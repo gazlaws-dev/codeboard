@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Colour"
+        android:textSize="20sp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp">
+
+        <RadioButton
+            android:id="@+id/material_dark_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Material Dark"
+            android:onClick="onRadioPress"/>
+
+        <RadioButton
+            android:id="@+id/material_light_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Material Light"
+            android:onClick="onRadioPress"/>
+
+        <RadioButton
+            android:id="@+id/black_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Black"
+            android:onClick="onRadioPress"/>
+
+        <RadioButton
+            android:id="@+id/white_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="White"
+            android:onClick="onRadioPress"/>
+        <RadioButton
+            android:id="@+id/blue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Blue"
+            android:onClick="onRadioPress"/>
+        <RadioButton
+            android:id="@+id/purple_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Purple"
+            android:onClick="onRadioPress"/>
+
+    </RadioGroup>
+</LinearLayout>
