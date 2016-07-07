@@ -4,6 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:hint="Re-open keyboard to see changes" />
+
+    <CheckBox
+        android:id="@+id/check_preview"
+        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup previews of characters?"
+        android:onClick="previewToggle"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,55 +29,63 @@
         android:textSize="20sp" />
 
     <RadioGroup
+        android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp">
 
         <RadioButton
             android:id="@+id/material_dark_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Material Dark"
-            android:onClick="onRadioPress"/>
+            android:button="@drawable/selectmd"
+            android:text=" Material Dark"
+
+
+            />
 
         <RadioButton
             android:id="@+id/material_light_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Material Light"
-            android:onClick="onRadioPress"/>
+            android:button="@drawable/selectml"
+            android:text=" Material Light" />
 
         <RadioButton
             android:id="@+id/black_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Black"
-            android:onClick="onRadioPress"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:button="@drawable/selectblack"
+            android:text=" Black" />
 
         <RadioButton
             android:id="@+id/white_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="White"
-            android:onClick="onRadioPress"/>
+            android:button="@drawable/selectwhite"
+            android:text=" White" />
+
         <RadioButton
             android:id="@+id/blue_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Blue"
-            android:onClick="onRadioPress"/>
+            android:button="@drawable/selectblue"
+            android:text=" Blue" />
+
         <RadioButton
             android:id="@+id/purple_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Purple"
-            android:onClick="onRadioPress"/>
+            android:button="@drawable/selectpurple"
+            android:checked="false"
+            android:text=" Purple" />
 
     </RadioGroup>
+
 </LinearLayout>

@@ -30,7 +30,8 @@
     <!--</Row>-->
 
 
-    <Row android:keyHeight="30dp">
+    <Row android:keyHeight="30dp"
+        android:keyWidth="7.6%p">
         <Key
             android:codes="40"
             android:keyEdgeFlags="left"
@@ -73,9 +74,11 @@
             android:keyEdgeFlags="right"
             android:keyLabel="\# \@"
             android:popupCharacters="\@"
+
             android:popupKeyboard="@layout/popup_layout"/>
     </Row>
-    <Row android:keyHeight="30dp">
+    <Row android:keyHeight="30dp"
+        android:keyWidth="9.09%p">
 
         <Key
             android:codes="43"
@@ -110,13 +113,17 @@
             android:keyLabel="[" />
         <Key
             android:codes="93"
-            android:keyLabel="]" />
-        <Key
-            android:codes="12345"
-            android:keyEdgeFlags="right"
-            android:keyLabel="scanf" />
+            android:keyLabel="]"
+            android:keyEdgeFlags="right"/>
+        <!--<Key-->
+            <!--android:codes="12345"-->
+            <!---->
+            <!--android:keyLabel="scanf"-->
+
+            <!--/>-->
     </Row>
-    <Row>
+    <Row
+        android:keyWidth="9.09%p">
         <Key
             android:codes="113"
             android:keyEdgeFlags="left"
@@ -155,7 +162,8 @@
             android:keyEdgeFlags="right"
             android:keyLabel="Del" />
     </Row>
-    <Row>
+    <Row
+        android:keyWidth="9.09%p">
         <Key
             android:codes="33"
             android:keyEdgeFlags="left"
@@ -234,7 +242,7 @@
         <Key
             android:codes="38"
             android:keyEdgeFlags="left"
-            android:keyLabel="&amp;"
+            android:keyLabel="&amp; |"
             android:popupCharacters="|"
             android:popupKeyboard="@layout/popup_layout"
             android:keyWidth="10%p" />

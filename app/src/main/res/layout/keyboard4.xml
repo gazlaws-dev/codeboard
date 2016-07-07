@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-
     android:keyPreviewLayout="@layout/preview"
-    android:background="@drawable/dark_263238"
-    android:keyBackground="@drawable/dark_263238"
+    android:keyBackground="@drawable/blue_0d47a1"
+    android:shadowColor="@android:color/transparent"
+    android:background="@drawable/blue_0d47a1"
     />
