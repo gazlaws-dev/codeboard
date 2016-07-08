@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     android:orientation="vertical">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:hint="Re-open keyboard to see changes" />
 
@@ -18,21 +16,25 @@
         android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Popup previews of characters?"
         android:onClick="previewToggle"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
         android:text="Colour"
         android:textSize="20sp" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <RadioGroup
         android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp">
+        android:layout_marginTop="8dp">
 
         <RadioButton
             android:id="@+id/material_dark_button"
@@ -87,5 +89,6 @@
             android:text=" Purple" />
 
     </RadioGroup>
+    </ScrollView>
 
 </LinearLayout>

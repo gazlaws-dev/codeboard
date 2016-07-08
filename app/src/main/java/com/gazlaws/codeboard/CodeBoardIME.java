@@ -1,4 +1,4 @@
-package com.gazlaws.codeboard;//package com.gazlaws.codeboard;
+package com.gazlaws.codeboard;
 
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
@@ -25,6 +25,7 @@ public class CodeBoardIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
     private KeyboardView kv;
     private Keyboard keyboard;
+    EditorInfo sEditorInfo;
 
     private boolean caps = false;
 
@@ -34,71 +35,69 @@ public class CodeBoardIME extends InputMethodService
         InputConnection ic = getCurrentInputConnection();
         CharSequence txt = getCurrentInputConnection().getTextBeforeCursor(1000, 0);
 
+
         int len = txt.length();
 
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
-                ic.deleteSurroundingText(1, 0);
+                    if(ic.getSelectedText(0)== null){
+                        ic.deleteSurroundingText(1, 0);
+                    }
+                    else getCurrentInputConnection().commitText("",1);
+
+
                 break;
+
             case Keyboard.KEYCODE_SHIFT:
                 caps = !caps;
                 keyboard.setShifted(caps);
                 kv.invalidateAllKeys();
                 break;
             case -4:
-//                switch ((EditorInfo.IME_MASK_ACTION|EditorInfo.IME_FLAG_NO_ENTER_ACTION)) {
-//                    case EditorInfo.IME_ACTION_GO:
-//                        ic.performEditorAction(EditorInfo.IME_ACTION_GO);
-//                        break;
-//                    case EditorInfo.IME_ACTION_NEXT:
-//                        ic.performEditorAction(EditorInfo.IME_ACTION_NEXT);
-//                        break;
-//                    case EditorInfo.IME_ACTION_SEARCH:
-//                        ic.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
-//                        break;
-//                    case EditorInfo.IME_ACTION_SEND:
-//                        ic.performEditorAction(EditorInfo.IME_ACTION_SEND);
-//                        break;
-//                    default:
-//                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-//                        break;
-//                }
-                ic.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                switch (sEditorInfo.imeOptions & (EditorInfo.IME_MASK_ACTION|EditorInfo.IME_FLAG_NO_ENTER_ACTION)) {
+                    case EditorInfo.IME_ACTION_GO:
+                        ic.performEditorAction(EditorInfo.IME_ACTION_GO);
+                        break;
+                    case EditorInfo.IME_ACTION_NEXT:
+                        ic.performEditorAction(EditorInfo.IME_ACTION_NEXT);
+                        break;
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        ic.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
+                        break;
+                    case EditorInfo.IME_ACTION_SEND:
+                        ic.performEditorAction(EditorInfo.IME_ACTION_SEND);
+                        break;
+                    default:
+                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                        break;
+                }
                 break;
 
-            case 55003:
 
-                len++;
-                ic.setSelection(len, len);
+            case 53737:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.selectAll);
                 break;
-            case 55002:
-               if (len > 0)
-                    len--;
-                ic.setSelection(len, len);
 
+            case 53738:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
                 break;
-//
-//            case 55001:
-//                len -= 10;
-//                ic.setSelection(len, len);
-//                break;
-//
-//            case 55004:
-//                len += 10;
-//                ic.setSelection(len, len);
-//                break;
+
+            case 53739:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
+                break;
+            case 53740:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
+                break;
 
             case 9:
-                ic.commitText("    ", 1);
-
+                ic.commitText("\u0009", 1);
+                break;
 
             default:
                 char code = (char) primaryCode;
                 if (Character.isLetter(code) && caps) {
                     code = Character.toUpperCase(code);
                     ic.commitText(String.valueOf(code), 1);
-
 //              else if (code == 12344) {
 //                    ic.commitText("printf(", 1);
 //                } else if (code == 12345) {
@@ -189,9 +188,10 @@ public class CodeBoardIME extends InputMethodService
 
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
-        //super.onStartInputView(attribute, restarting);
+        super.onStartInputView(attribute, restarting);
 
         setInputView(onCreateInputView());
+        sEditorInfo = attribute;
     }
 }
 

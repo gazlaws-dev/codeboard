@@ -1,37 +1,34 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="50dp"
+    android:keyHeight="8%p"
     android:keyWidth="10%p"
     android:verticalGap="0px">
-    <!--<Row android:keyHeight="25dp">-->
-        <!--<Key-->
-            <!--android:codes="55002"-->
-            <!--android:isRepeatable="true"-->
-            <!--android:keyEdgeFlags="left"-->
-            <!--android:keyLabel="Purple"-->
-            <!--android:keyWidth="25%p"></Key> &lt;!&ndash;android:keyLabel="&lt;"&ndash;&gt;-->
-
-        <!--<Key-->
-            <!--android:codes="55001"-->
-            <!--android:isRepeatable="true"-->
-            <!--android:keyLabel="&lt;&lt;"-->
-            <!--android:keyWidth="25%p"></Key>-->
-        <!--<Key-->
-            <!--android:codes="55004"-->
-            <!--android:isRepeatable="true"-->
-            <!--android:keyLabel="&gt;&gt;"-->
-            <!--android:keyWidth="25%p"></Key>-->
-        <!--<Key-->
-            <!--android:codes="55003"-->
-            <!--android:isRepeatable="true"-->
-            <!--android:keyEdgeFlags="right"-->
-            <!--android:keyLabel="&gt;"-->
-            <!--android:keyWidth="25%p"></Key>-->
-    <!--</Row>-->
-
+    <Row
+        android:rowEdgeFlags="top"
+        android:keyWidth="25%p"
+        android:keyHeight="5%p"
+       >
+        <Key
+            android:codes="53737"
+            android:keyLabel="Select All"
+            />
+        <Key
+            android:codes="53738"
+            android:keyLabel="Cut"
+            />
+        <Key
+            android:codes="53739"
+            android:keyLabel="Copy"
+            />
+        <Key
+            android:codes="53740"
+            android:keyLabel="Paste"
+            />
+    </Row>
 
     <Row android:keyHeight="30dp"
-        android:keyWidth="7.6%p">
+        android:keyWidth="7.6%p"
+        >
         <Key
             android:codes="40"
             android:keyEdgeFlags="left"
@@ -83,7 +80,8 @@
         <Key
             android:codes="43"
             android:keyEdgeFlags="left"
-            android:keyLabel="+" />
+            android:keyLabel="+"
+            />
         <Key
             android:codes="45"
             android:keyLabel="-" />
@@ -238,7 +236,8 @@
             android:keyLabel="Tab" />
 
     </Row>
-    <Row android:keyHeight="30dp">
+    <Row android:keyHeight="30dp"
+        android:rowEdgeFlags="bottom">
         <Key
             android:codes="38"
             android:keyEdgeFlags="left"

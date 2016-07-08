@@ -6,6 +6,5 @@
     android:horizontalGap="0px"
     android:verticalGap="0px"
     android:keyHeight="56dp"
-
     >
 </Keyboard>
