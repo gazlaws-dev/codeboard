@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/hint_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -61,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:button="@drawable/selectblack"
-            android:text=" Black" />
+            android:text=" Pure Black" />
 
         <RadioButton
             android:id="@+id/white_button"

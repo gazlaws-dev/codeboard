@@ -1,13 +1,14 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="8%p"
-    android:keyWidth="10%p"
+    android:keyHeight="7%p"
     android:verticalGap="0px">
     <Row
+
         android:rowEdgeFlags="top"
         android:keyWidth="25%p"
-        android:keyHeight="5%p"
+        android:keyHeight="4%p"
        >
+
         <Key
             android:codes="53737"
             android:keyLabel="Select All"
@@ -24,10 +25,11 @@
             android:codes="53740"
             android:keyLabel="Paste"
             />
+
     </Row>
 
-    <Row android:keyHeight="30dp"
-        android:keyWidth="7.6%p"
+    <Row
+        android:keyHeight="5%p"
         >
         <Key
             android:codes="40"
@@ -74,8 +76,9 @@
 
             android:popupKeyboard="@layout/popup_layout"/>
     </Row>
-    <Row android:keyHeight="30dp"
-        android:keyWidth="9.09%p">
+    <Row
+        android:keyHeight="6%p"
+        >
 
         <Key
             android:codes="43"
@@ -107,6 +110,9 @@
             android:codes="95"
             android:keyLabel="_" />
         <Key
+            android:codes="36"
+            android:keyLabel="$"/>
+        <Key
             android:codes="91"
             android:keyLabel="[" />
         <Key
@@ -121,7 +127,7 @@
             <!--/>-->
     </Row>
     <Row
-        android:keyWidth="9.09%p">
+        >
         <Key
             android:codes="113"
             android:keyEdgeFlags="left"
@@ -161,7 +167,7 @@
             android:keyLabel="Del" />
     </Row>
     <Row
-        android:keyWidth="9.09%p">
+        >
         <Key
             android:codes="33"
             android:keyEdgeFlags="left"
@@ -236,7 +242,8 @@
             android:keyLabel="Tab" />
 
     </Row>
-    <Row android:keyHeight="30dp"
+    <Row
+        android:keyHeight="6%p"
         android:rowEdgeFlags="bottom">
         <Key
             android:codes="38"
@@ -244,20 +251,21 @@
             android:keyLabel="&amp; |"
             android:popupCharacters="|"
             android:popupKeyboard="@layout/popup_layout"
-            android:keyWidth="10%p" />
+             />
         <Key
             android:codes="92"
             android:keyLabel="\\"
-            android:keyWidth="10%p" />
+           />
         <Key
             android:codes="37"
             android:keyLabel="%"
-            android:keyWidth="10%p" />
+           />
         <Key
             android:codes="32"
             android:isRepeatable="true"
             android:keyLabel="Space"
-            android:keyWidth="20%p" />
+            android:keyWidth="30%p"
+            />
         <Key
             android:codes="60"
             android:keyLabel="&lt;"
@@ -265,20 +273,20 @@
         <Key
             android:codes="62"
             android:keyLabel="&gt;"
-            android:keyWidth="10%p" />
+            />
         <Key
             android:codes="59"
             android:keyLabel=";"
-            android:keyWidth="10%p" />
+            />
         <Key
             android:codes="46"
             android:keyLabel="."
-            android:keyWidth="10%p" />
+           />
         <Key
             android:codes="44"
             android:keyEdgeFlags="right"
             android:keyLabel=","
-            android:keyWidth="10%p" />
+             />
 
     </Row>
 </Keyboard>

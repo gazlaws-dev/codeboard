@@ -1,13 +1,16 @@
 package com.gazlaws.codeboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
@@ -29,6 +32,45 @@ public class MainActivity extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //  Declare a new thread to do a preference check
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                //  If the activity has never started before...
+                if (isFirstStart) {
+
+                    //  Launch app intro
+//                    Intent i = new Intent(MainActivity.this, DefaultIntro.class);
+//                    startActivity(i);
+
+                    TextView tutorial_text = (TextView) findViewById(R.id.hint_text);
+                    tutorial_text.setText("Enable CodeBoard in Settings > Language and Keyboard");
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstStart", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
+
+        //debug only
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 
         radioGroup = (RadioGroup)findViewById(R.id.radiogroup);
         radioGroup.setOnCheckedChangeListener(radioGroupOnCheckedChangeListener);
@@ -87,47 +129,7 @@ public class MainActivity extends ActionBarActivity {
             preview.setChecked(false);
     }
 
-//        public void onRadioPress(View view) {
-//            Toast.makeText(MainActivity.this, "To Do:Colours", Toast.LENGTH_SHORT).show();
-//            boolean checked = ((RadioButton) view).isChecked();
-//            KeyboardView keyColour = (KeyboardView) findViewById(R.id.keyboard);
-//
-//            switch (view.getId()) {
-//                case R.id.black_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.black_000000);
-//                                            }
-//                    break;
-//
-//                case R.id.white_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.white_ffffff);
-//                    }
-//                    break;
-//                case R.id.material_dark_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.dark_263238);
-//                    }
-//                    break;
-//                case R.id.material_light_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.light_eceff1);
-//                    }
-//                    break;
-//                case R.id.blue_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.blue_0d47a1);
-//                    }
-//                    break;
-//                case R.id.purple_button:
-//                    if (checked) {
-//                        keyColour.setBackgroundResource(R.drawable.purple_4a148c);
-//                    }
-//                    break;
-//
-//
-//            }
-//        }
+
 
 
 }

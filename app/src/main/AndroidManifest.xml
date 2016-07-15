@@ -1,48 +1,47 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gazlaws.codeboard">
+    package="com.gazlaws.codeboard"
+    >
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter android:label="CodeBoard IME">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gazlaws” -->
-                <data android:scheme="http"
-                    android:host="www.gazlaws.com"
-                    android:pathPrefix="/CodeBoard" />
-                <!-- note that the leading "/" is required for pathPrefix-->
-                <!-- Accepts URIs that begin with "example://gazlaws”
-                <data android:scheme="example"
-                      android:host="gazlaws" />
-                -->
-            </intent-filter>
-        </activity>
-
-        <service android:name=".CodeBoardIME"
+        android:theme="@style/AppTheme"
+       >
+        <service
+            android:name=".CodeBoardIME"
             android:label="@string/codeboard_ime"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            >
-            <meta-data android:name="android.view.im" android:resource="@xml/method"/>
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
 
-
-
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!--<intent-filter android:label="CodeBoard IME">-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--<category android:name="android.intent.category.BROWSABLE" />-->
+            <!--&lt;!&ndash; Accepts URIs that begin with "http://www.example.com/gazlaws” &ndash;&gt;-->
+            <!--<data android:scheme="http"-->
+            <!--android:host="www.gazlaws.com"-->
+            <!--android:pathPrefix="/CodeBoard" />-->
+            <!--&lt;!&ndash; note that the leading "/" is required for pathPrefix&ndash;&gt;-->
+            <!--&lt;!&ndash; Accepts URIs that begin with "example://gazlaws”-->
+            <!--<data android:scheme="example"-->
+            <!--android:host="gazlaws" />-->
+            <!--&ndash;&gt;-->
+            <!--</intent-filter>-->
+        </activity>
 
     </application>
 

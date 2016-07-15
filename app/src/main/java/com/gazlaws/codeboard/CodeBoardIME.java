@@ -47,6 +47,13 @@ public class CodeBoardIME extends InputMethodService
 
 
                 break;
+            case 27:
+                //Escape
+                long now = System.currentTimeMillis();
+                int meta = 0;
+                if (ic != null) ic.sendKeyEvent(new KeyEvent(
+                        now, now, KeyEvent.ACTION_DOWN, primaryCode, 0, meta));
+                break;
 
             case Keyboard.KEYCODE_SHIFT:
                 caps = !caps;
@@ -110,6 +117,13 @@ public class CodeBoardIME extends InputMethodService
 
     }
 
+//    private void sendEscape() {
+//        if (isConnectbot()) {
+//            sendKeyChar((char) 27);
+//        } else {
+//            sendModifiedKeyDownUp(111 /*KeyEvent.KEYCODE_ESCAPE */);
+//        }
+//    }
 
 
     @Override
@@ -151,6 +165,7 @@ public class CodeBoardIME extends InputMethodService
 
         switch (pre.getInt("SAVED_RADIO_BUTTON_INDEX",0)){
             case 0:
+                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
                 break;
             case 1:
