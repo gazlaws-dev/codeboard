@@ -1,19 +1,15 @@
 package com.gazlaws.codeboard;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.widget.Switch;
-
-import com.gazlaws.codeboard.R;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -26,6 +22,8 @@ public class CodeBoardIME extends InputMethodService
     private KeyboardView kv;
     private Keyboard keyboard;
     EditorInfo sEditorInfo;
+    private Vibrator vibrator;
+    private boolean vibratorOn;
 
     private boolean caps = false;
 
@@ -128,6 +126,9 @@ public class CodeBoardIME extends InputMethodService
 
     @Override
     public void onPress(int primaryCode) {
+        if(vibratorOn){
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(20);}
     }
 
 
@@ -165,8 +166,9 @@ public class CodeBoardIME extends InputMethodService
 
         switch (pre.getInt("SAVED_RADIO_BUTTON_INDEX",0)){
             case 0:
+                //kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
+
                 break;
             case 1:
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard1, null);
@@ -186,6 +188,7 @@ public class CodeBoardIME extends InputMethodService
 
             default:
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
+
                 break;
 
 
@@ -195,9 +198,22 @@ public class CodeBoardIME extends InputMethodService
             kv.setPreviewEnabled(true);
         } else  kv.setPreviewEnabled(false);
 
-        keyboard = new Keyboard(this, R.xml.qwerty);
+        if(pre.getInt("VIBRATE",1)==1){
+            vibratorOn=true;
+        } else vibratorOn=false;
+
+        if(pre.getInt("SIZE",1)==0){
+            keyboard = new Keyboard(this, R.xml.qwerty);
+        }else  if(pre.getInt("SIZE",1)==2){
+            keyboard = new Keyboard(this, R.xml.qwerty_large);
+        }
+        else  keyboard = new Keyboard(this, R.xml.qwerty_medium);
+
+
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
+
+
         return kv;
     }
 

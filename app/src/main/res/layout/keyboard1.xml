@@ -9,6 +9,8 @@
     android:keyPreviewLayout="@layout/preview"
     android:keyBackground="@drawable/light_eceff1"
     android:background="@drawable/light_eceff1"
-    android:keyTextColor="@color/primary_dark_material_dark"
+    android:keyTextColor="@color/material_blue_grey_800"
     android:shadowColor="@android:color/transparent"
+    android:popupLayout="@layout/popup1"
+
     />

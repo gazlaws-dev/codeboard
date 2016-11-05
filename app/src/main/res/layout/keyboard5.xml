@@ -10,4 +10,5 @@
     android:keyBackground="@drawable/purple_4a148c"
     android:shadowColor="@android:color/transparent"
     android:background="@drawable/purple_4a148c"
+    android:popupLayout="@layout/popup5"
     />

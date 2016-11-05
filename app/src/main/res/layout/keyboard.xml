@@ -10,4 +10,5 @@
     android:keyPreviewLayout="@layout/preview"
     android:background="@drawable/dark_263238"
     android:keyBackground="@drawable/dark_263238"
+    android:popupLayout="@layout/popup0"
     />

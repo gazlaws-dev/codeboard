@@ -1,6 +1,6 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="7%p"
+    android:keyHeight="9%p"
     android:verticalGap="0px"
     >
     <Row
@@ -78,7 +78,7 @@
             android:popupKeyboard="@layout/popup_layout"/>
     </Row>
     <Row
-        android:keyHeight="6%p"
+        android:keyHeight="5%p"
         >
 
         <Key
@@ -248,7 +248,7 @@
 
     </Row>
     <Row
-        android:keyHeight="6%p"
+
         android:rowEdgeFlags="bottom">
         <Key
             android:codes="38"

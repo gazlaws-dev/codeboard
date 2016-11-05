@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+    >
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -14,12 +18,73 @@
 
     <CheckBox
         android:id="@+id/check_preview"
-        android:checked="true"
+        android:checked="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Popup previews of characters?"
         android:onClick="previewToggle"/>
+
+
+    <CheckBox
+        android:id="@+id/check_vibrator"
+        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Vibrate on keypress?"
+        android:onClick="vibratorToggle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+
+        android:layout_marginBottom="8dp"
+        android:text="Keyboard Size"
+        android:textSize="20sp" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="2"
+        android:progress="1"
+        android:id="@+id/size_seekbar"
+
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/relative_layout"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+       >
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Small"
+        android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+         />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:layout_centerInParent="true"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,14 +93,14 @@
         android:text="Colour"
         android:textSize="20sp" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
     <RadioGroup
         android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+       >
 
         <RadioButton
             android:id="@+id/material_dark_button"
@@ -44,6 +109,7 @@
             android:layout_margin="16dp"
             android:button="@drawable/selectmd"
             android:text=" Material Dark"
+            android:onClick="closeKeyboard"
 
 
             />
@@ -54,7 +120,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:button="@drawable/selectml"
-            android:text=" Material Light" />
+            android:text=" Material Light"
+            android:onClick="closeKeyboard"/>
 
         <RadioButton
             android:id="@+id/black_button"
@@ -62,7 +129,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:button="@drawable/selectblack"
-            android:text=" Pure Black" />
+            android:text=" Pure Black"
+            android:onClick="closeKeyboard"/>
 
         <RadioButton
             android:id="@+id/white_button"
@@ -70,7 +138,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:button="@drawable/selectwhite"
-            android:text=" White" />
+            android:text=" White"
+            android:onClick="closeKeyboard"/>
 
         <RadioButton
             android:id="@+id/blue_button"
@@ -78,7 +147,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:button="@drawable/selectblue"
-            android:text=" Blue" />
+            android:text=" Blue"
+            android:onClick="closeKeyboard"/>
 
         <RadioButton
             android:id="@+id/purple_button"
@@ -87,9 +157,11 @@
             android:layout_margin="16dp"
             android:button="@drawable/selectpurple"
             android:checked="false"
-            android:text=" Purple" />
+            android:text=" Purple"
+            android:onClick="closeKeyboard"/>
 
     </RadioGroup>
-    </ScrollView>
+
 
 </LinearLayout>
+    </ScrollView>
