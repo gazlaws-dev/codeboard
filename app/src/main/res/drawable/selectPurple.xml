@@ -3,6 +3,6 @@
 
 
         <item android:state_checked="true" android:drawable="@drawable/checked"/>
-        <item android:state_checked="false" android:drawable="@drawable/purple" />
+        <item android:state_checked="false" android:drawable="@drawable/purple_circle" />
 
 </selector>

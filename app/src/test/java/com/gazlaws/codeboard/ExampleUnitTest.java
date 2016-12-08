@@ -1,7 +1,9 @@
 package com.gazlaws.codeboard;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 /**

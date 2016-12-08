@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:keyPreviewLayout="@layout/preview"
+    android:keyPreviewLayout="@layout/preview1"
     android:keyBackground="@drawable/light_eceff1"
     android:background="@drawable/light_eceff1"
     android:keyTextColor="@color/material_blue_grey_800"

@@ -3,30 +3,6 @@
     android:keyHeight="10%p"
     android:keyWidth="10%p"
     android:verticalGap="0px">
-    <!--<Row-->
-        <!--android:rowEdgeFlags="top"-->
-        <!--android:keyWidth="25%p"-->
-        <!--android:keyHeight="5%p"-->
-        <!--&gt;-->
-
-        <!--<Key-->
-            <!--android:codes="53737"-->
-            <!--android:keyLabel="Select All"-->
-            <!--/>-->
-        <!--<Key-->
-            <!--android:codes="53738"-->
-            <!--android:keyLabel="Cut"-->
-            <!--/>-->
-        <!--<Key-->
-            <!--android:codes="53739"-->
-            <!--android:keyLabel="Copy"-->
-            <!--/>-->
-        <!--<Key-->
-            <!--android:codes="53740"-->
-            <!--android:keyLabel="Paste"-->
-            <!--/>-->
-
-    <!--</Row>-->
 
     <Row>
         <Key
@@ -94,7 +70,9 @@
             android:keyLabel=":" />
         <Key
             android:codes="42"
-            android:keyLabel="*" />
+            android:popupCharacters="^"
+            android:popupKeyboard="@layout/popup_layout"
+            android:keyLabel="*^" />
         <Key
             android:codes="47"
             android:keyLabel="/" />
@@ -117,12 +95,7 @@
             android:codes="93"
             android:keyLabel="]"
             android:keyEdgeFlags="right"/>
-        <!--<Key-->
-        <!--android:codes="12345"-->
-        <!---->
-        <!--android:keyLabel="scanf"-->
 
-        <!--/>-->
     </Row>
     <Row
         >
@@ -162,7 +135,7 @@
             android:codes="-5"
             android:isRepeatable="true"
             android:keyEdgeFlags="right"
-            android:keyLabel="Del" />
+            android:keyLabel="⨞" />
     </Row>
     <Row
         >
@@ -243,16 +216,20 @@
     <Row
         android:rowEdgeFlags="bottom">
         <Key
-            android:codes="38"
             android:keyEdgeFlags="left"
+            android:codes="18"
+            android:keyLabel="Ctrl"
+            />
+        <Key
+            android:codes="38"
             android:keyLabel="&amp; |"
             android:popupCharacters="|"
             android:popupKeyboard="@layout/popup_layout"
-             />
+            />
         <Key
             android:codes="92"
             android:keyLabel="\\"
-           />
+            />
         <Key
             android:codes="37"
             android:keyLabel="%"
@@ -261,28 +238,33 @@
             android:codes="32"
             android:isRepeatable="true"
             android:keyLabel="Space"
-            android:keyWidth="30%p" />
+            android:keyWidth="30%p"
+
+            />
         <Key
             android:codes="60"
             android:keyLabel="&lt;"
-            />
+            android:keyWidth="10%p" />
         <Key
             android:codes="62"
             android:keyLabel="&gt;"
-           />
+            />
         <Key
             android:codes="59"
             android:keyLabel=";"
             />
         <Key
-            android:codes="46"
-            android:keyLabel="."
-          />
+            android:codes="39"
+            android:keyLabel="'"/>
         <Key
             android:codes="44"
-            android:keyEdgeFlags="right"
-            android:keyLabel=","
-           />
+            android:keyLabel=","/>
 
+        <Key
+            android:codes="46"
+            android:keyEdgeFlags="right"
+            android:keyLabel="."
+            android:popupKeyboard="@layout/popup_layout"
+            />
     </Row>
 </Keyboard>

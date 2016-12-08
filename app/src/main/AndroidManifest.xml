@@ -2,6 +2,8 @@
     package="com.gazlaws.codeboard"
     >
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -20,6 +22,8 @@
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
+
+
 
         <activity android:name=".MainActivity"
             android:label="@string/app_name">
@@ -42,6 +46,10 @@
             <!--&ndash;&gt;-->
             <!--</intent-filter>-->
         </activity>
+
+        <activity android:name=".IntroActivity"
+            android:label="@string/app_intro" />
+
 
     </application>
 
