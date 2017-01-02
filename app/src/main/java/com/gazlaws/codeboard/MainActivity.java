@@ -201,6 +201,24 @@ public class MainActivity extends AppCompatActivity {
         closeKeyboard(v);
     }
 
+    public void arrowToggle(View v) {
+        CheckBox preview = (CheckBox) findViewById(R.id.check_no_arrow);
+        if (preview.isChecked()) {
+            SavePreferences("ARROW_ROW", 0);
+        } else SavePreferences("ARROW_ROW", 1);
+        closeKeyboard(v);
+    }
+
+    public void shiftToggle(View v) {
+        CheckBox preview = (CheckBox) findViewById(R.id.shift_toggle);
+        if (preview.isChecked()) {
+            SavePreferences("SHIFT", 1);
+        } else SavePreferences("SHIFT", 0);
+        closeKeyboard(v);
+    }
+
+
+
     public void closeKeyboard(View v) {
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -222,9 +240,13 @@ public class MainActivity extends AppCompatActivity {
 
         int setPreview = sharedPreferences.getInt("PREVIEW", 0);
         int setVibrator = sharedPreferences.getInt("VIBRATE", 1);
-        int setSize = sharedPreferences.getInt("SIZE", 1);
+        int setSize = sharedPreferences.getInt("SIZE", 2);
+        int setShiftLock = sharedPreferences.getInt("SHIFT", 0);
+        int setArrow = sharedPreferences.getInt("ARROW_ROW", 1);
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
+        CheckBox shiftLock = (CheckBox) findViewById(R.id.shift_toggle);
         CheckBox vibrate = (CheckBox) findViewById(R.id.check_vibrator);
+        CheckBox noarrow = (CheckBox) findViewById(R.id.check_no_arrow);
         SeekBar size = (SeekBar) findViewById(R.id.size_seekbar);
 
         if (setPreview == 1)
@@ -232,10 +254,20 @@ public class MainActivity extends AppCompatActivity {
         else
             preview.setChecked(false);
 
+        if (setShiftLock == 1)
+            shiftLock.setChecked(true);
+        else
+            shiftLock.setChecked(false);
+
         if (setVibrator == 1)
             vibrate.setChecked(true);
         else
             vibrate.setChecked(false);
+
+        if (setArrow == 1)
+            noarrow.setChecked(false);
+        else
+            noarrow.setChecked(true);
 
         size.setProgress(setSize);
 
@@ -244,6 +276,17 @@ public class MainActivity extends AppCompatActivity {
     public void openPlay(View v) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse("market://details?id=com.gazlaws.codeboard"));
+        startActivity(i);
+    }
+
+    public void openTutorial(View v){
+        Intent i = new Intent(MainActivity.this, IntroActivity.class);
+        startActivity(i);
+    }
+
+    public void openGithub(View v) {
+        Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse("https://github.com/gazlaws-dev/codeboard"));
+
         startActivity(i);
     }
 

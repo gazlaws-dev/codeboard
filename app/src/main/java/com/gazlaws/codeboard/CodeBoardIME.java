@@ -13,6 +13,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.List;
+
 
 /**
  * Created by Ruby(aka gazlaws) on 13/02/2016.
@@ -27,7 +29,7 @@ public class CodeBoardIME extends InputMethodService
     EditorInfo sEditorInfo;
     private Vibrator vibrator;
     private boolean vibratorOn;
-
+    private boolean shiftLock;
     private boolean shift = false;
     private boolean ctrl = false;
 
@@ -36,30 +38,30 @@ public class CodeBoardIME extends InputMethodService
 
         InputConnection ic = getCurrentInputConnection();
         CharSequence txt = getCurrentInputConnection().getTextBeforeCursor(1000, 0);
-        int len = txt.length();
+        int i;
+        List<Keyboard.Key> keys = keyboard.getKeys();
 
 
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
-//                    if(ic.getSelectedText(0)== null){
-//                        ic.deleteSurroundingText(1, 0);
-//                    }
-//                    else getCurrentInputConnection().commitText("",1);
+
                 break;
 
             case 27:
                 //Escape
                 long now = System.currentTimeMillis();
                 int meta = 0;
-                if (ic != null) ic.sendKeyEvent(new KeyEvent(
-                        now, now, KeyEvent.ACTION_DOWN, primaryCode, 0, meta));
+
+                ic.sendKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ESCAPE, 0, KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON));
+
                 break;
 
             case -13:
                 InputMethodManager imm = (InputMethodManager)
                         getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showInputMethodPicker();
+
 //                try {
 //                    InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 //                    final IBinder token = this.getWindow().getWindow().getAttributes().token;
@@ -72,12 +74,57 @@ public class CodeBoardIME extends InputMethodService
                 break;
 
             case 18:
-                ctrl = true;
+                ctrl = !ctrl;
+
+                for(i=0; i < keys.size();i++) {
+                    if (ctrl) {
+                        if (keys.get(i).label.equals("Ctrl")) {
+                            keys.get(i).label = "CTRL";
+                            break;
+                        }
+                    } else {
+                        if (keys.get(i).label.equals("CTRL")) {
+                            keys.get(i).label = "Ctrl";
+                            break;
+                        }
+                    }
+                }
+                kv.invalidateAllKeys();
+                break;
+
+            case 53737:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.selectAll);
+                break;
+            case 53738:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
+                break;
+            case 53739:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
+                break;
+            case 53740:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
                 break;
 
             case Keyboard.KEYCODE_SHIFT:
+
                 shift = !shift;
                 keyboard.setShifted(shift);
+
+                if (shift){
+                    for(i=0; i < keys.size();i++){
+                        if(keys.get(i).label.equals("Shift")) {
+                            keys.get(i).label = "SHIFT";
+                            break;
+                        }
+                    }
+                } else for(i=0; i < keys.size();i++){
+                    //Log.e("3","shift");
+                    if(keys.get(i).label.equals("SHIFT")) {
+
+                        keys.get(i).label = "Shift";
+                        break;
+                    }
+                }
                 kv.invalidateAllKeys();
                 break;
 
@@ -96,6 +143,7 @@ public class CodeBoardIME extends InputMethodService
                     case EditorInfo.IME_ACTION_SEARCH:
                         ic.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
                         break;
+
                     case EditorInfo.IME_ACTION_SEND:
                         ic.performEditorAction(EditorInfo.IME_ACTION_SEND);
                         break;
@@ -114,8 +162,6 @@ public class CodeBoardIME extends InputMethodService
                 break;
 
             case 14:
-//                len--;
-//                getCurrentInputConnection().setSelection(len, len);
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
                 break;
             case 15:
@@ -125,8 +171,6 @@ public class CodeBoardIME extends InputMethodService
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_DOWN);
                 break;
             case 17:
-//                len++;
-//                getCurrentInputConnection().setSelection(len, len);
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT);
                 break;
 
@@ -138,21 +182,49 @@ public class CodeBoardIME extends InputMethodService
                         case 'A':
                             getCurrentInputConnection().performContextMenuAction(android.R.id.selectAll);
                             ctrl = false;
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateKey(i);
                             break;
                         case 'c':
                         case 'C':
                             getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
                             ctrl = false;
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateKey(i);
                             break;
                         case 'v':
                         case 'V':
                             getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
                             ctrl = false;
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateKey(i);
                             break;
                         case 'x':
                         case 'X':
                             getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
                             ctrl = false;
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateKey(i);
                             break;
                         case 'z':
 //                            event = new KeyEvent(event.getDownTime(), event.getEventTime(),
@@ -164,8 +236,14 @@ public class CodeBoardIME extends InputMethodService
                                 long now2 = System.currentTimeMillis();
                                 ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON | KeyEvent.META_SHIFT_ON | KeyEvent.META_SHIFT_LEFT_ON));
 
-                                Log.d("shift ctrl", "what's gong on");
                                 shift = false;
+                                    for(i=0; i < keys.size(); i++){
+                                        if(keys.get(i).label.equals("SHIFT")) {
+
+                                            keys.get(i).label = "Shift";
+                                            break;
+                                        }
+                                    }
                                 keyboard.setShifted(shift);
                                 kv.invalidateAllKeys();
 
@@ -175,21 +253,59 @@ public class CodeBoardIME extends InputMethodService
                             }
 
                             ctrl = false;
-
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateAllKeys();
                             break;
 
                         default:
                             ic.commitText(String.valueOf(code), 1);
                             ctrl = false;
+                            for(i=0; i < keys.size();i++){
+                                if(keys.get(i).label.equals("CTRL")) {
+                                    keys.get(i).label = "Ctrl";
+                                    break;
+                                }
+                            }
+                            kv.invalidateAllKeys();
                             break;
 
+                    }
+
+                    if(shift){
+                        shift=false;
+                        for(i=0; i < keys.size();i++){
+                            if(keys.get(i).label.equals("SHIFT")) {
+                                keys.get(i).label = "Shift";
+                                break;
+                            }
+                        }
+                        keyboard.setShifted(shift);
+                        kv.invalidateAllKeys();
                     }
                 } else if (Character.isLetter(code) && shift) {
                     code = Character.toUpperCase(code);
                     ic.commitText(String.valueOf(code), 1);
-                    shift = false;
-                    keyboard.setShifted(shift);
-                    kv.invalidateAllKeys();
+                    if(!shiftLock) {
+                        shift = false;
+
+                        for (i = 0; i < keys.size(); i++) {
+                            //Log.e("5", "shift");
+                            if (keys.get(i).label.equals("SHIFT")) {
+
+                                keys.get(i).label = "Shift";
+                                break;
+                            }
+                        }
+                        keyboard.setShifted(shift);
+                        kv.invalidateAllKeys();
+                    }
+
+
                 } else ic.commitText(String.valueOf(code), 1);
 
         }
@@ -245,8 +361,6 @@ public class CodeBoardIME extends InputMethodService
             case 0:
                 //kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
-
-
                 break;
             case 1:
                 kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard1, null);
@@ -282,28 +396,55 @@ public class CodeBoardIME extends InputMethodService
 
        if (pre.getInt("RADIO_INDEX_LAYOUT", 0) == 0) {
 
-            if (pre.getInt("SIZE", 1) == 0) {
-                keyboard = new Keyboard(this, R.xml.qwerty);
-            } else if (pre.getInt("SIZE", 1) == 2) {
-                keyboard = new Keyboard(this, R.xml.qwerty_large);
-            } else keyboard = new Keyboard(this, R.xml.qwerty_medium);
+           if(pre.getInt("ARROW_ROW",1) == 1){
 
+               if (pre.getInt("SIZE", 2) == 0) {
+                   keyboard = new Keyboard(this, R.xml.qwerty_arrow_small);
+               }
+               else if (pre.getInt("SIZE", 2) == 1) {
+                   keyboard = new Keyboard(this, R.xml.qwerty_arrow);}
+               else if (pre.getInt("SIZE", 2) == 3) {
+                   keyboard = new Keyboard(this, R.xml.qwerty_large_arrow);
+               } else keyboard = new Keyboard(this, R.xml.qwerty_medium_arrow);
+           }
+           else {
+
+               if (pre.getInt("SIZE", 2) == 0) {
+                   keyboard = new Keyboard(this, R.xml.qwerty_small);
+               } else if (pre.getInt("SIZE", 2) == 1) {
+                   keyboard = new Keyboard(this, R.xml.qwerty);
+               }else if (pre.getInt("SIZE", 2) == 3) {
+                   keyboard = new Keyboard(this, R.xml.qwerty_large);
+               } else keyboard = new Keyboard(this, R.xml.qwerty_medium);
+           }
         }
        else {
-            if (pre.getInt("SIZE", 1) == 0) {
-                keyboard = new Keyboard(this, R.xml.azerty);
-            } else if (pre.getInt("SIZE", 1) == 2) {
-                keyboard = new Keyboard(this, R.xml.azerty_large);
-            } else keyboard = new Keyboard(this, R.xml.azerty_medium);
+           if(pre.getInt("ARROW_ROW",1) == 1) {
+               if (pre.getInt("SIZE", 2) == 0) {
+                   keyboard = new Keyboard(this, R.xml.azerty_arrow_small);
+               } else if (pre.getInt("SIZE", 2) == 1) {
+                   keyboard = new Keyboard(this, R.xml.azerty_arrow);
+               } else if (pre.getInt("SIZE", 2) == 3) {
+                   keyboard = new Keyboard(this, R.xml.azerty_large_arrow);
+               } else keyboard = new Keyboard(this, R.xml.azerty_medium_arrow);
+           }
+           else {
+               if (pre.getInt("SIZE", 2) == 0) {
+                   keyboard = new Keyboard(this, R.xml.azerty_small);
+               } else if (pre.getInt("SIZE", 2) == 1) {
+                   keyboard = new Keyboard(this, R.xml.azerty);
+               } else if (pre.getInt("SIZE", 2) == 3) {
+                   keyboard = new Keyboard(this, R.xml.azerty_large);
+               } else keyboard = new Keyboard(this, R.xml.azerty_medium);
+           }
         }
-// else if (pre.getInt("RADIO_INDEX_LAYOUT", 0) == 2) {
-//            if (pre.getInt("SIZE", 1) == 0) {
-//                keyboard = new Keyboard(this, R.xml.qwerty);
-//            } else if (pre.getInt("SIZE", 1) == 2) {
-//                keyboard = new Keyboard(this, R.xml.qwerty_large);
-//            } else keyboard = new Keyboard(this, R.xml.qwerty_medium);
-//        }
 
+        if(pre.getInt("SHIFT",0)==1){
+            shiftLock=true;
+        } else shiftLock=false;
+
+        shift=false;
+        ctrl=false;
 //do this for symbols
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);

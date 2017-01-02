@@ -238,7 +238,7 @@
             android:codes="32"
             android:isRepeatable="true"
             android:keyLabel="Space"
-            android:keyWidth="30%p"
+            android:keyWidth="25%p"
 
             />
         <Key

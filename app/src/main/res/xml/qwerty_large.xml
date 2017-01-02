@@ -9,22 +9,22 @@
         android:keyHeight="5%p"
         >
         <Key
-            android:codes="14"
+            android:codes="53737"
             android:isRepeatable="true"
-            android:keyLabel="◀"
+            android:keyLabel="Select All"
             />
         <Key
-            android:codes="15"
+            android:codes="53738"
             android:isRepeatable="true"
-            android:keyLabel="▲"/>
+            android:keyLabel="Cut"/>
         />
         <Key
-            android:codes="16"
+            android:codes="53739"
             android:isRepeatable="true"
-            android:keyLabel="▼"/>
+            android:keyLabel="Copy"/>
         <Key
-            android:codes="17"
-            android:keyLabel="▶" />
+            android:codes="53740"
+            android:keyLabel="Paste" />
 
     </Row>
     <Row
@@ -160,7 +160,7 @@
             android:codes="-5"
             android:isRepeatable="true"
             android:keyEdgeFlags="right"
-            android:keyLabel="⨞" />
+            android:keyLabel="◀" />
     </Row>
     <Row
         >
@@ -270,7 +270,7 @@
             android:codes="32"
             android:isRepeatable="true"
             android:keyLabel="Space"
-            android:keyWidth="30%p"
+            android:keyWidth="25%p"
 
             />
         <Key
