@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:background="@drawable/dark_263238">
+<android.inputmethodservice.KeyboardView
+    android:id="@android:id/keyboardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:keyPreviewLayout="@layout/preview0"
+    android:popupLayout="@layout/popup0"
+    android:keyBackground="@drawable/dark_263238"
+    android:keyTextColor="#fff"
+    android:background="@drawable/dark_263238"
+    android:keyTextSize="22sp"
+    android:shadowColor="@android:color/transparent"/>
+<ImageButton android:id="@android:id/closeButton"
+    android:background="@android:color/transparent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:clickable="true"
+    android:src="@drawable/checked" />
+</LinearLayout>

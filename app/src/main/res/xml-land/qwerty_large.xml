@@ -6,8 +6,11 @@
 
     <Row>
         <Key
-            android:codes="40"
+            android:codes="27"
             android:keyEdgeFlags="left"
+            android:keyLabel="Esc" />
+        <Key
+            android:codes="40"
             android:keyLabel="(" />
         <Key
             android:codes="41"
