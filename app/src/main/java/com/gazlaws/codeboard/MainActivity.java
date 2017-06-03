@@ -209,15 +209,6 @@ public class MainActivity extends AppCompatActivity {
         closeKeyboard(v);
     }
 
-    public void shiftToggle(View v) {
-        CheckBox preview = (CheckBox) findViewById(R.id.shift_toggle);
-        if (preview.isChecked()) {
-            SavePreferences("SHIFT", 1);
-        } else SavePreferences("SHIFT", 0);
-        closeKeyboard(v);
-    }
-
-
 
     public void closeKeyboard(View v) {
 
@@ -241,10 +232,10 @@ public class MainActivity extends AppCompatActivity {
         int setPreview = sharedPreferences.getInt("PREVIEW", 0);
         int setVibrator = sharedPreferences.getInt("VIBRATE", 1);
         int setSize = sharedPreferences.getInt("SIZE", 2);
-        int setShiftLock = sharedPreferences.getInt("SHIFT", 0);
+
         int setArrow = sharedPreferences.getInt("ARROW_ROW", 1);
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
-        CheckBox shiftLock = (CheckBox) findViewById(R.id.shift_toggle);
+
         CheckBox vibrate = (CheckBox) findViewById(R.id.check_vibrator);
         CheckBox noarrow = (CheckBox) findViewById(R.id.check_no_arrow);
         SeekBar size = (SeekBar) findViewById(R.id.size_seekbar);
@@ -253,11 +244,6 @@ public class MainActivity extends AppCompatActivity {
             preview.setChecked(true);
         else
             preview.setChecked(false);
-
-        if (setShiftLock == 1)
-            shiftLock.setChecked(true);
-        else
-            shiftLock.setChecked(false);
 
         if (setVibrator == 1)
             vibrate.setChecked(true);

@@ -3,6 +3,8 @@
     <string name="codeboard_ime">CodeBoard IME</string>
     <string name="subtype_en_US">CodeBoard-%s</string>
     <string name="subtype_fr_FR">CodeBoard-%s</string>
-    <string name="printf">printf("");</string>
+    <string name="printf">printf(\"\");</string>
+    <string name="scanf">scanf(\"\");</string>
+    <string name="for_">for(;;){\n\t}</string>
     <string name="app_intro">CodeBoard - Intro</string>
 </resources>

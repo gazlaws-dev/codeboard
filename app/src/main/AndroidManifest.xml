@@ -31,20 +31,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--<intent-filter android:label="CodeBoard IME">-->
-            <!--<action android:name="android.intent.action.VIEW" />-->
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--<category android:name="android.intent.category.BROWSABLE" />-->
-            <!--&lt;!&ndash; Accepts URIs that begin with "http://www.example.com/gazlaws” &ndash;&gt;-->
-            <!--<data android:scheme="http"-->
-            <!--android:host="www.gazlaws.com"-->
-            <!--android:pathPrefix="/CodeBoard" />-->
-            <!--&lt;!&ndash; note that the leading "/" is required for pathPrefix&ndash;&gt;-->
-            <!--&lt;!&ndash; Accepts URIs that begin with "example://gazlaws”-->
-            <!--<data android:scheme="example"-->
-            <!--android:host="gazlaws" />-->
-            <!--&ndash;&gt;-->
-            <!--</intent-filter>-->
         </activity>
 
         <activity android:name=".IntroActivity"

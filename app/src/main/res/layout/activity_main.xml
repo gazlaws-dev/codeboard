@@ -52,15 +52,6 @@
             android:onClick="vibratorToggle"
             android:text="Vibrate on keypress?" />
 
-        <CheckBox
-            android:id="@+id/shift_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:onClick="shiftToggle"
-            android:text="Shift lock?" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
