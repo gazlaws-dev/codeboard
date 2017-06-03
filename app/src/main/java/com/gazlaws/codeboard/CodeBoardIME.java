@@ -13,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -22,6 +24,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+import static android.view.KeyEvent.KEYCODE_CTRL_LEFT;
+import static android.view.KeyEvent.KEYCODE_HOME;
+import static android.view.KeyEvent.KEYCODE_SHIFT_LEFT;
 import static android.view.KeyEvent.META_CTRL_ON;
 import static android.view.KeyEvent.META_SHIFT_ON;
 
@@ -69,7 +74,12 @@ public class CodeBoardIME extends InputMethodService
             case 53740:
                 getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
                 break;
-
+            case 53741:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.undo);
+                break;
+            case 53742:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.redo);
+                break;
             case Keyboard.KEYCODE_DELETE:
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
                 break;
@@ -187,17 +197,19 @@ public class CodeBoardIME extends InputMethodService
                 break;
 
             case 5000:
-                sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
+                    handleArrow(KeyEvent.KEYCODE_DPAD_LEFT);
+
                 break;
             case 5001:
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_DOWN);
                 break;
             case 5002:
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_UP);
+
                 break;
 
             case 5003:
-                sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    handleArrow(KeyEvent.KEYCODE_DPAD_RIGHT);
                 break;
 
             default:
@@ -207,39 +219,58 @@ public class CodeBoardIME extends InputMethodService
                     switch (code) {
                         case 'a':
                         case 'A':
-                            //getCurrentInputConnection().performContextMenuAction(android.R.id.selectAll);
-
-                            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, 0, META_CTRL_ON));
+                            if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                            {
+                                getCurrentInputConnection().performContextMenuAction(android.R.id.selectAll);
+                            } else
+                                ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, 0, META_CTRL_ON));
                             break;
                         case 'c':
                         case 'C':
-                            //getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
-
-                            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C, 0, META_CTRL_ON));
+                            if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                            {
+                                getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
+                            } else
+                                ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C, 0, META_CTRL_ON));
                             break;
                         case 'v':
                         case 'V':
-                            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_V, 0, META_CTRL_ON));
+                            if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                            {
+                                getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
+                            } else
+                                ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_V, 0, META_CTRL_ON));
                             break;
                         case 'x':
                         case 'X':
-                            //getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
-                            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_X, 0, META_CTRL_ON));
+                            if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                            {
+                                getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
+                            } else
+                                ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_X, 0, META_CTRL_ON));
                             break;
                         case 'z':
                         case 'Z':
                             if (shift) {
                                 if (ic != null) {
-                                   ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, META_CTRL_ON | META_SHIFT_ON));
+                                    if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                                    {
+                                        getCurrentInputConnection().performContextMenuAction(android.R.id.redo);
+                                    } else
+                                        ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, META_CTRL_ON | META_SHIFT_ON));
                                     shift = false;
                                     shiftLock = false;
                                     shiftKeyToggle();
                                 }
-                            } else{
-                                    Log.e("ctrl", "z");
-                                ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, META_CTRL_ON ));
+                            } else {
+                                //Log.e("ctrl", "z");
+                                if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
+                                {
+                                    getCurrentInputConnection().performContextMenuAction(android.R.id.undo);
+                                } else
+                                    ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, META_CTRL_ON));
 
-                                }
+                            }
 
                             break;
 
@@ -335,7 +366,7 @@ public class CodeBoardIME extends InputMethodService
             //and onKey will now happen
         }
 
-        if(keyCode == 32) {
+        if (keyCode == 32) {
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showInputMethodPicker();
@@ -348,7 +379,7 @@ public class CodeBoardIME extends InputMethodService
     @Override
     public void onText(CharSequence text) {
         InputConnection ic = getCurrentInputConnection();
-        if(text.toString().contains("for")) {
+        if (text.toString().contains("for")) {
             ic.commitText(text, 1);
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -359,7 +390,7 @@ public class CodeBoardIME extends InputMethodService
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
 
         } else {
-            ic.commitText(text,1);
+            ic.commitText(text, 1);
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
             sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -539,6 +570,39 @@ public class CodeBoardIME extends InputMethodService
         }
         keyboard.setShifted(shift);
         kv.invalidateAllKeys();
+    }
+
+    public void handleArrow(int keyCode) {
+        InputConnection ic = getCurrentInputConnection();
+        Long now2 = System.currentTimeMillis();
+        if(ctrl && shift){
+            ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, KEYCODE_CTRL_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+            moveSelection(keyCode);
+            ic.sendKeyEvent(new KeyEvent(now2+4, now2+4, KeyEvent.ACTION_UP, KEYCODE_CTRL_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+
+        }
+        else if (shift)
+            moveSelection(keyCode);
+        else if (ctrl)
+            ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON | META_CTRL_ON));
+        else sendDownUpKeyEvents(keyCode);
+    }
+
+    private void moveSelection(int keyCode) {
+//        inputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+//        inputMethodService.sendDownAndUpKeyEvent(dpad_keyCode, 0);
+//        inputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        InputConnection ic = getCurrentInputConnection();
+        Long now2 = System.currentTimeMillis();
+        ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+        if(ctrl)
+            ic.sendKeyEvent(new KeyEvent(now2+1, now2+1, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON | META_CTRL_ON));
+
+        else
+                ic.sendKeyEvent(new KeyEvent(now2+1, now2+1, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON));
+        ic.sendKeyEvent(new KeyEvent(now2+3, now2+3, KeyEvent.ACTION_UP, KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+
+
     }
 }
 

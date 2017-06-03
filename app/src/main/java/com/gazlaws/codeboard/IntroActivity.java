@@ -26,8 +26,8 @@ public class IntroActivity extends AppIntro {
         // AppIntro will automatically generate the dots indicator and buttons.
         addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro1));
         addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro2));
-        addSlide(AppIntroFragment.newInstance("All the shortcuts!", "Click 'ctrl', then 'a','x', 'c', 'v', 'z' for select all, cut, copy, paste, or undo." +
-                "\n \n Ctrl+Shift+Z for redo",
+        addSlide(AppIntroFragment.newInstance("All the shortcuts!", "Click 'ctrl' for select all, cut, copy, paste, or undo." +
+                "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard \n More symbols",
                 R.drawable.intro3, Color.parseColor("#3F51B5")));
 
         // Instead of fragments, you can also use our default slide
