@@ -331,7 +331,7 @@ public class CodeBoardIME extends InputMethodService
         // Process long-click here
         if (keyCode == 16) {
             shiftLock = !shiftLock;
-            Log.e("CodeBoardIME", "long press" + Boolean.toString(shiftLock));
+            //Log.e("CodeBoardIME", "long press" + Boolean.toString(shiftLock));
             //and onKey will now happen
         }
 
