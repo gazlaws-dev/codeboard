@@ -260,7 +260,7 @@ public class CodeBoardIME extends InputMethodService
                     if (shiftLock == false) {
                         shift = false;
                         shiftKeyToggle();
-                        Log.e("CodeboardIME", "Unshifted b/c no lock");
+                        //Log.e("CodeboardIME", "Unshifted b/c no lock");
                     }
 
                 } else
