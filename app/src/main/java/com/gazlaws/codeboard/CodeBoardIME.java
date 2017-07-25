@@ -85,38 +85,7 @@ public class CodeBoardIME extends InputMethodService
                 break;
 
             case Keyboard.KEYCODE_DONE:
-                switch (sEditorInfo.imeOptions & (EditorInfo.IME_MASK_ACTION | EditorInfo.IME_FLAG_NO_ENTER_ACTION)) {
-
-                    case EditorInfo.IME_ACTION_DONE:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_DONE);
-                        break;
-                    case EditorInfo.IME_ACTION_GO:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_GO);
-                        break;
-                    case EditorInfo.IME_ACTION_NEXT:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_NEXT);
-                        break;
-                    case EditorInfo.IME_ACTION_NONE:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_NONE);
-                        break;
-                    case EditorInfo.IME_ACTION_SEARCH:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
-                        break;
-                    case EditorInfo.IME_ACTION_SEND:
-                        ic.performEditorAction(EditorInfo.IME_ACTION_SEND);
-                        break;
-
-                    default:
-                        if (sEditorInfo.imeOptions == 1342177286)//fix for DroidEdit
-                        {
-                            //Log.i(Integer.toString(sEditorInfo.imeOptions), "DroidEdit's EditorInfo");
-                            ic.performEditorAction(EditorInfo.IME_ACTION_GO);
-                        } else
-                            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-                        //Log.i (Integer.toString(sEditorInfo.imeOptions & (EditorInfo.IME_MASK_ACTION|EditorInfo.IME_FLAG_NO_ENTER_ACTION)),"Here");
-                        break;
-                }
-
+                sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
                 break;
 
             case 27:
