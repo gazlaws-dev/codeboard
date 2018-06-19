@@ -145,9 +145,9 @@ public class CodeBoardIME extends InputMethodService
                 // Log.e("CodeBoardIME", "onKey" + Boolean.toString(shiftLock));
                 long nowShift = System.currentTimeMillis();
                 if (shift)
-                    ic.sendKeyEvent(new KeyEvent(nowShift, nowShift, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT, 0, META_CTRL_ON));
+                    ic.sendKeyEvent(new KeyEvent(nowShift, nowShift, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
                 else
-                    ic.sendKeyEvent(new KeyEvent(nowShift, nowShift, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT, 0, META_CTRL_ON));
+                    ic.sendKeyEvent(new KeyEvent(nowShift, nowShift, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
 
                 if (shiftLock) {
                     shift = true;
@@ -243,9 +243,16 @@ public class CodeBoardIME extends InputMethodService
 
                             break;
 
-                        default:
-
+                        default://to use in vim, need to send keycode for each letter :/ todolater
+                            if (Character.isLetter(code) && shift) {
+                                code = Character.toUpperCase(code);
                             ic.commitText(String.valueOf(code), 1);
+                             if (shiftLock == false) {
+                                    shift = false;
+                                    shiftKeyToggle();
+                                    //Log.e("CodeboardIME", "Unshifted b/c no lock");
+                                }
+                            }
                             break;
 
                     }
