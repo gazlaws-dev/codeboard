@@ -15,7 +15,6 @@ import android.view.ViewConfiguration;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 import android.media.MediaPlayer; // for keypress sound
 
 import java.util.List;
@@ -421,7 +420,7 @@ public class CodeBoardIME extends InputMethodService
     public void onPress(final int primaryCode) {
         
         if (soundOn) {
-            MediaPlayer keypressSoundPlayer = MediaPlayer.create(this, R.raw.keypressSound); 
+            MediaPlayer keypressSoundPlayer = MediaPlayer.create(this, R.raw.keypress_sound);
             keypressSoundPlayer.start();
         }
         if (vibratorOn) {
