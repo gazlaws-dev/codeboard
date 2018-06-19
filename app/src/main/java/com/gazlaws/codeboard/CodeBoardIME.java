@@ -46,6 +46,8 @@ public class CodeBoardIME extends InputMethodService
     private boolean switchedKeyboard=false;
 
 
+
+
     public void onKeyCtrl(int code, InputConnection ic) {
         long now2 = System.currentTimeMillis();
         switch (code) {
@@ -480,7 +482,6 @@ public class CodeBoardIME extends InputMethodService
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if(imm!=null)
                 imm.showInputMethodPicker();
-            //prevent onKey from running
             switchedKeyboard=true;
         }
 
