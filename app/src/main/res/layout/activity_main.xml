@@ -42,6 +42,14 @@
             android:onClick="previewToggle"
             android:text="Popup previews of characters?" />
 
+        <CheckBox
+            android:id="@+id/check_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:onClick="soundToggle"
+            android:text="Sound on keypress?" />
 
         <CheckBox
             android:id="@+id/check_vibrator"

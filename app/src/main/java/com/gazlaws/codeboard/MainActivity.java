@@ -193,6 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void soundToggle(View v) {
+        CheckBox preview = (CheckBox) findViewById(R.id.check_sound);
+        if (preview.isChecked()) {
+            SavePreferences("SOUND", 1);
+        } else SavePreferences("SOUND", 0);
+        closeKeyboard(v);
+    }
+
     public void vibratorToggle(View v) {
         CheckBox preview = (CheckBox) findViewById(R.id.check_vibrator);
         if (preview.isChecked()) {
@@ -229,13 +237,15 @@ public class MainActivity extends AppCompatActivity {
         RadioButton savedCheckedRadioButtonLayout = (RadioButton) radioGroupLayout.getChildAt(savedRadioLayout);
         savedCheckedRadioButtonLayout.setChecked(true);
 
-        int setPreview = sharedPreferences.getInt("PREVIEW", 0);
+        int setPreview  = sharedPreferences.getInt("PREVIEW", 0);
+        int setSound    = sharedPreferences.getInt("SOUND"  , 1);
         int setVibrator = sharedPreferences.getInt("VIBRATE", 1);
-        int setSize = sharedPreferences.getInt("SIZE", 2);
+        int setSize     = sharedPreferences.getInt("SIZE"   , 2);
 
         int setArrow = sharedPreferences.getInt("ARROW_ROW", 1);
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
 
+        CheckBox sound   = (CheckBox) findViewById(R.id.check_sound);
         CheckBox vibrate = (CheckBox) findViewById(R.id.check_vibrator);
         CheckBox noarrow = (CheckBox) findViewById(R.id.check_no_arrow);
         SeekBar size = (SeekBar) findViewById(R.id.size_seekbar);
@@ -244,6 +254,11 @@ public class MainActivity extends AppCompatActivity {
             preview.setChecked(true);
         else
             preview.setChecked(false);
+
+        if (setSound == 1)
+            sound.setChecked(true);
+        else
+            sound.setChecked(false);
 
         if (setVibrator == 1)
             vibrate.setChecked(true);

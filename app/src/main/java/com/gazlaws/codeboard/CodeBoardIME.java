@@ -15,6 +15,7 @@ import android.view.ViewConfiguration;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.media.MediaPlayer; // for keypress sound
 
 import java.util.List;
 import java.util.Timer;
@@ -27,6 +28,7 @@ import static android.view.KeyEvent.META_CTRL_ON;
 import static android.view.KeyEvent.META_SHIFT_ON;
 
 
+
 /*Created by Ruby(aka gazlaws) on 13/02/2016.
  */
 
@@ -37,6 +39,7 @@ public class CodeBoardIME extends InputMethodService
     private Keyboard keyboard;
     EditorInfo sEditorInfo;
     private boolean vibratorOn;
+    private boolean soundOn;
     private boolean shiftLock = false;
     private boolean shift = false;
     private boolean ctrl = false;
@@ -429,6 +432,11 @@ public class CodeBoardIME extends InputMethodService
 
     @Override
     public void onPress(final int primaryCode) {
+        
+        if (soundOn) {
+            MediaPlayer keypressSoundPlayer = MediaPlayer.create(this, R.raw.keypress_sound);
+            keypressSoundPlayer.start();
+        }
         if (vibratorOn) {
 
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -628,6 +636,10 @@ public class CodeBoardIME extends InputMethodService
         if (pre.getInt("PREVIEW", 0) == 1) {
             kv.setPreviewEnabled(true);
         } else kv.setPreviewEnabled(false);
+
+        if (pre.getInt("SOUND", 1) == 1) {
+            soundOn = true;
+        } else soundOn = false;
 
         if (pre.getInt("VIBRATE", 1) == 1) {
             vibratorOn = true;
