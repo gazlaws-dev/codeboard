@@ -4,23 +4,27 @@
             android:keyEdgeFlags="left"
             android:keyLabel="Esc" />
     <Key
-    android:keyWidth="25%p"
+    android:keyWidth="14%p"
+            android:codes="9"
+            android:keyLabel="Tab" />
+    <Key
+    android:keyWidth="17%p"
         android:codes="53737"
         android:isRepeatable="true"
         android:keyLabel="Select All"
         />
     <Key
-    android:keyWidth="15%p"
+    android:keyWidth="13%p"
         android:codes="53738"
         android:isRepeatable="true"
         android:keyLabel="Cut"/>
     <Key
-    android:keyWidth="15%p"
+    android:keyWidth="13%p"
         android:codes="53739"
         android:isRepeatable="true"
         android:keyLabel="Copy"/>
     <Key
-    android:keyWidth="17%p"
+    android:keyWidth="13%p"
         android:codes="53740"
         android:keyLabel="Paste" />
 

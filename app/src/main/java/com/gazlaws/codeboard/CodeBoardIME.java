@@ -92,7 +92,11 @@ public class CodeBoardIME extends InputMethodService
                             getCurrentInputConnection().performContextMenuAction(android.R.id.redo);
                         } else
                             ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Z, 0, META_CTRL_ON | META_SHIFT_ON));
+
+                        long nowS = System.currentTimeMillis();
                         shift = false;
+                        ic.sendKeyEvent(new KeyEvent(nowS, nowS, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
+
                         shiftLock = false;
                         shiftKeyUpdateView();
                     }
@@ -252,10 +256,13 @@ public class CodeBoardIME extends InputMethodService
                     code = Character.toUpperCase(code);
                     ic.commitText(String.valueOf(code), 1);
                     if (!shiftLock) {
+                        long nowS = System.currentTimeMillis();
                         shift = false;
-                        shiftKeyUpdateView();
+                        ic.sendKeyEvent(new KeyEvent(nowS, nowS, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
+
                         //Log.e("CodeboardIME", "Unshifted b/c no lock");
                     }
+                    shiftKeyUpdateView();
                 }
                 break;
 
@@ -389,7 +396,10 @@ public class CodeBoardIME extends InputMethodService
                 if (ctrl) {
                     onKeyCtrl(code, ic);
                     if (!shiftLock) {
+                        long nowS = System.currentTimeMillis();
                         shift = false;
+                        ic.sendKeyEvent(new KeyEvent(nowS, nowS, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
+
                         shiftKeyUpdateView();
                     }
                     ctrl = false;
@@ -398,11 +408,15 @@ public class CodeBoardIME extends InputMethodService
                     code = Character.toUpperCase(code);
                     ic.commitText(String.valueOf(code), 1);
                     if (!shiftLock) {
+
+                        long nowS = System.currentTimeMillis();
                         shift = false;
-                        shiftKeyUpdateView();
+                        ic.sendKeyEvent(new KeyEvent(nowS, nowS, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON));
+
                         //Log.e("CodeboardIME", "Unshifted b/c no lock");
                     }
 
+                    shiftKeyUpdateView();
                 } else{
                     if(!switchedKeyboard) {
                         ic.commitText(String.valueOf(code), 1);
@@ -691,13 +705,13 @@ public class CodeBoardIME extends InputMethodService
         if (ctrl && shift) {
             ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, KEYCODE_CTRL_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
             moveSelection(keyCode);
-            ic.sendKeyEvent(new KeyEvent(now2 + 4, now2 + 4, KeyEvent.ACTION_UP, KEYCODE_CTRL_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+            ic.sendKeyEvent(new KeyEvent(now2 , now2, KeyEvent.ACTION_UP, KEYCODE_CTRL_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
 
         } else if (shift)
             moveSelection(keyCode);
         else if (ctrl)
-            ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON | META_CTRL_ON));
-        else sendDownUpKeyEvents(keyCode);
+            ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, keyCode, 0,  META_CTRL_ON));
+        else {sendDownUpKeyEvents(keyCode);}
     }
 
     private void moveSelection(int keyCode) {
@@ -708,11 +722,11 @@ public class CodeBoardIME extends InputMethodService
         Long now2 = System.currentTimeMillis();
         ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
         if (ctrl)
-            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON | META_CTRL_ON));
+            ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON | META_CTRL_ON));
 
         else
-            ic.sendKeyEvent(new KeyEvent(now2 + 1, now2 + 1, KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON));
-        ic.sendKeyEvent(new KeyEvent(now2 + 3, now2 + 3, KeyEvent.ACTION_UP, KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
+            ic.sendKeyEvent(new KeyEvent(now2, now2 , KeyEvent.ACTION_DOWN, keyCode, 0, META_SHIFT_ON));
+        ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_UP, KEYCODE_SHIFT_LEFT, 0, META_SHIFT_ON | META_CTRL_ON));
 
 
     }

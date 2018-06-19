@@ -26,22 +26,28 @@
             android:keyEdgeFlags="left"
             android:keyLabel="Esc" />
     <Key
-    android:keyWidth="25%p"
+    android:keyWidth="13%p"
+            android:codes="9"
+            android:keyLabel="Tab" />
+    <Key
+    	android:keyWidth="13%p"
         android:codes="5000"
         android:isRepeatable="true"
         android:keyLabel="◀"
         />
     <Key
+    	android:keyWidth="13%p"
         android:codes="5001"
         android:isRepeatable="true"
         android:keyLabel="▼"/>
        
     <Key
+    	android:keyWidth="13%p"
         android:codes="5002"
         android:isRepeatable="true"
         android:keyLabel="▲"/>
     <Key
-    android:keyWidth="17%p"
+    	android:keyWidth="13%p"
         android:codes="5003"
         android:isRepeatable="true"
         android:keyLabel="▶" />
@@ -66,7 +72,7 @@
     </Row>
 
     <Row
-        android:keyWidth = "9%p"
+        android:keyWidth = "10%p"
         android:keyboardMode="@integer/keyboard_normal"
         android:keyHeight="$row4Height$"
         >
@@ -74,7 +80,7 @@
     </Row>
 
     <Row
-        android:keyWidth = "8.9%p"
+        android:keyWidth = "9%p"
         android:keyboardMode="@integer/keyboard_normal"
         android:keyHeight="$row5Height$"
         >
@@ -132,38 +138,12 @@
 
     </Row>
 
+
+
+
     <Row
-    	android:keyWidth ="10%p"
         android:keyboardMode="@integer/keyboard_sym"
         android:keyHeight="$row5Height$"
-        >
-     	<Key
-        	android:keyWidth ="20%p"
-            android:keyOutputText="@string/for_"
-            android:keyLabel="@string/for_" />
-        <Key
-        	android:keyWidth ="30%p"
-            android:keyOutputText="@string/printf"
-            android:keyLabel="@string/printf" />
-        
-        <Key
-        	android:keyWidth ="30%p"
-            android:keyOutputText="@string/scanf"
-            android:keyLabel="@string/scanf" />
-        <Key
-        	android:keyWidth ="20%p"
-            android:codes="-4"
-            android:keyEdgeFlags="right"
-            android:keyLabel="Enter"
-           />
-
-        
-    </Row>
-
-
-    <Row
-        android:keyboardMode="@integer/keyboard_sym"
-        android:keyHeight="$row6Height$"
         android:keyWidth="15%p"
         >
         <Key
@@ -198,7 +178,33 @@
 	        android:keyLabel="Redo" />
 
     </Row>
-    
+        <Row
+    	android:keyWidth ="10%p"
+        android:keyboardMode="@integer/keyboard_sym"
+        android:keyHeight="$row6Height$"
+        >
+     	<Key
+        	android:keyWidth ="20%p"
+            android:keyOutputText="@string/for_"
+            android:keyLabel="@string/for_" />
+        <Key
+        	android:keyWidth ="30%p"
+            android:keyOutputText="@string/printf"
+            android:keyLabel="@string/printf" />
+        
+        <Key
+        	android:keyWidth ="30%p"
+            android:keyOutputText="@string/scanf"
+            android:keyLabel="@string/scanf" />
+        <Key
+        	android:keyWidth ="20%p"
+            android:codes="-4"
+            android:keyEdgeFlags="right"
+            android:keyLabel="Enter"
+           />
+
+        
+    </Row>
 
     <Row        
         android:keyHeight="$row7Height$"
