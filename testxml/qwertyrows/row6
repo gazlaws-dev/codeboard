@@ -29,6 +29,7 @@
             android:keyLabel="\?"
             />
         <Key
-            android:codes="9"
+            android:codes="-4"
             android:keyEdgeFlags="right"
-            android:keyLabel="Tab" />
+            android:keyLabel="Enter"
+           />

@@ -8,8 +8,8 @@ android {
         applicationId "com.gazlaws.codeboard"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 13
-        versionName "4.0.4"
+        versionCode 14
+        versionName "4.1.0"
     }
     buildTypes {
         release {

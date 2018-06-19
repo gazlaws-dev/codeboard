@@ -1,26 +1,32 @@
     
 	<Key
-    android:keyWidth="13%p"
+    	android:keyWidth="13%p"
             android:codes="27"
             android:keyEdgeFlags="left"
             android:keyLabel="Esc" />
     <Key
-    android:keyWidth="25%p"
+    	android:keyWidth="13%p"
+            android:codes="9"
+            android:keyLabel="Tab" />
+    <Key
+    	android:keyWidth="13%p"
         android:codes="5000"
         android:isRepeatable="true"
         android:keyLabel="◀"
         />
     <Key
+    	android:keyWidth="13%p"
         android:codes="5001"
         android:isRepeatable="true"
         android:keyLabel="▼"/>
        
     <Key
+    	android:keyWidth="13%p"
         android:codes="5002"
         android:isRepeatable="true"
         android:keyLabel="▲"/>
     <Key
-    android:keyWidth="17%p"
+    	android:keyWidth="13%p"
         android:codes="5003"
         android:isRepeatable="true"
         android:keyLabel="▶" />

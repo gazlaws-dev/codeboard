@@ -28,10 +28,7 @@
             android:keyLabel="o" />
         <Key
             android:codes="112"
-            android:keyLabel="p" />
+            android:keyLabel="p"
+            android:keyEdgeFlags="right" />
 
-        <Key
-            android:codes="-5"
-            android:isRepeatable="true"
-            android:keyEdgeFlags="right"
-            android:keyLabel="◀" />
+
