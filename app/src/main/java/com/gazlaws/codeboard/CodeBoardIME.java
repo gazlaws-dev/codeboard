@@ -506,11 +506,11 @@ public class CodeBoardIME extends InputMethodService
         }
 
         if (keyCode == 32) {
+            switchedKeyboard=true;
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if(imm!=null)
                 imm.showInputMethodPicker();
-            switchedKeyboard=true;
         }
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -749,5 +749,3 @@ public class CodeBoardIME extends InputMethodService
 
     }
 }
-
-
