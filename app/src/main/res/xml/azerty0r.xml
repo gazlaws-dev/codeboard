@@ -367,12 +367,7 @@
 		android:keyHeight="5%p"
         android:keyWidth="15%p"
         >
-        <Key
-        	android:keyWidth="10%p"
-            android:codes="16"
-            android:keyEdgeFlags="left"
-            android:isModifier="true"
-            android:keyLabel="Shft" />
+        
         <Key
 	        android:codes="53737"
 	        android:keyWidth="20%p"
@@ -404,17 +399,23 @@
         android:keyboardMode="@integer/keyboard_sym"
 		android:keyHeight="5%p"
         >
+        <Key
+        	android:keyWidth="10%p"
+            android:codes="16"
+            android:keyEdgeFlags="left"
+            android:isModifier="true"
+            android:keyLabel="Shft" />
      	<Key
         	android:keyWidth ="20%p"
             android:keyOutputText="@string/for_"
             android:keyLabel="@string/for_" />
         <Key
-        	android:keyWidth ="30%p"
+        	android:keyWidth ="25%p"
             android:keyOutputText="@string/printf"
             android:keyLabel="@string/printf" />
         
         <Key
-        	android:keyWidth ="30%p"
+        	android:keyWidth ="25%p"
             android:keyOutputText="@string/scanf"
             android:keyLabel="@string/scanf" />
         <Key
@@ -448,11 +449,7 @@
             android:keyWidth = "6%p"
             android:keyLabel="|"
            />
-        <Key
-            android:codes="32"
-            android:keyLabel="Space"
-            android:keyWidth="26%p"
-            />
+           
         <Key
             android:codes="60"
             android:keyLabel="&lt;"
@@ -462,6 +459,11 @@
             android:codes="62"
             android:keyWidth = "7%p"
             android:keyLabel="&gt;"
+            />
+        <Key
+            android:codes="32"
+            android:keyLabel="Space"
+            android:keyWidth="26%p"
             />
         <Key
             android:codes="59"

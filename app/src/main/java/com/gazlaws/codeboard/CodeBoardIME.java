@@ -440,7 +440,7 @@ public class CodeBoardIME extends InputMethodService
                 public void onCompletion(MediaPlayer mp) {
                     mp.release();
 
-                };
+                }
             });
         }
         if (vibratorOn) {

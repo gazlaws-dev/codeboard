@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.gazlaws.codeboard"
         minSdkVersion 23
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 14
         versionName "4.1.0"
     }
@@ -31,8 +31,8 @@ repositories {
 
 dependencies {
 
-    api 'com.android.support:appcompat-v7:27.1.1'
-    api 'com.android.support:support-v13:27.1.1'
+    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'com.android.support:support-v13:28.0.0'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
 
 }
