@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CodeBoard.iml" filepath="$PROJECT_DIR$/CodeBoard.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/codeboard.iml" filepath="$PROJECT_DIR$/codeboard.iml" />
     </modules>
   </component>
 </project>

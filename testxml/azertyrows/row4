@@ -34,4 +34,4 @@
             android:codes="-5"
             android:isRepeatable="true"
             android:keyEdgeFlags="right"
-            android:keyLabel="◀" />
+            android:keyIcon="@drawable/back_icon" />
