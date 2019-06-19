@@ -8,7 +8,7 @@
                 android:width="0dp"
                 android:color="#ffffff"/>
             <size
-                android:width="50dp"
+                android:width="35dp"
                 android:height="30dp"/>
 
         </shape>
@@ -42,7 +42,7 @@
 
     <item
         android:top="7dp"
-        android:left="40dp" >
+        android:left="25dp" >
 
         <rotate
             android:fromDegrees="90"
@@ -59,7 +59,7 @@
 
     <item
         android:bottom="7dp"
-        android:left="40dp" >
+        android:left="25dp" >
 
         <rotate
             android:fromDegrees="90"
@@ -76,7 +76,7 @@
 
     <item
         android:bottom="-7dp"
-        android:right="38dp" >
+        android:right="23dp" >
 
         <rotate
             android:fromDegrees="45"
@@ -93,7 +93,7 @@
 
     <item
         android:bottom="7dp"
-        android:right="38dp" >
+        android:right="23dp" >
 
         <rotate
             android:fromDegrees="135"
@@ -110,8 +110,8 @@
 
     <item
 
-        android:left="28dp"
-        android:right="10dp">
+        android:left="15dp"
+        android:right="8dp">
 
         <rotate
             android:fromDegrees="45"
@@ -128,8 +128,8 @@
 
     <item
 
-        android:left="28dp"
-        android:right="10dp">
+        android:left="15dp"
+        android:right="8dp">
 
         <rotate
             android:fromDegrees="135"
