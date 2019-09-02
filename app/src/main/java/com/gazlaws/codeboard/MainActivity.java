@@ -23,13 +23,14 @@ import android.widget.SeekBar;
  * Created by Ruby on 02/06/2016.
  */
 public class MainActivity extends AppCompatActivity {
-    RadioGroup radioGroupColour,radioGroupLayout;
+    RadioGroup radioGroupColour,radioGroupLayout, radioGroupBorders;
     SeekBar seekBar;
 
 
    final String RADIO_INDEX_COLOUR = "RADIO_INDEX_COLOUR";
    final String RADIO_INDEX_LAYOUT = "RADIO_INDEX_LAYOUT";
    final String CUSTOM_SYMBOLS = "CUSTOM_SYMBOLS";
+   final String RADIO_INDEX_BORDER = "RADIO_INDEX_BORDER";
 
 
     @Override
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         radioGroupLayout = (RadioGroup) findViewById(R.id.radiogrouplayout);
         radioGroupLayout.setOnCheckedChangeListener(radioGroupOnCheckedChangeListenerLayout);
 
+        radioGroupBorders = findViewById(R.id.radiogroupborders);
+        radioGroupBorders.setOnCheckedChangeListener(radioGroupOnCheckedChangeListenerBorders);
+
 
         LoadPreferences();
 
@@ -152,6 +156,16 @@ public class MainActivity extends AppCompatActivity {
                     int checkedIndexLayout = radioGroupLayout.indexOfChild(checkedRadioButtonLayout);
                     SavePreferences(RADIO_INDEX_LAYOUT, checkedIndexLayout);
 
+                }
+            };
+
+    RadioGroup.OnCheckedChangeListener radioGroupOnCheckedChangeListenerBorders =
+            new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    RadioButton checkedRadioButtonBorder = radioGroupBorders.findViewById(checkedId);
+                    int checkedIndexBorder = radioGroupBorders.indexOfChild(checkedRadioButtonBorder);
+                    SavePreferences(RADIO_INDEX_BORDER, checkedIndexBorder);
                 }
             };
 
@@ -254,6 +268,10 @@ public class MainActivity extends AppCompatActivity {
         int savedRadioLayout = sharedPreferences.getInt(RADIO_INDEX_LAYOUT, 0);
         RadioButton savedCheckedRadioButtonLayout = (RadioButton) radioGroupLayout.getChildAt(savedRadioLayout);
         savedCheckedRadioButtonLayout.setChecked(true);
+
+        int savedRadioBorders = sharedPreferences.getInt(RADIO_INDEX_BORDER, 0);
+        RadioButton savedCheckedRadioButtonBorders = (RadioButton) radioGroupBorders.getChildAt(savedRadioBorders);
+        savedCheckedRadioButtonBorders.setChecked(true);
 
         int setPreview  = sharedPreferences.getInt("PREVIEW", 0);
         int setSound    = sharedPreferences.getInt("SOUND"  , 1);

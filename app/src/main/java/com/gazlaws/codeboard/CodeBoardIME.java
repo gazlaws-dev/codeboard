@@ -344,6 +344,54 @@ public class CodeBoardIME extends InputMethodService
         SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
 
         mKeyboardUiFactory.theme = getThemeByRadioIndex(pre.getInt("RADIO_INDEX_COLOUR", 0));
+        SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+
+        if (pre.getInt("RADIO_INDEX_BORDER", 0) == 0) {
+            switch (pre.getInt("RADIO_INDEX_COLOUR", 0)) {
+                case 1:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard1_border, null);
+                    break;
+                case 2:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard2_border, null);
+                    break;
+                case 3:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard3_border, null);
+                    break;
+                case 4:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard4_border, null);
+                    break;
+                case 5:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard5_border, null);
+                    break;
+
+                default:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_border, null);
+                    break;
+            }
+        } else {
+            switch (pre.getInt("RADIO_INDEX_COLOUR", 0)) {
+                case 1:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard1, null);
+                    break;
+                case 2:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard2, null);
+                    break;
+                case 3:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard3, null);
+                    break;
+                case 4:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard4, null);
+                    break;
+                case 5:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard5, null);
+                    break;
+
+                default:
+                    kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
+                    break;
+            }
+        }
+
 
         if (pre.getInt("PREVIEW", 0) == 1) {
             mKeyboardUiFactory.theme.enablePreview = true;

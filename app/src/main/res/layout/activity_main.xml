@@ -246,6 +246,39 @@
             android:text="@string/default_symbols"
             android:id="@+id/input_symbols">
         </EditText>
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Button borders"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:id="@+id/radiogroupborders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/borderson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:onClick="closeKeyboard"
+            android:text="ON"
+
+            />
+        <RadioButton
+            android:id="@+id/bordersoff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:onClick="closeKeyboard"
+            android:text="OFF"
+            />
 
         <Button
             android:layout_width="match_parent"
