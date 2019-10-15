@@ -35,12 +35,24 @@ public class KeyboardLayoutBuilder {
         return this;
     }
 
+    public KeyboardLayoutBuilder addKey(char key)
+    {
+        this.addKey(1, key);
+        return this;
+    }
+
     public KeyboardLayoutBuilder addKey(float relativeSize)
+    {
+        this.addKey(relativeSize, '?');
+        return this;
+    }
+
+    public KeyboardLayoutBuilder addKey(float relativeSize, char key)
     {
         if (currentRow == null){
             newRow();
         }
-        currentRow.addKey(relativeSize);
+        currentRow.addKey(relativeSize, key);
         return this;
     }
 

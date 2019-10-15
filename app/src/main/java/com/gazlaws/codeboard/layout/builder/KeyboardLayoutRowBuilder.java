@@ -36,8 +36,8 @@ public class KeyboardLayoutRowBuilder {
         return result;
     }
 
-    public KeyboardLayoutRowBuilder addKey(float relativeSize) {
-        keys.add(new KeyBlueprint(relativeSize));
+    public KeyboardLayoutRowBuilder addKey(float relativeSize, char key) {
+        keys.add(new KeyBlueprint(relativeSize, key));
         totalRequestedSize += relativeSize;
         return this;
     }
@@ -61,6 +61,7 @@ public class KeyboardLayoutRowBuilder {
     private static Key buildKeyFromBlueprint(KeyBlueprint blueprint, Box box) {
         Key key = new Key();
         key.box = box;
+        key.str = "" + blueprint.key;
         return key;
     }
 }

@@ -676,7 +676,12 @@ public class CodeBoardIME extends InputMethodService
             Collection<Key> keyboardLayout = new KeyboardLayoutBuilder()
                 .setBox(Box.create(0,0,1080,300))
                 .setRowGap(8).setKeyGap(8)
-                .addKey(1).addKey(1).newRow().addKey(1).addKey(1).build();
+                .addKey('Q').addKey('W').addKey('E').addKey('R').addKey('T').addKey('Y').addKey('U').addKey('I').addKey('O').addKey('P')
+                    .newRow()
+                    .addKey('A').addKey('S').addKey('D').addKey('F').addKey('G').addKey('H').addKey('J').addKey('K').addKey('L')
+                    .newRow()
+                    .addKey('Z').addKey('X').addKey('C').addKey('V').addKey('B').addKey('N').addKey('M').addKey('<').addKey('>').addKey('.')
+                    .build();
 
             KeyboardUiFactory factory = new KeyboardUiFactory();
             return factory.getView(this, keyboardLayout);
