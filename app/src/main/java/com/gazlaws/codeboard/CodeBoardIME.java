@@ -17,6 +17,13 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
 
+import com.gazlaws.codeboard.layout.Box;
+import com.gazlaws.codeboard.layout.Key;
+import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
+import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
+import com.gazlaws.codeboard.layout.ui.KeyboardUiFactory;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -664,6 +671,19 @@ public class CodeBoardIME extends InputMethodService
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
 
+        try {
+
+            Collection<Key> keyboardLayout = new KeyboardLayoutBuilder()
+                .setBox(Box.create(0,0,1080,300))
+                .setRowGap(8).setKeyGap(8)
+                .addKey(1).addKey(1).newRow().addKey(1).addKey(1).build();
+
+            KeyboardUiFactory factory = new KeyboardUiFactory();
+            return factory.getView(this, keyboardLayout);
+
+        } catch (KeyboardLayoutException e) {
+            e.printStackTrace();
+        }
 
         return kv;
     }
