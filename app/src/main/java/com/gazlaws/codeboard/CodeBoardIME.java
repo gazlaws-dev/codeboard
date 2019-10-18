@@ -674,8 +674,8 @@ public class CodeBoardIME extends InputMethodService
         try {
 
             Collection<Key> keyboardLayout = new KeyboardLayoutBuilder()
-                .setBox(Box.create(0,0,1080,300))
-                .setRowGap(8).setKeyGap(8)
+                .setBox(Box.create(0,0,1,1))
+                .setRowGap(0.01f).setKeyGap(0.01f)
                 .addKey('Q').addKey('W').addKey('E').addKey('R').addKey('T').addKey('Y').addKey('U').addKey('I').addKey('O').addKey('P')
                     .newRow()
                     .addKey('A').addKey('S').addKey('D').addKey('F').addKey('G').addKey('H').addKey('J').addKey('K').addKey('L')
