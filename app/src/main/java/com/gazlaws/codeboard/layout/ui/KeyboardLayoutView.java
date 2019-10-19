@@ -11,7 +11,13 @@ public class KeyboardLayoutView extends ViewGroup {
 
     public KeyboardLayoutView(Context context) {
         super(context);
+        setBackgroundColor(0xfff0e8e0);
+        Log.d(TAG, "KeyboardLayoutView: CREATED!!!");
     }
+
+    int avaiableWidth = 0;
+    int avaiableHeight = 0;
+    boolean measured = false;
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -21,8 +27,15 @@ public class KeyboardLayoutView extends ViewGroup {
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
+        // when measure is called for first time store the width and height
+        if (!measured){
+            avaiableWidth = widthSize;
+            avaiableHeight = heightSize;
+            measured = true;
+        }
+
         Log.d(TAG, "onMeasure" + widthSize + " " + heightSize);
-        setMeasuredDimension(widthSize,heightSize/2);
+        setMeasuredDimension(avaiableWidth, avaiableHeight *3/8);
     }
 
     @Override

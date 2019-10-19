@@ -29,6 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+import static android.content.ContentValues.TAG;
 import static android.view.KeyEvent.KEYCODE_CTRL_LEFT;
 import static android.view.KeyEvent.KEYCODE_SHIFT_LEFT;
 import static android.view.KeyEvent.META_CTRL_ON;
@@ -672,10 +673,10 @@ public class CodeBoardIME extends InputMethodService
         kv.setOnKeyboardActionListener(this);
 
         try {
-
+            Log.d(TAG, "onCreateInputView: rebuilding view");
             Collection<Key> keyboardLayout = new KeyboardLayoutBuilder()
                 .setBox(Box.create(0,0,1,1))
-                .setRowGap(0.01f).setKeyGap(0.01f)
+                .setRowGap(0.01f).setKeyGap(0.01f).setPadding(0.01f)
                 .addKey('Q').addKey('W').addKey('E').addKey('R').addKey('T').addKey('Y').addKey('U').addKey('I').addKey('O').addKey('P')
                     .newRow()
                     .addKey('A').addKey('S').addKey('D').addKey('F').addKey('G').addKey('H').addKey('J').addKey('K').addKey('L')

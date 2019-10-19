@@ -12,6 +12,7 @@ public class KeyboardLayoutBuilder {
     private KeyboardLayoutRowBuilder currentRow = null;
     private float rowGap = 0; // space between keyboard rows
     private float keyGap = 0; // space between keys (horizontal
+    private float padding = 0;
 
     public KeyboardLayoutBuilder newRow()
     {
@@ -32,6 +33,11 @@ public class KeyboardLayoutBuilder {
 
     public KeyboardLayoutBuilder setKeyGap(float size){
         this.keyGap = size;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder setPadding(float size){
+        this.padding = size;
         return this;
     }
 
@@ -57,10 +63,10 @@ public class KeyboardLayoutBuilder {
     }
 
     public ArrayList<Key> build() throws KeyboardLayoutException {
-        float availableWidth = box.width;
-        float availableHeight = box.height;
-        float cursorX = box.x;
-        float cursorY = box.y;
+        float availableWidth = box.width - 2*padding;
+        float availableHeight = box.height - (rows.size()-1)*rowGap - 2*padding;
+        float cursorX = box.x + padding;
+        float cursorY = box.y + padding;
         ArrayList<Key> result = new ArrayList<>();
         for (KeyboardLayoutRowBuilder rowBuilder : rows) {
             rowBuilder.setGap(keyGap);
@@ -69,6 +75,7 @@ public class KeyboardLayoutBuilder {
             Box rowBox = Box.create(cursorX, cursorY, width, height);
             rowBuilder.setBox(rowBox);
             cursorY += rowBox.height;
+            cursorY += rowGap;
             result.addAll(rowBuilder.build());
         }
         return result;
