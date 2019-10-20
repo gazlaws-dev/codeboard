@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.KeyboardView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -13,11 +16,47 @@ import com.gazlaws.codeboard.layout.Key;
 public class KeyboardButtonView extends View {
 
     private final Key key;
+    private final KeyboardView.OnKeyboardActionListener inputService;
 
-    public KeyboardButtonView(Context context, Key key) {
+    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService) {
         super(context);
+        this.inputService = inputService;
         this.key = key;
         this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View click) {
+                KeyboardButtonView.this.click();
+            }
+        });
+        this.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return KeyboardButtonView.this.longClick();
+            }
+        });
+    }
+
+    private boolean longClick() {
+        animateClick();
+        return true;
+    }
+
+    private void click() {
+        Log.d("KeyboardButtonView", "click "+ this.key.info.code);
+        if (this.key.info.outputText != null){
+            inputService.onText(this.key.info.outputText);
+        } else {
+            inputService.onKey(this.key.info.code, null);
+            inputService.onPress(this.key.info.code);
+            inputService.onRelease(this.key.info.code);
+        }
+        animateClick();
+    }
+
+    private void animateClick(){
+        this.setAlpha(.1f);
+        this.animate().alpha(1.0f).setDuration(300);
     }
 
     @Override

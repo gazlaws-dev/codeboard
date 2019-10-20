@@ -285,7 +285,7 @@ public class CodeBoardIME extends InputMethodService
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
 
-
+        Log.d("asdasd", "onKey" + primaryCode);
         InputConnection ic = getCurrentInputConnection();
         keyboard = kv.getKeyboard();
 
@@ -680,24 +680,24 @@ public class CodeBoardIME extends InputMethodService
             builder.setPadding(0.01f).setRowGap(0.01f).setKeyGap(0.01f);
 
             if (mToprow == 0) {
-                Definitions.AddCopyPasteRow(builder);
+                Definitions.addCopyPasteRow(builder);
             } else {
-                Definitions.AddArrowsRow(builder);
+                Definitions.addArrowsRow(builder);
             }
 
-            Definitions.AddNumberRow(builder);
-            Definitions.AddOperatorRow(builder);
+            Definitions.addNumberRow(builder);
+            Definitions.addOperatorRow(builder);
 
             if (mLayout == 0){
-                Definitions.AddQwertyRows(builder);
+                Definitions.addQwertyRows(builder);
             } else {
-                Definitions.AddAzertyRows(builder);
+                Definitions.addAzertyRows(builder);
             }
 
-            Definitions.AddSpaceRow(builder);
+            Definitions.addSpaceRow(builder);
 
             Collection<Key> keyboardLayout = builder.build();
-            KeyboardUiFactory factory = new KeyboardUiFactory();
+            KeyboardUiFactory factory = new KeyboardUiFactory(this);
             return factory.getView(this, keyboardLayout);
 
         } catch (KeyboardLayoutException e) {

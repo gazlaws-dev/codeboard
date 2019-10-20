@@ -20,12 +20,12 @@ public class KeyboardLayoutRowBuilderTest {
 
     @Test
     public void addKey_canBeCalledMultipleTimes() {
-        builder().setBox(defaultBox).addKey(1, key).addKey(1, key).addKey(1, key);
+        builder().setBox(defaultBox).addKey(new KeyInfo()).addKey(new KeyInfo()).addKey(new KeyInfo());
     }
 
     @Test
     public void build_returnsCorrectNumberOfKeys() throws KeyboardLayoutException {
-        assertEquals(2, builder().setBox(defaultBox).addKey(1, key).addKey(1, key).build().size());
+        assertEquals(2, builder().setBox(defaultBox).addKey(new KeyInfo()).addKey(new KeyInfo()).build().size());
     }
 
     @Test
@@ -57,8 +57,12 @@ public class KeyboardLayoutRowBuilderTest {
     }
 
     private ArrayList<Key> buildTwoKeysRow(float gap) throws KeyboardLayoutException {
+        KeyInfo keyA = new KeyInfo();
+        keyA.size = 1;
+        KeyInfo keyB = new KeyInfo();
+        keyB.size = 3;
         return builder().setBox(defaultBox)
                 .setGap(gap)
-                .addKey(1, key).addKey(3, key).build();
+                .addKey(keyA).addKey(keyB).build();
     }
 }

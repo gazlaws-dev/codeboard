@@ -4,7 +4,7 @@ import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 
 public class Definitions {
 
-    public static void AddArrowsRow(KeyboardLayoutBuilder keyboard)
+    public static void addArrowsRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
                 .addKey("Esc", 27)
@@ -17,7 +17,7 @@ public class Definitions {
         ;
     }
 
-    public static void AddCopyPasteRow(KeyboardLayoutBuilder keyboard)
+    public static void addCopyPasteRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
                 .addKey("Esc", 27)
@@ -30,7 +30,7 @@ public class Definitions {
         ;
     }
 
-    public static void AddNumberRow(KeyboardLayoutBuilder keyboard) {
+    public static void addNumberRow(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey('(')
                 .addKey(')')
@@ -48,7 +48,7 @@ public class Definitions {
                 ;
     }
 
-    public static void AddOperatorRow(KeyboardLayoutBuilder keyboard) {
+    public static void addOperatorRow(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey('+')
                 .addKey('-')
@@ -65,7 +65,7 @@ public class Definitions {
                 ;
     }
 
-    public static void AddQwertyRows(KeyboardLayoutBuilder keyboard) {
+    public static void addQwertyRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey('q')
                 .addKey('w')
@@ -104,7 +104,7 @@ public class Definitions {
     }
 
 
-    public static void AddAzertyRows(KeyboardLayoutBuilder keyboard) {
+    public static void addAzertyRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey('a')
                 .addKey('z')
@@ -143,7 +143,7 @@ public class Definitions {
         ;
     }
 
-    public static void AddSymbolRows(KeyboardLayoutBuilder keyboard){
+    public static void addSymbolRows(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
                 .addKey('~')
                 .addKey('`')
@@ -171,7 +171,7 @@ public class Definitions {
                 ;
     }
 
-    public static void AddSpaceRow(KeyboardLayoutBuilder keyboard){
+    public static void addSpaceRow(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
                 .addKey("Ctrl",17).asModifier()
                 .addKey('&')

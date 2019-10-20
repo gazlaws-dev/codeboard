@@ -50,6 +50,7 @@ public class KeyboardLayoutBuilder {
         }
         currentKey = new KeyInfo();
         currentKey.label = label;
+        currentKey.code = code;
         currentKey.size = 1.0f;
         currentKey.isRepeatable = false;
         currentRow.addKey(currentKey);

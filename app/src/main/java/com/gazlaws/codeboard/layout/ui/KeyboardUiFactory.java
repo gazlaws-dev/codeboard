@@ -1,6 +1,7 @@
 package com.gazlaws.codeboard.layout.ui;
 
 import android.content.Context;
+import android.inputmethodservice.KeyboardView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -11,11 +12,17 @@ import java.util.Collection;
 
 public class KeyboardUiFactory {
 
+    private final KeyboardView.OnKeyboardActionListener inputService;
+
+    public KeyboardUiFactory(KeyboardView.OnKeyboardActionListener inputService) {
+        this.inputService = inputService;
+    }
+
     public View getView(Context context, Collection<Key> keys){
         KeyboardLayoutView layout = new KeyboardLayoutView(context);
         for (Key key :keys){
             RelativeLayout.LayoutParams params = getKeyLayoutParams(key);
-            View view = getKeyView(context,key);
+            View view = createKeyView(context,key);
             layout.addView(view,params);
         }
         return layout;
@@ -30,9 +37,9 @@ public class KeyboardUiFactory {
         return params;
     }
 
-    private View getKeyView(Context context, Key key) {
+    private View createKeyView(Context context, Key key) {
 
-        KeyboardButtonView view =  new KeyboardButtonView(context, key);
+        KeyboardButtonView view =  new KeyboardButtonView(context, key, inputService);
         Box box = key.box;
         view.layout((int)box.getLeft(), (int)box.getTop(), (int)box.getRight(), (int)box.getBottom());
         return view;
