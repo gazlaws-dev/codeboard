@@ -3,15 +3,14 @@ package com.gazlaws.codeboard.layout.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.Gravity;
-import android.widget.Button;
+import android.view.View;
 
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 
-public class KeyboardButtonView extends android.support.v7.widget.AppCompatButton {
+public class KeyboardButtonView extends View {
 
     private final Key key;
 
@@ -19,7 +18,6 @@ public class KeyboardButtonView extends android.support.v7.widget.AppCompatButto
         super(context);
         this.key = key;
         this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-        this.setGravity(Gravity.CENTER);
     }
 
     @Override
@@ -42,12 +40,12 @@ public class KeyboardButtonView extends android.support.v7.widget.AppCompatButto
 
         Paint paint2 = new Paint();
         paint2.setColor(0xff000000);
-        float fontHeight = 64.0f;
-        paint2.setTextSize(64.0f);
+        float fontHeight = 48.0f;
+        paint2.setTextSize(fontHeight);
         paint2.setTextAlign(Paint.Align.CENTER);
         paint2.setAntiAlias(true);
         paint2.setTypeface(Typeface.DEFAULT);
-        canvas.drawText(this.key.str,this.getWidth()/2,this.getHeight()/2+fontHeight/2,paint2);
-        //super.draw(canvas);
+        canvas.drawText(this.key.info.label,this.getWidth()/2,this.getHeight()/2 + fontHeight/3,paint2);
+        super.draw(canvas);
     }
 }

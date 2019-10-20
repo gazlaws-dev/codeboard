@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
 
 import com.gazlaws.codeboard.layout.Box;
+import com.gazlaws.codeboard.layout.Definitions;
 import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
@@ -674,16 +675,28 @@ public class CodeBoardIME extends InputMethodService
 
         try {
             Log.d(TAG, "onCreateInputView: rebuilding view");
-            Collection<Key> keyboardLayout = new KeyboardLayoutBuilder()
-                .setBox(Box.create(0,0,1,1))
-                .setRowGap(0.01f).setKeyGap(0.01f).setPadding(0.01f)
-                .addKey('Q').addKey('W').addKey('E').addKey('R').addKey('T').addKey('Y').addKey('U').addKey('I').addKey('O').addKey('P')
-                    .newRow()
-                    .addKey('A').addKey('S').addKey('D').addKey('F').addKey('G').addKey('H').addKey('J').addKey('K').addKey('L')
-                    .newRow()
-                    .addKey('Z').addKey('X').addKey('C').addKey('V').addKey('B').addKey('N').addKey('M').addKey('<').addKey('>').addKey('.')
-                    .build();
+            KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
+            builder.setBox(Box.create(0,0,1,1));
+            builder.setPadding(0.01f).setRowGap(0.01f).setKeyGap(0.01f);
 
+            if (mToprow == 0) {
+                Definitions.AddCopyPasteRow(builder);
+            } else {
+                Definitions.AddArrowsRow(builder);
+            }
+
+            Definitions.AddNumberRow(builder);
+            Definitions.AddOperatorRow(builder);
+
+            if (mLayout == 0){
+                Definitions.AddQwertyRows(builder);
+            } else {
+                Definitions.AddAzertyRows(builder);
+            }
+
+            Definitions.AddSpaceRow(builder);
+
+            Collection<Key> keyboardLayout = builder.build();
             KeyboardUiFactory factory = new KeyboardUiFactory();
             return factory.getView(this, keyboardLayout);
 

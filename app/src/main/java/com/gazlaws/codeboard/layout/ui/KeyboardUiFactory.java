@@ -33,9 +33,7 @@ public class KeyboardUiFactory {
     private View getKeyView(Context context, Key key) {
 
         KeyboardButtonView view =  new KeyboardButtonView(context, key);
-        view.setText(key.str);
         Box box = key.box;
-
         view.layout((int)box.getLeft(), (int)box.getTop(), (int)box.getRight(), (int)box.getBottom());
         return view;
     }

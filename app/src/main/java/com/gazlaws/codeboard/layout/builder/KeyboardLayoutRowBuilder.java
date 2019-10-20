@@ -8,9 +8,8 @@ import java.util.ArrayList;
 public class KeyboardLayoutRowBuilder {
 
     private Box box; // the dimensions of a row
-    private ArrayList<KeyBlueprint> keys = new ArrayList<>();
+    private ArrayList<KeyInfo> keys = new ArrayList<>();
     private float gap = 0;
-    private float totalRequestedSize = 0;
 
     public ArrayList<Key> build() throws KeyboardLayoutException {
         checkAndUpdateDefaults();
@@ -22,23 +21,26 @@ public class KeyboardLayoutRowBuilder {
         if (availableWidth <= 0){
             throw new KeyboardLayoutException("Not enough space to fit keys in row");
         }
+        float totalRequestedSize = 0;
+        for (KeyInfo info : keys){
+            totalRequestedSize += info.size;
+        }
         float cursorX = box.x;
         float cursorY = box.y;
         ArrayList<Key> result = new ArrayList<>();
-        for (KeyBlueprint blueprint : keys){
-            float width = availableWidth/totalRequestedSize*blueprint.size;
+        for (KeyInfo info : keys){
+            float width = availableWidth/totalRequestedSize*info.size;
             float height = availableHeight;
             Box box = Box.create(cursorX, cursorY, width, height);
             cursorX += box.width + gap;
-            Key key = buildKeyFromBlueprint(blueprint, box);
+            Key key = buildKeyFromBlueprint(info, box);
             result.add(key);
         }
         return result;
     }
 
-    public KeyboardLayoutRowBuilder addKey(float relativeSize, char key) {
-        keys.add(new KeyBlueprint(relativeSize, key));
-        totalRequestedSize += relativeSize;
+    public KeyboardLayoutRowBuilder addKey(KeyInfo key) {
+        keys.add(key);
         return this;
     }
 
@@ -58,10 +60,10 @@ public class KeyboardLayoutRowBuilder {
         }
     }
 
-    private static Key buildKeyFromBlueprint(KeyBlueprint blueprint, Box box) {
+    private static Key buildKeyFromBlueprint(KeyInfo info, Box box) {
         Key key = new Key();
         key.box = box;
-        key.str = "" + blueprint.key;
+        key.info = info;
         return key;
     }
 }

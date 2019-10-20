@@ -10,12 +10,14 @@ public class KeyboardLayoutBuilder {
     private Box box; // the dimensions of the keyboard
     private ArrayList<KeyboardLayoutRowBuilder> rows = new ArrayList<>();
     private KeyboardLayoutRowBuilder currentRow = null;
+    private KeyInfo currentKey = null;
     private float rowGap = 0; // space between keyboard rows
     private float keyGap = 0; // space between keys (horizontal
     private float padding = 0;
 
     public KeyboardLayoutBuilder newRow()
     {
+        currentKey = null;
         currentRow = new KeyboardLayoutRowBuilder();
         rows.add(currentRow);
         return this;
@@ -41,24 +43,50 @@ public class KeyboardLayoutBuilder {
         return this;
     }
 
-    public KeyboardLayoutBuilder addKey(char key)
-    {
-        this.addKey(1, key);
-        return this;
-    }
-
-    public KeyboardLayoutBuilder addKey(float relativeSize)
-    {
-        this.addKey(relativeSize, '?');
-        return this;
-    }
-
-    public KeyboardLayoutBuilder addKey(float relativeSize, char key)
+    public KeyboardLayoutBuilder addKey(String label, int code)
     {
         if (currentRow == null){
             newRow();
         }
-        currentRow.addKey(relativeSize, key);
+        currentKey = new KeyInfo();
+        currentKey.label = label;
+        currentKey.size = 1.0f;
+        currentKey.isRepeatable = false;
+        currentRow.addKey(currentKey);
+        return this;
+    }
+
+    public KeyboardLayoutBuilder addKey(char key)
+    {
+        return this.addKey("" + key, (int)key);
+    }
+
+    public KeyboardLayoutBuilder addKey(float relativeSize)
+    {
+        return this.addKey('?').withSize(relativeSize);
+    }
+
+    public KeyboardLayoutBuilder addKey(String label)
+    {
+        return this.addKey("label", 0).withOutputText(label);
+    }
+
+    public KeyboardLayoutBuilder asRepeatable(boolean repeat){
+        currentKey.isRepeatable = repeat;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder asRepeatable(){
+        return this.asRepeatable(true);
+    }
+
+    public KeyboardLayoutBuilder withSize(float size) {
+        currentKey.size = size;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder withCode(int code){
+        currentKey.code = code;
         return this;
     }
 
@@ -81,4 +109,17 @@ public class KeyboardLayoutBuilder {
         return result;
     }
 
+    public KeyboardLayoutBuilder asModifier(boolean isModifier) {
+        currentKey.isModifier = isModifier;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder asModifier() {
+        return asModifier(true);
+    }
+
+    public KeyboardLayoutBuilder withOutputText(String s) {
+        currentKey.outputText = s;
+        return this;
+    }
 }
