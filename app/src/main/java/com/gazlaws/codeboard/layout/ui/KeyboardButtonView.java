@@ -4,59 +4,45 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.KeyboardView;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class KeyboardButtonView extends View {
+
+    private static final String TAG = "KeyboardButtonView";
 
     private final Key key;
     private final KeyboardView.OnKeyboardActionListener inputService;
+    private Timer timer;
 
     public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService) {
         super(context);
         this.inputService = inputService;
         this.key = key;
-        this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View click) {
-                KeyboardButtonView.this.click();
-            }
-        });
-        this.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return KeyboardButtonView.this.longClick();
-            }
-        });
     }
 
-    private boolean longClick() {
-        animateClick();
-        return true;
-    }
-
-    private void click() {
-        Log.d("KeyboardButtonView", "click "+ this.key.info.code);
-        if (this.key.info.outputText != null){
-            inputService.onText(this.key.info.outputText);
-        } else {
-            inputService.onKey(this.key.info.code, null);
-            inputService.onPress(this.key.info.code);
-            inputService.onRelease(this.key.info.code);
+    @Override
+    public boolean onTouchEvent(MotionEvent e)
+    {
+        int action = e.getAction();
+        switch(action){
+            case MotionEvent.ACTION_DOWN:
+                onPress();
+                break;
+            case MotionEvent.ACTION_UP:
+                onRelease();
+                break;
+            default:
+                break;
         }
-        animateClick();
-    }
-
-    private void animateClick(){
-        this.setAlpha(.1f);
-        this.animate().alpha(1.0f).setDuration(300);
+        return true;
     }
 
     @Override
@@ -86,5 +72,63 @@ public class KeyboardButtonView extends View {
         paint2.setTypeface(Typeface.DEFAULT);
         canvas.drawText(this.key.info.label,this.getWidth()/2,this.getHeight()/2 + fontHeight/3,paint2);
         super.draw(canvas);
+    }
+
+    private void onPress() {
+        if (key.info.code != 0){
+            inputService.onPress(key.info.code);
+        }
+        if (this.key.info.outputText != null){
+            inputService.onText(key.info.outputText);
+        }
+        if (key.info.isRepeatable){
+            startRepeating();
+        }
+        submitKeyEvent();
+        animateClick();
+    }
+
+    private void onRelease() {
+        if (key.info.code != 0){
+            inputService.onRelease(key.info.code);
+        }
+        if (key.info.isRepeatable){
+            stopRepeating();
+        }
+    }
+
+    private void submitKeyEvent(){
+        if (key.info.code != 0){
+            inputService.onKey(key.info.code, null);
+        }
+        if (this.key.info.outputText != null){
+            inputService.onText(key.info.outputText);
+        }
+    }
+
+    private void stopRepeating() {
+        if (timer == null){
+            return;
+        }
+        timer.cancel();
+        timer = null;
+    }
+
+    private void startRepeating() {
+        if (timer != null){
+            return;
+        }
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                submitKeyEvent();
+            }
+        },400, 50);
+    }
+
+    private void animateClick(){
+        this.setAlpha(.1f);
+        this.animate().alpha(1.0f).setDuration(300);
     }
 }
