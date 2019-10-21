@@ -5,13 +5,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gazlaws.codeboard.theme.UiTheme;
+
 import static android.content.ContentValues.TAG;
 
 public class KeyboardLayoutView extends ViewGroup {
 
-    public KeyboardLayoutView(Context context) {
+    public KeyboardLayoutView(Context context, UiTheme uiTheme) {
         super(context);
-        setBackgroundColor(0xfff0e8e0);
+        setBackgroundColor(uiTheme.backgroundColor);
         Log.d(TAG, "KeyboardLayoutView: CREATED!!!");
     }
 

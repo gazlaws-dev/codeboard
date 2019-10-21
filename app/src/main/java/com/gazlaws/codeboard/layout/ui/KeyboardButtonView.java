@@ -2,14 +2,13 @@ package com.gazlaws.codeboard.layout.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.inputmethodservice.KeyboardView;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
+import com.gazlaws.codeboard.theme.UiTheme;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,12 +19,14 @@ public class KeyboardButtonView extends View {
 
     private final Key key;
     private final KeyboardView.OnKeyboardActionListener inputService;
+    private final UiTheme uiTheme;
     private Timer timer;
 
-    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService) {
+    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme) {
         super(context);
         this.inputService = inputService;
         this.key = key;
+        this.uiTheme = uiTheme;
     }
 
     @Override
@@ -59,19 +60,25 @@ public class KeyboardButtonView extends View {
 
     @Override
     public void draw(Canvas canvas){
-        Paint paint = new Paint();
-        paint.setColor(0xffffffff);
-        canvas.drawRoundRect(.0f, .0f, this.getWidth(), this.getHeight(), 16.0f, 16.0f, paint);
-
-        Paint paint2 = new Paint();
-        paint2.setColor(0xff000000);
-        float fontHeight = 48.0f;
-        paint2.setTextSize(fontHeight);
-        paint2.setTextAlign(Paint.Align.CENTER);
-        paint2.setAntiAlias(true);
-        paint2.setTypeface(Typeface.DEFAULT);
-        canvas.drawText(this.key.info.label,this.getWidth()/2,this.getHeight()/2 + fontHeight/3,paint2);
+        drawButtonBody(canvas);
+        drawButtonContent(canvas);
         super.draw(canvas);
+    }
+
+    private void drawButtonContent(Canvas canvas) {
+        float x = this.getWidth()/2;
+        float y = this.getHeight()/2 + uiTheme.fontHeight/3;
+        canvas.drawText(this.key.info.label, x, y, uiTheme.foregroundPaint);
+    }
+
+    private void drawButtonBody(Canvas canvas) {
+        float left = uiTheme.buttonBodyPadding;
+        float top = uiTheme.buttonBodyPadding;
+        float right = this.getWidth() - uiTheme.buttonBodyPadding;
+        float bottom = this.getHeight() - uiTheme.buttonBodyPadding;
+        float rx = uiTheme.buttonBodyBorderRadius;
+        float ry = uiTheme.buttonBodyBorderRadius;
+        canvas.drawRoundRect(left, top, right, bottom, rx, ry, uiTheme.buttonBodyPaint);
     }
 
     private void onPress() {
@@ -85,7 +92,7 @@ public class KeyboardButtonView extends View {
             startRepeating();
         }
         submitKeyEvent();
-        animateClick();
+        animatePress();
     }
 
     private void onRelease() {
@@ -95,6 +102,7 @@ public class KeyboardButtonView extends View {
         if (key.info.isRepeatable){
             stopRepeating();
         }
+        animateRelease();
     }
 
     private void submitKeyEvent(){
@@ -127,8 +135,22 @@ public class KeyboardButtonView extends View {
         },400, 50);
     }
 
-    private void animateClick(){
-        this.setAlpha(.1f);
-        this.animate().alpha(1.0f).setDuration(300);
+    private void animatePress(){
+        if (uiTheme.enablePreview){
+            this.animate().translationY(-200.0f).setDuration(10);
+            this.animate().scaleX(2.0f).setDuration(10);
+            this.animate().scaleY(2.0f).setDuration(10);
+        } else {
+            this.setAlpha(.1f);
+        }
+    }
+    private void animateRelease() {
+        if (uiTheme.enablePreview){
+            this.animate().translationY(0.0f).setDuration(100);
+            this.animate().scaleX(1.0f).setDuration(100);
+            this.animate().scaleY(1.0f).setDuration(100);
+        } else {
+            this.animate().alpha(1.0f).setDuration(400);
+        }
     }
 }

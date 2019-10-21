@@ -23,6 +23,8 @@ import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
 import com.gazlaws.codeboard.layout.ui.KeyboardUiFactory;
+import com.gazlaws.codeboard.theme.ThemeDefinitions;
+import com.gazlaws.codeboard.theme.ThemeInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,8 +46,6 @@ import static android.view.KeyEvent.META_SHIFT_ON;
 
 public class CodeBoardIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
-    private KeyboardView kv;
-    private Keyboard keyboard;
     EditorInfo sEditorInfo;
     private boolean vibratorOn;
     private boolean soundOn;
@@ -56,6 +56,7 @@ public class CodeBoardIME extends InputMethodService
     private int mLayout, mToprow, mSize;
     private Timer timerLongPress = null;
     private boolean switchedKeyboard=false;
+    private KeyboardUiFactory mKeyboardUiFactory = null;
 
 
 
@@ -287,7 +288,7 @@ public class CodeBoardIME extends InputMethodService
 
         Log.d("asdasd", "onKey" + primaryCode);
         InputConnection ic = getCurrentInputConnection();
-        keyboard = kv.getKeyboard();
+        //keyboard = kv.getKeyboard();
 
         switch (primaryCode) {
 
@@ -331,25 +332,14 @@ public class CodeBoardIME extends InputMethodService
                     imm.showInputMethodPicker();
                 break;
             case -15:
-                if (kv != null) {
-                    if (mKeyboardState == R.integer.keyboard_normal) {
-                        //change to symbol keyboard
-                        Keyboard symbolKeyboard = chooseKB(mLayout, mToprow, mSize, R.integer.keyboard_sym);
+                mKeyboardState = mKeyboardState == R.integer.keyboard_normal
+                        ? R.integer.keyboard_sym
+                        : R.integer.keyboard_normal;
 
-                        kv.setKeyboard(symbolKeyboard);
-
-                        mKeyboardState = R.integer.keyboard_sym;
-                    } else if (mKeyboardState == R.integer.keyboard_sym) {
-                        //change to normal keyboard
-                        Keyboard normalKeyboard = chooseKB(mLayout, mToprow, mSize, R.integer.keyboard_normal);
-
-                        kv.setKeyboard(normalKeyboard);
-                        mKeyboardState = R.integer.keyboard_normal;
-                    }
-                    controlKeyUpdateView();
-                    shiftKeyUpdateView();
-
-                }
+                // regenerate view
+                setInputView(onCreateInputView());
+                controlKeyUpdateView();
+                shiftKeyUpdateView();
 
                 break;
 
@@ -550,9 +540,7 @@ public class CodeBoardIME extends InputMethodService
 
     @Override
     public void swipeDown() {
-
-        kv.closing();
-
+        // kv.closing();
     }
 
     @Override
@@ -617,40 +605,19 @@ public class CodeBoardIME extends InputMethodService
     @Override
     public View onCreateInputView() {
 
-        SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-
-        switch (pre.getInt("RADIO_INDEX_COLOUR", 0)) {
-            case 0:
-                //kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
-                break;
-            case 1:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard1, null);
-                break;
-            case 2:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard2, null);
-                break;
-            case 3:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard3, null);
-                break;
-            case 4:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard4, null);
-                break;
-            case 5:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard5, null);
-                break;
-
-            default:
-                kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
-
-                break;
-
-
+        if (mKeyboardUiFactory == null){
+            mKeyboardUiFactory = new KeyboardUiFactory(this);
         }
 
+        SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+
+        mKeyboardUiFactory.theme = getThemeByRadioIndex(pre.getInt("RADIO_INDEX_COLOUR", 0));
+
         if (pre.getInt("PREVIEW", 0) == 1) {
-            kv.setPreviewEnabled(true);
-        } else kv.setPreviewEnabled(false);
+            mKeyboardUiFactory.theme.enablePreview = true;
+        } else {
+            mKeyboardUiFactory.theme.enablePreview = false;
+        }
 
         if (pre.getInt("SOUND", 1) == 1) {
             soundOn = true;
@@ -666,18 +633,15 @@ public class CodeBoardIME extends InputMethodService
         mLayout = pre.getInt("RADIO_INDEX_LAYOUT", 0);
         mSize = pre.getInt("SIZE", 2);
         mToprow = pre.getInt("ARROW_ROW", 1);
-        mKeyboardState = R.integer.keyboard_normal;
-        //reset to normal
 
-        Keyboard keyboard = chooseKB(mLayout, mToprow, mSize, mKeyboardState);
-        kv.setKeyboard(keyboard);
-        kv.setOnKeyboardActionListener(this);
+        //Keyboard keyboard = chooseKB(mLayout, mToprow, mSize, mKeyboardState);
+        //kv.setKeyboard(keyboard);
+        //kv.setOnKeyboardActionListener(this);
 
         try {
             Log.d(TAG, "onCreateInputView: rebuilding view");
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
             builder.setBox(Box.create(0,0,1,1));
-            builder.setPadding(0.01f).setRowGap(0.01f).setKeyGap(0.01f);
 
             if (mToprow == 0) {
                 Definitions.addCopyPasteRow(builder);
@@ -688,23 +652,26 @@ public class CodeBoardIME extends InputMethodService
             Definitions.addNumberRow(builder);
             Definitions.addOperatorRow(builder);
 
-            if (mLayout == 0){
-                Definitions.addQwertyRows(builder);
+            if (mKeyboardState == R.integer.keyboard_sym){
+                Definitions.addSymbolRows(builder);
             } else {
-                Definitions.addAzertyRows(builder);
+                if (mLayout == 0){
+                    Definitions.addQwertyRows(builder);
+                } else {
+                    Definitions.addAzertyRows(builder);
+                }
             }
 
             Definitions.addSpaceRow(builder);
 
             Collection<Key> keyboardLayout = builder.build();
-            KeyboardUiFactory factory = new KeyboardUiFactory(this);
-            return factory.getView(this, keyboardLayout);
+            return mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
 
         } catch (KeyboardLayoutException e) {
             e.printStackTrace();
         }
-
-        return kv;
+        return null;
+        // return kv;
     }
 
     @Override
@@ -716,7 +683,8 @@ public class CodeBoardIME extends InputMethodService
     }
 
     public void controlKeyUpdateView() {
-        keyboard = kv.getKeyboard();
+        // TODO implement ctrl key update
+        /*keyboard = kv.getKeyboard();
         int i;
         List<Keyboard.Key> keys = keyboard.getKeys();
         for (i = 0; i < keys.size(); i++) {
@@ -732,12 +700,12 @@ public class CodeBoardIME extends InputMethodService
                 }
             }
         }
-        kv.invalidateKey(i);
+        kv.invalidateKey(i);*/
     }
 
     public void shiftKeyUpdateView() {
-
-        keyboard = kv.getKeyboard();
+        // TODO implement shift key update
+        /*keyboard = kv.getKeyboard();
         List<Keyboard.Key> keys = keyboard.getKeys();
         for (int i = 0; i < keys.size(); i++) {
             if (shift) {
@@ -753,7 +721,7 @@ public class CodeBoardIME extends InputMethodService
             }
         }
         keyboard.setShifted(shift);
-        kv.invalidateAllKeys();
+        kv.invalidateAllKeys();*/
     }
 
     public void handleArrow(int keyCode) {
@@ -769,6 +737,19 @@ public class CodeBoardIME extends InputMethodService
         else if (ctrl)
             ic.sendKeyEvent(new KeyEvent(now2, now2, KeyEvent.ACTION_DOWN, keyCode, 0,  META_CTRL_ON));
         else {sendDownUpKeyEvents(keyCode);}
+    }
+
+
+    private ThemeInfo getThemeByRadioIndex(int index){
+        switch (index) {
+            case 0: return ThemeDefinitions.MaterialDark();
+            case 1: return ThemeDefinitions.MaterialWhite();
+            case 2: return ThemeDefinitions.PureBlack();
+            case 3: return ThemeDefinitions.White();
+            case 4: return ThemeDefinitions.Blue();
+            case 5: return ThemeDefinitions.Purple();
+            default: return ThemeDefinitions.Default();
+        }
     }
 
     private void moveSelection(int keyCode) {
