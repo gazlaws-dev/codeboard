@@ -634,9 +634,7 @@ public class CodeBoardIME extends InputMethodService
         mSize = pre.getInt("SIZE", 2);
         mToprow = pre.getInt("ARROW_ROW", 1);
 
-        //Keyboard keyboard = chooseKB(mLayout, mToprow, mSize, mKeyboardState);
-        //kv.setKeyboard(keyboard);
-        //kv.setOnKeyboardActionListener(this);
+        mKeyboardUiFactory.theme.size = mSize / 100.0f;
 
         try {
             Log.d(TAG, "onCreateInputView: rebuilding view");
@@ -671,7 +669,6 @@ public class CodeBoardIME extends InputMethodService
             e.printStackTrace();
         }
         return null;
-        // return kv;
     }
 
     @Override

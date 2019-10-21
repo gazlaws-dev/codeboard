@@ -74,9 +74,10 @@
             android:id="@+id/size_seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="3"
+            android:min="30"
+            android:max="70"
             android:onClick="closeKeyboard"
-            android:progress="2" />
+            android:progress="40" />
 
         <RelativeLayout
             android:id="@+id/relative_layout"

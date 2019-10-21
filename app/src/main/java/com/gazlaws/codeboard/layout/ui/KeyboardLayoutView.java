@@ -11,15 +11,17 @@ import static android.content.ContentValues.TAG;
 
 public class KeyboardLayoutView extends ViewGroup {
 
+    int availableWidth = 0;
+    int availableHeight = 0;
+    boolean measured = false;
+    private final UiTheme uiTheme;
+
     public KeyboardLayoutView(Context context, UiTheme uiTheme) {
         super(context);
         setBackgroundColor(uiTheme.backgroundColor);
+        this.uiTheme = uiTheme;
         Log.d(TAG, "KeyboardLayoutView: CREATED!!!");
     }
-
-    int avaiableWidth = 0;
-    int avaiableHeight = 0;
-    boolean measured = false;
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -31,13 +33,14 @@ public class KeyboardLayoutView extends ViewGroup {
 
         // when measure is called for first time store the width and height
         if (!measured){
-            avaiableWidth = widthSize;
-            avaiableHeight = heightSize;
+            availableWidth = widthSize;
+            availableHeight = heightSize;
             measured = true;
         }
+        float size = availableHeight > availableWidth ? uiTheme.portraitSize : uiTheme.landscapeSize;
 
         Log.d(TAG, "onMeasure" + widthSize + " " + heightSize);
-        setMeasuredDimension(avaiableWidth, avaiableHeight *3/8);
+        setMeasuredDimension(availableWidth, (int)(availableHeight * size));
     }
 
     @Override

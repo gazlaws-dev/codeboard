@@ -13,6 +13,8 @@ public class UiTheme {
     public Paint buttonBodyPaint;
     public float buttonBodyBorderRadius = 8.0f;
     public boolean enablePreview = false;
+    public float portraitSize;
+    public float landscapeSize;
 
     private UiTheme(){
         this.foregroundPaint = new Paint();
@@ -22,6 +24,8 @@ public class UiTheme {
 
     public static UiTheme buildFromInfo(ThemeInfo info){
         UiTheme theme = new UiTheme();
+        theme.portraitSize = info.size;
+        theme.landscapeSize = info.size;
         theme.enablePreview = info.enablePreview;
         // background
         theme.backgroundColor = info.backgroundColor;
