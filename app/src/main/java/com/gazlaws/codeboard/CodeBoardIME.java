@@ -288,7 +288,6 @@ public class CodeBoardIME extends InputMethodService
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
 
-        Log.d("asdasd", "onKey" + primaryCode);
         InputConnection ic = getCurrentInputConnection();
         //keyboard = kv.getKeyboard();
 
@@ -639,7 +638,6 @@ public class CodeBoardIME extends InputMethodService
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
 
         try {
-            Log.d(TAG, "onCreateInputView: rebuilding view");
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
             builder.setBox(Box.create(0,0,1,1));
 
