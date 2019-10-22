@@ -23,9 +23,9 @@ public class KeyboardUiFactory {
         this.inputService = inputService;
     }
 
-    public View createKeyboardView(Context context, Collection<Key> keys){
+    public KeyboardLayoutView createKeyboardView(Context context, Collection<Key> keys){
         UiTheme uiTheme = UiTheme.buildFromInfo(this.theme);
-        ViewGroup layout = createKeyGroupView(context, uiTheme);
+        KeyboardLayoutView layout = createKeyGroupView(context, uiTheme);
         for (Key key :keys){
             RelativeLayout.LayoutParams params = getKeyLayoutParams(key);
             View view = createKeyView(context, key, uiTheme);
@@ -34,12 +34,12 @@ public class KeyboardUiFactory {
         return layout;
     }
 
-    private ViewGroup createKeyGroupView(Context context, UiTheme uiTheme){
+    private KeyboardLayoutView createKeyGroupView(Context context, UiTheme uiTheme){
         KeyboardLayoutView layoutView = new KeyboardLayoutView(context, uiTheme);
         return layoutView;
     }
 
-    private View createKeyView(Context context, Key key, UiTheme uiTheme) {
+    private KeyboardButtonView createKeyView(Context context, Key key, UiTheme uiTheme) {
         KeyboardButtonView view =  new KeyboardButtonView(context, key, inputService, uiTheme);
         Box box = key.box;
         view.layout((int)box.getLeft(), (int)box.getTop(), (int)box.getRight(), (int)box.getBottom());

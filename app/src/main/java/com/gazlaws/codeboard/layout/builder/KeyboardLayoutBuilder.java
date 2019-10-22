@@ -69,7 +69,7 @@ public class KeyboardLayoutBuilder {
 
     public KeyboardLayoutBuilder addKey(String label)
     {
-        return this.addKey("label", 0).withOutputText(label);
+        return this.addKey(label, 0).withOutputText(label);
     }
 
     public KeyboardLayoutBuilder asRepeatable(boolean repeat){
@@ -122,5 +122,19 @@ public class KeyboardLayoutBuilder {
     public KeyboardLayoutBuilder withOutputText(String s) {
         currentKey.outputText = s;
         return this;
+    }
+
+    public KeyboardLayoutBuilder onShiftShow(String label){
+        currentKey.onShiftLabel = label;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder onCtrlShow(String label){
+        currentKey.onCtrlLabel = label;
+        return this;
+    }
+
+    public KeyboardLayoutBuilder onShiftUppercase() {
+        return onShiftShow(currentKey.label.toUpperCase());
     }
 }

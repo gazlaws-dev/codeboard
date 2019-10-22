@@ -24,6 +24,24 @@ public class KeyInfo {
      * Key can be held to repeat
      */
     public boolean isRepeatable;
+
+    /**
+     * This key is a modifier (Shift/Ctrl)
+     */
     public boolean isModifier;
+
+    /**
+     * When key is pressed output this text
+     */
     public String outputText;
+
+    /**
+     * When shift modifier is pressed, show this label instead
+     */
+    public String onShiftLabel;
+
+    /**
+     * When control modifier is pressed, show this label instead
+     */
+    public String onCtrlLabel;
 }

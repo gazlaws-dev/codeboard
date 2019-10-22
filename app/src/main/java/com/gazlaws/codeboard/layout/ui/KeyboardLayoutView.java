@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 
 import com.gazlaws.codeboard.theme.UiTheme;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static android.content.ContentValues.TAG;
 
 public class KeyboardLayoutView extends ViewGroup {
@@ -51,5 +54,30 @@ public class KeyboardLayoutView extends ViewGroup {
             final View child = getChildAt(i);
             child.layout(l,t,r,b);
         }
+    }
+
+    public void applyShiftModifier(boolean shiftPressed){
+        for (KeyboardButtonView button : getKeyboardButtons()){
+             button.applyShiftModifier(shiftPressed);
+        }
+    }
+
+    public void applyCtrlModifier(boolean ctrlPressed){
+        for (KeyboardButtonView button : getKeyboardButtons()){
+            button.applyCtrlModifier(ctrlPressed);
+        }
+
+    }
+
+    private Collection<KeyboardButtonView> getKeyboardButtons(){
+        int childCount = this.getChildCount();
+        ArrayList<KeyboardButtonView> list = new ArrayList<>(childCount);
+        for (int i=0; i<childCount; i++){
+            View child = getChildAt(i);
+            if (child instanceof KeyboardButtonView){
+                list.add((KeyboardButtonView)child);
+            }
+        }
+        return list;
     }
 }

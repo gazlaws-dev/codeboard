@@ -22,6 +22,7 @@ import com.gazlaws.codeboard.layout.Definitions;
 import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
+import com.gazlaws.codeboard.layout.ui.KeyboardLayoutView;
 import com.gazlaws.codeboard.layout.ui.KeyboardUiFactory;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
@@ -57,6 +58,7 @@ public class CodeBoardIME extends InputMethodService
     private Timer timerLongPress = null;
     private boolean switchedKeyboard=false;
     private KeyboardUiFactory mKeyboardUiFactory = null;
+    private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
 
 
 
@@ -663,7 +665,8 @@ public class CodeBoardIME extends InputMethodService
             Definitions.addSpaceRow(builder);
 
             Collection<Key> keyboardLayout = builder.build();
-            return mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
+            mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
+            return mCurrentKeyboardLayoutView;
 
         } catch (KeyboardLayoutException e) {
             e.printStackTrace();
@@ -680,45 +683,11 @@ public class CodeBoardIME extends InputMethodService
     }
 
     public void controlKeyUpdateView() {
-        // TODO implement ctrl key update
-        /*keyboard = kv.getKeyboard();
-        int i;
-        List<Keyboard.Key> keys = keyboard.getKeys();
-        for (i = 0; i < keys.size(); i++) {
-            if (ctrl) {
-                if (keys.get(i).label != null && keys.get(i).label.equals("Ctrl")) {
-                    keys.get(i).label = "CTRL";
-                    break;
-                }
-            } else {
-                if (keys.get(i).label != null && keys.get(i).label.equals("CTRL")) {
-                    keys.get(i).label = "Ctrl";
-                    break;
-                }
-            }
-        }
-        kv.invalidateKey(i);*/
+        mCurrentKeyboardLayoutView.applyCtrlModifier(ctrl);
     }
 
     public void shiftKeyUpdateView() {
-        // TODO implement shift key update
-        /*keyboard = kv.getKeyboard();
-        List<Keyboard.Key> keys = keyboard.getKeys();
-        for (int i = 0; i < keys.size(); i++) {
-            if (shift) {
-                if (keys.get(i).label != null && keys.get(i).label.equals("Shft")) {
-                    keys.get(i).label = "SHFT";
-                    break;
-                }
-            } else {
-                if (keys.get(i).label != null && keys.get(i).label.equals("SHFT")) {
-                    keys.get(i).label = "Shft";
-                    break;
-                }
-            }
-        }
-        keyboard.setShifted(shift);
-        kv.invalidateAllKeys();*/
+        mCurrentKeyboardLayoutView.applyShiftModifier(shift);
     }
 
     public void handleArrow(int keyCode) {

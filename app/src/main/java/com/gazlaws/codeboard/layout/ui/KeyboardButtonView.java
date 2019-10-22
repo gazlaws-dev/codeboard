@@ -21,12 +21,14 @@ public class KeyboardButtonView extends View {
     private final KeyboardView.OnKeyboardActionListener inputService;
     private final UiTheme uiTheme;
     private Timer timer;
+    private String currentLabel = null;
 
     public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme) {
         super(context);
         this.inputService = inputService;
         this.key = key;
         this.uiTheme = uiTheme;
+        this.currentLabel = key.info.label;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class KeyboardButtonView extends View {
     private void drawButtonContent(Canvas canvas) {
         float x = this.getWidth()/2;
         float y = this.getHeight()/2 + uiTheme.fontHeight/3;
-        canvas.drawText(this.key.info.label, x, y, uiTheme.foregroundPaint);
+        canvas.drawText(currentLabel, x, y, uiTheme.foregroundPaint);
     }
 
     private void drawButtonBody(Canvas canvas) {
@@ -84,9 +86,6 @@ public class KeyboardButtonView extends View {
     private void onPress() {
         if (key.info.code != 0){
             inputService.onPress(key.info.code);
-        }
-        if (this.key.info.outputText != null){
-            inputService.onText(key.info.outputText);
         }
         if (key.info.isRepeatable){
             startRepeating();
@@ -151,6 +150,31 @@ public class KeyboardButtonView extends View {
             this.animate().scaleY(1.0f).setDuration(100);
         } else {
             this.animate().alpha(1.0f).setDuration(400);
+        }
+    }
+
+    public void applyShiftModifier(boolean shiftPressed) {
+        if (this.key.info.onShiftLabel != null){
+            String nextLabel = shiftPressed
+                    ? this.key.info.onShiftLabel
+                    : this.key.info.label;
+            setCurrentLabel(nextLabel);
+        }
+    }
+
+    public void applyCtrlModifier(boolean ctrlPressed) {
+        if (this.key.info.onCtrlLabel != null){
+            String nextLabel = ctrlPressed
+                    ? this.key.info.onCtrlLabel
+                    : this.key.info.label;
+            setCurrentLabel(nextLabel);
+        }
+    }
+
+    private void setCurrentLabel(String nextLabel) {
+        if (nextLabel != currentLabel){
+            currentLabel = nextLabel;
+            this.invalidate();
         }
     }
 }
