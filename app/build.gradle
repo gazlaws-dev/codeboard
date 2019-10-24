@@ -10,6 +10,7 @@ android {
         targetSdkVersion 28
         versionCode 14
         versionName "4.1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -34,6 +35,12 @@ dependencies {
     api 'com.android.support:appcompat-v7:28.0.0'
     api 'com.android.support:support-v13:28.0.0'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
+
+    // Required for local unit tests (JUnit 4 framework)
     testImplementation 'junit:junit:4.12'
+
+    // Required for instrumented tests
+    androidTestImplementation 'com.android.support:support-annotations:24.0.0'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
 
 }
