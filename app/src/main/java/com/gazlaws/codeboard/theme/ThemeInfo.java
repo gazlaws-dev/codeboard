@@ -5,4 +5,5 @@ public class ThemeInfo {
     public int backgroundColor;
     public boolean enablePreview;
     public float size;
+    public float sizeLandscape;
 }

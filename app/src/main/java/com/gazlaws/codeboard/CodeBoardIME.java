@@ -1,7 +1,6 @@
 package com.gazlaws.codeboard;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -28,12 +27,10 @@ import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-import static android.content.ContentValues.TAG;
 import static android.view.KeyEvent.KEYCODE_CTRL_LEFT;
 import static android.view.KeyEvent.KEYCODE_SHIFT_LEFT;
 import static android.view.KeyEvent.META_CTRL_ON;
@@ -54,7 +51,8 @@ public class CodeBoardIME extends InputMethodService
     private boolean shift = false;
     private boolean ctrl = false;
     private int mKeyboardState = R.integer.keyboard_normal;
-    private int mLayout, mToprow, mSize;
+    private int mLayout, mSize;
+    private boolean mToprow;
     private Timer timerLongPress = null;
     private boolean switchedKeyboard=false;
     private KeyboardUiFactory mKeyboardUiFactory = null;
@@ -565,41 +563,32 @@ public class CodeBoardIME extends InputMethodService
             mKeyboardUiFactory = new KeyboardUiFactory(this);
         }
 
-        SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        KeyboardPreferences preferences = new KeyboardPreferences(this);
 
-        mKeyboardUiFactory.theme = getThemeByRadioIndex(pre.getInt("RADIO_INDEX_COLOUR", 0));
-
-        if (pre.getInt("PREVIEW", 0) == 1) {
-            mKeyboardUiFactory.theme.enablePreview = true;
-        } else {
-            mKeyboardUiFactory.theme.enablePreview = false;
-        }
-
-        if (pre.getInt("SOUND", 1) == 1) {
-            soundOn = true;
-        } else soundOn = false;
-
-        if (pre.getInt("VIBRATE", 1) == 1) {
-            vibratorOn = true;
-        } else vibratorOn = false;
+        mKeyboardUiFactory.theme = getThemeByIndex(preferences.getThemeIndex());
+        mKeyboardUiFactory.theme.enablePreview = preferences.isPreviewEnabled();
+        soundOn = preferences.isSoundEnabled();
+        vibratorOn = preferences.isVibrateEnabled();
 
         shift = false;
         ctrl = false;
 
-        mLayout = pre.getInt("RADIO_INDEX_LAYOUT", 0);
-        mSize = pre.getInt("SIZE", 45);
-        mToprow = pre.getInt("ARROW_ROW", 1);
+        mLayout = preferences.getLayoutIndex();
+        mSize = preferences.getPortraitSize();
+        int sizeLandscape = preferences.getLandscapeSize();
+        mToprow = preferences.isArrowRowEnabled();
 
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
+        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
 
         try {
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
             builder.setBox(Box.create(0,0,1,1));
 
-            if (mToprow == 0) {
-                Definitions.addCopyPasteRow(builder);
-            } else {
+            if (mToprow) {
                 Definitions.addArrowsRow(builder);
+            } else {
+                Definitions.addCopyPasteRow(builder);
             }
 
             Definitions.addNumberRow(builder);
@@ -660,7 +649,7 @@ public class CodeBoardIME extends InputMethodService
     }
 
 
-    private ThemeInfo getThemeByRadioIndex(int index){
+    private ThemeInfo getThemeByIndex(int index){
         switch (index) {
             case 0: return ThemeDefinitions.MaterialDark();
             case 1: return ThemeDefinitions.MaterialWhite();

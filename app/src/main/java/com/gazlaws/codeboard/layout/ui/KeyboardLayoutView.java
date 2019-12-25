@@ -1,18 +1,14 @@
 package com.gazlaws.codeboard.layout.ui;
 
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import com.gazlaws.codeboard.theme.UiTheme;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static android.content.ContentValues.TAG;
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.gazlaws.codeboard.theme.UiTheme;
 
 public class KeyboardLayoutView extends ViewGroup {
 
