@@ -7,9 +7,9 @@ public class Definitions {
     public static void addArrowsRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
-                .addKey("Esc", 27)
-                .addKey("Tab", 9)
-                .addKey("◀", 5000).asRepeatable()
+                .addKey("Esc", 27);
+        addTabKey(keyboard);
+        keyboard.addKey("◀", 5000).asRepeatable()
                 .addKey("▼", 5001).asRepeatable()
                 .addKey("▲", 5002).asRepeatable()
                 .addKey("▶", 5003).asRepeatable()
@@ -20,9 +20,9 @@ public class Definitions {
     public static void addCopyPasteRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
-                .addKey("Esc", 27)
-                .addKey("Tab", 9)
-                .addKey("Select All", 53737).withSize(2.0f).asRepeatable()
+                .addKey("Esc", 27);
+        addTabKey(keyboard);
+        keyboard.addKey("Select All", 53737).withSize(2.0f).asRepeatable()
                 .addKey("Cut", 53738).asRepeatable()
                 .addKey("Copy", 53739).asRepeatable()
                 .addKey("Paste", 53740)
@@ -87,20 +87,19 @@ public class Definitions {
                 .addKey('h').onShiftUppercase()
                 .addKey('j').onShiftUppercase()
                 .addKey('k').onShiftUppercase()
-                .addKey('l').onShiftUppercase()
-                .addKey("⌫", -5).asRepeatable()
-                .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
-                .addKey('z').onShiftUppercase()
+                .addKey('l').onShiftUppercase();
+        addBackspaceKey(keyboard);
+        keyboard.newRow();
+        addShiftKey(keyboard);
+        keyboard.addKey('z').onShiftUppercase()
                 .addKey('x').onShiftUppercase()
                 .addKey('c').onShiftUppercase()
                 .addKey('v').onShiftUppercase()
                 .addKey('b').onShiftUppercase()
                 .addKey('n').onShiftUppercase()
                 .addKey('m').onShiftUppercase()
-                .addKey('?')
-                .addKey("Enter", -4).withSize(1.5f)
-                ;
+                .addKey('?');
+        addEnterKey(keyboard);
     }
 
 
@@ -115,9 +114,9 @@ public class Definitions {
                 .addKey('u').onShiftUppercase()
                 .addKey('i').onShiftUppercase()
                 .addKey('o').onShiftUppercase()
-                .addKey('p').onShiftUppercase()
-                .addKey("⌫", -5).asRepeatable()
-                .newRow()
+                .addKey('p').onShiftUppercase();
+        addBackspaceKey(keyboard);
+        keyboard.newRow()
                 .addKey('q').onShiftUppercase()
                 .addKey('s').onShiftUppercase()
                 .addKey('d').onShiftUppercase()
@@ -127,20 +126,19 @@ public class Definitions {
                 .addKey('j').onShiftUppercase()
                 .addKey('k').onShiftUppercase()
                 .addKey('l').onShiftUppercase()
-                .addKey('m').onShiftUppercase()
-                .addKey("Enter", -4).withSize(1.5f)
-                .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
-                .addKey('w').onShiftUppercase()
+                .addKey('m').onShiftUppercase();
+        addEnterKey(keyboard);
+        keyboard.newRow();
+        addShiftKey(keyboard);
+        keyboard.addKey('w').onShiftUppercase()
                 .addKey('x').onShiftUppercase()
                 .addKey('c').onShiftUppercase()
                 .addKey('v').onShiftUppercase()
                 .addKey('b').onShiftUppercase()
                 .addKey('n').onShiftUppercase()
                 .addKey('!').withSize(.8f)
-                .addKey('?').withSize(.8f)
-                .addKey("Tab", 9)
-        ;
+                .addKey('?').withSize(.8f);
+        addTabKey(keyboard);
     }
 
     public static void addDvorakRows(KeyboardLayoutBuilder keyboard) {
@@ -152,9 +150,9 @@ public class Definitions {
                 .addKey('g').onShiftUppercase()
                 .addKey('c').onShiftUppercase()
                 .addKey('r').onShiftUppercase()
-                .addKey('l').onShiftUppercase()
-                .addKey("Enter", -4).withSize(1.5f)
-                .newRow()
+                .addKey('l').onShiftUppercase();
+        addEnterKey(keyboard);
+        keyboard.newRow()
                 .addKey('a').onShiftUppercase()
                 .addKey('o').onShiftUppercase()
                 .addKey('e').onShiftUppercase()
@@ -164,11 +162,11 @@ public class Definitions {
                 .addKey('h').onShiftUppercase()
                 .addKey('t').onShiftUppercase()
                 .addKey('n').onShiftUppercase()
-                .addKey('s').onShiftUppercase()
-                .addKey("⌫", -5).asRepeatable()
-                .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
-                .addKey('q').onShiftUppercase()
+                .addKey('s').onShiftUppercase();
+        addBackspaceKey(keyboard);
+        keyboard.newRow();
+        addShiftKey(keyboard);
+        keyboard.addKey('q').onShiftUppercase()
                 .addKey('j').onShiftUppercase()
                 .addKey('k').onShiftUppercase()
                 .addKey('x').onShiftUppercase()
@@ -190,22 +188,21 @@ public class Definitions {
                 .addKey('$')
                 .addKey("£", 163)
                 .addKey("°", 176)
-                .addKey("¬", 172)
-                .addKey("◀", -5).asRepeatable()
-                .newRow()
+                .addKey("¬", 172);
+        addBackspaceKey(keyboard);
+        keyboard.newRow()
                 .addKey("Sel All", 53737).asRepeatable()
                 .addKey("Cut", 53738).asRepeatable()
                 .addKey("Copy", 53739).asRepeatable()
                 .addKey("Paste", 53740)
                 .addKey("Undo", 53741)
                 .addKey("Redo", 53742)
-                .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
-                .addKey("for(;;){\n\t}").withSize(2.0f)
+                .newRow();
+        addShiftKey(keyboard);
+        keyboard.addKey("for(;;){\n\t}").withSize(2.0f)
                 .addKey("printf(\"\");").withSize(2.0f)
-                .addKey("scanf(\"\");").withSize(2.0f)
-                .addKey("Enter", -4).withSize(1.5f)
-                ;
+                .addKey("scanf(\"\");").withSize(2.0f);
+        addEnterKey(keyboard);
     }
 
     public static void addSpaceRow(KeyboardLayoutBuilder keyboard){
@@ -222,5 +219,22 @@ public class Definitions {
                 .addKey(',').withSize(.7f)
                 .addKey('.').withSize(.7f)
                 ;
+    }
+
+    private static KeyboardLayoutBuilder addTabKey(KeyboardLayoutBuilder keyboard){
+        return keyboard.addKey("Tab", 9);
+    }
+
+    private static KeyboardLayoutBuilder addShiftKey(KeyboardLayoutBuilder keyboard){
+        return keyboard.addKey("Shft", 16).asModifier()
+                .onShiftShow("SHFT").withSize(1.5f);
+    }
+
+    private static KeyboardLayoutBuilder addBackspaceKey(KeyboardLayoutBuilder keyboard){
+        return keyboard.addKey("⌫", -5).asRepeatable();
+    }
+
+    private static KeyboardLayoutBuilder addEnterKey(KeyboardLayoutBuilder keyboard){
+        return keyboard.addKey("Enter", -4).withSize(1.5f);
     }
 }
