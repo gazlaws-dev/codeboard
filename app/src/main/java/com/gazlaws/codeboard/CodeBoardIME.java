@@ -608,10 +608,11 @@ public class CodeBoardIME extends InputMethodService
             if (mKeyboardState == R.integer.keyboard_sym){
                 Definitions.addSymbolRows(builder);
             } else {
-                if (mLayout == 0){
-                    Definitions.addQwertyRows(builder);
-                } else {
-                    Definitions.addAzertyRows(builder);
+                switch (mLayout){
+                    default:
+                    case 0: Definitions.addQwertyRows(builder); break;
+                    case 1: Definitions.addAzertyRows(builder); break;
+                    case 2: Definitions.addDvorakRows(builder); break;
                 }
             }
 

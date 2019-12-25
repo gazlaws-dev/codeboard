@@ -223,15 +223,14 @@
             android:text="Azerty"
             android:checked="false"
             />
-        <!--<RadioButton-->
-        <!--android:id="@+id/dvoraklayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:onClick="closeKeyboard"-->
-        <!--android:text="  Dvorak"-->
-
-        <!--/>-->
+        <RadioButton
+            android:id="@+id/dvoraklayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="closeKeyboard"
+            android:layout_margin="8dp"
+            android:text="Dvorak"
+            />
 
 
     </RadioGroup>
