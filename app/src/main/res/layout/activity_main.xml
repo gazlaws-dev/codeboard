@@ -1,269 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="16dp">
 
-    <LinearLayout
+    <Button
+        android:id="@+id/change_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:orientation="vertical">
+        android:onClick="changeButton"
+        android:text="@string/change_keyboard"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/change_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="changeButton"
-            android:text="Change Keyboard"
-            android:visibility="visible" />
+    <EditText
+        android:id="@+id/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/reopen_hint" />
 
-        <EditText
-            android:id="@+id/hint_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Re-open keyboard to see changes" />
+    <CheckBox
+        android:id="@+id/check_no_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:onClick="arrowToggle"
+        android:text="@string/replace_arrows" />
 
-        <CheckBox
-            android:id="@+id/check_no_arrow"
+    <CheckBox
+        android:id="@+id/check_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:onClick="previewToggle"
+        android:text="@string/preview" />
+
+    <CheckBox
+        android:id="@+id/check_sound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:onClick="soundToggle"
+        android:text="@string/sound_on_keypress" />
+
+    <CheckBox
+        android:id="@+id/check_vibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:onClick="vibratorToggle"
+        android:text="@string/vibrate_on_keypress" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/keyboard_size"
+        android:textSize="20sp" />
+
+
+    <SeekBar
+        android:id="@+id/size_seekbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:thumbOffset="8dp"
+        android:progress="45"
+        android:max="70"
+        android:onClick="closeKeyboard" />
+
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/smallest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:onClick="arrowToggle"
-            android:text="Replace arrows with cut/copy/paste shortcuts?" />
+            android:layout_alignParentStart="true"
+            android:text="@string/smallest_for_tablets" />
 
-        <CheckBox
-            android:id="@+id/check_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:onClick="previewToggle"
-            android:text="Popup previews of characters?" />
 
-        <CheckBox
-            android:id="@+id/check_sound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="true"
-            android:onClick="soundToggle"
-            android:text="Sound on keypress?" />
-
-        <CheckBox
-            android:id="@+id/check_vibrator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="true"
-            android:onClick="vibratorToggle"
-            android:text="Vibrate on keypress?" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="24dp"
-            android:text="Keyboard Size"
-            android:textSize="20sp" />
+            android:layout_alignParentEnd="true"
+            android:text="@string/large" />
+
+    </RelativeLayout>
 
 
-        <SeekBar
-            android:id="@+id/size_seekbar"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="Colour"
+        android:textSize="20sp" />
+
+
+    <RadioGroup
+        android:id="@+id/radiogroupcolour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/material_dark_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:min="30"
-            android:max="70"
+            android:layout_margin="16dp"
+            android:button="@drawable/selectmd"
             android:onClick="closeKeyboard"
-            android:progress="40" />
+            android:text=" Material Dark"
 
-        <RelativeLayout
-            android:id="@+id/relative_layout"
+            />
+
+        <RadioButton
+            android:id="@+id/material_light_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:layout_margin="16dp"
+            android:button="@drawable/selectml"
+            android:onClick="closeKeyboard"
+            android:text=" Material Light" />
 
-            <TextView
-                android:id="@+id/smallest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="Smallest (for tablets)" />
-
-
-
-               <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="Large" />
-
-        </RelativeLayout>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:text="Colour"
-            android:textSize="20sp" />
-
-
-        <RadioGroup
-            android:id="@+id/radiogroupcolour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="8dp">
-
-            <RadioButton
-                android:id="@+id/material_dark_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:button="@drawable/selectmd"
-                android:onClick="closeKeyboard"
-                android:text=" Material Dark"
-
-                />
-
-            <RadioButton
-                android:id="@+id/material_light_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:button="@drawable/selectml"
-                android:onClick="closeKeyboard"
-                android:text=" Material Light" />
-
-            <RadioButton
-                android:id="@+id/black_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:button="@drawable/selectblack"
-                android:onClick="closeKeyboard"
-                android:text=" Pure Black" />
-
-            <RadioButton
-                android:id="@+id/white_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:button="@drawable/selectwhite"
-                android:onClick="closeKeyboard"
-                android:text=" White" />
-
-            <RadioButton
-                android:id="@+id/blue_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:button="@drawable/selectblue"
-                android:onClick="closeKeyboard"
-                android:text=" Blue" />
-
-            <RadioButton
-                android:id="@+id/purple_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:button="@drawable/selectpurple"
-                android:checked="false"
-                android:onClick="closeKeyboard"
-                android:text=" Purple" />
-
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-
-            android:text="Layout"
-            android:textSize="20sp" />
-        <!--todolater-->
-        <!--<CheckBox-->
-            <!--android:id="@+id/editrow"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Replace arrow keys with edit options (select/cut/copy/paste)"-->
-            <!--/>-->
-
-        <RadioGroup
-            android:id="@+id/radiogrouplayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="8dp">
-
-            <RadioButton
-                android:id="@+id/qwertylayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:onClick="closeKeyboard"
-                android:text="Qwerty"
-
-                />
-            <RadioButton
-                android:id="@+id/azertylayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:onClick="closeKeyboard"
-                android:text="Azerty"
-                android:checked="false"
-                />
-            <!--<RadioButton-->
-                <!--android:id="@+id/dvoraklayout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="16dp"-->
-                <!--android:onClick="closeKeyboard"-->
-                <!--android:text="  Dvorak"-->
-
-                <!--/>-->
-
-
-        </RadioGroup>
-
-        <Button
+        <RadioButton
+            android:id="@+id/black_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:button="@drawable/selectblack"
+            android:onClick="closeKeyboard"
+            android:text=" Pure Black" />
+
+        <RadioButton
+            android:id="@+id/white_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:button="@drawable/selectwhite"
+            android:onClick="closeKeyboard"
+            android:text=" White" />
+
+        <RadioButton
+            android:id="@+id/blue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:button="@drawable/selectblue"
+            android:onClick="closeKeyboard"
+            android:text=" Blue" />
+
+        <RadioButton
+            android:id="@+id/purple_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="Pay if you can :)"
-            android:visibility="gone" />
-        <Button
+            android:button="@drawable/selectpurple"
+            android:checked="false"
+            android:onClick="closeKeyboard"
+            android:text=" Purple" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+
+        android:text="Layout"
+        android:textSize="20sp" />
+    <!--todolater-->
+    <!--<CheckBox-->
+    <!--android:id="@+id/editrow"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Replace arrow keys with edit options (select/cut/copy/paste)"-->
+    <!--/>-->
+
+    <RadioGroup
+        android:id="@+id/radiogrouplayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/qwertylayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:onClick="openTutorial"
-            android:text="Tutorial to enable keyboard" />
+            android:layout_margin="8dp"
+            android:onClick="closeKeyboard"
+            android:text="Qwerty"
 
-
-
-        <Button
+            />
+        <RadioButton
+            android:id="@+id/azertylayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:onClick="openPlay"
-            android:text="Rate on Google Play" />
+            android:layout_margin="8dp"
+            android:onClick="closeKeyboard"
+            android:text="Azerty"
+            android:checked="false"
+            />
+        <!--<RadioButton-->
+        <!--android:id="@+id/dvoraklayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:onClick="closeKeyboard"-->
+        <!--android:text="  Dvorak"-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="This app is free, open-source and does not read your data:"/>
+        <!--/>-->
 
-        <Button
+
+    </RadioGroup>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Pay if you can :)"
+        android:visibility="gone" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="openTutorial"
+        android:text="Tutorial to enable keyboard" />
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="openPlay"
+        android:text="Rate on Google Play" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This app is free, open-source and does not read your data:"/>
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
@@ -271,5 +271,5 @@
         android:text="Check out the source code" />
 
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -7,4 +7,13 @@
     <string name="scanf">scanf(\"\");</string>
     <string name="for_">for(;;){\n\t}</string>
     <string name="app_intro">CodeBoard - Intro</string>
+    <string name="change_keyboard">Change Keyboard</string>
+    <string name="reopen_hint">Re-open keyboard to see changes</string>
+    <string name="replace_arrows">Replace arrows with cut/copy/paste shortcuts?</string>
+    <string name="preview">Popup previews of characters?</string>
+    <string name="sound_on_keypress">Sound on keypress?</string>
+    <string name="vibrate_on_keypress">Vibrate on keypress?</string>
+    <string name="keyboard_size">Keyboard Size</string>
+    <string name="smallest_for_tablets">Smallest (for tablets)</string>
+    <string name="large">Large</string>
 </resources>
