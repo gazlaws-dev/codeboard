@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
    final String RADIO_INDEX_COLOUR = "RADIO_INDEX_COLOUR";
    final String RADIO_INDEX_LAYOUT = "RADIO_INDEX_LAYOUT";
+   final String CUSTOM_SYMBOLS = "CUSTOM_SYMBOLS";
 
 
     @Override
@@ -160,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt(key, value);
         editor.apply();
     }
+    private void SavePreferencesAsString(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
 
 
     public void changeButton(View v) {
@@ -217,6 +225,10 @@ public class MainActivity extends AppCompatActivity {
         closeKeyboard(v);
     }
 
+    public void saveCustomSymbols(View v){
+        EditText customSymbolView = findViewById(R.id.input_symbols);
+        SavePreferencesAsString(CUSTOM_SYMBOLS, String.valueOf(customSymbolView.getText()));
+    }
 
     public void closeKeyboard(View v) {
 
@@ -228,6 +240,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void LoadPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+
+        String customSymbols = sharedPreferences.getString(CUSTOM_SYMBOLS,"");
+        EditText customSymbolView = findViewById(R.id.input_symbols);
+        customSymbolView.setText(customSymbols);
 
         int savedRadioColour = sharedPreferences.getInt(RADIO_INDEX_COLOUR, 0);
         RadioButton savedCheckedRadioButtonColour = (RadioButton) radioGroupColour.getChildAt(savedRadioColour);
