@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -35,6 +36,7 @@ import java.util.TimerTask;
 import static android.content.ContentValues.TAG;
 import static android.view.KeyEvent.KEYCODE_DEL;
 import static android.view.KeyEvent.KEYCODE_ENTER;
+import static android.view.KeyEvent.KEYCODE_SPACE;
 
 
 
@@ -57,39 +59,6 @@ public class CodeBoardIME extends InputMethodService
     private boolean long_pressed = false;
     private KeyboardUiFactory mKeyboardUiFactory = null;
     private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
-
-
-
-    /* onKeyCtrl allows select all, copy, paste, undo ,redo
-     */
-
-    public void onKeyCtrl(int primaryCode, InputConnection ic) {
-        long now = System.currentTimeMillis();
-
-        if (ic != null) {
-            char code = (char) primaryCode;
-            int ke;
-            {
-                ke = KeyEvent.keyCodeFromString("KEYCODE_" + Character.toUpperCase(code));
-            } //if not a character, like arrow, do that instead
-
-            //Bug: this is a depreciated function, so the meta state is not properly checked by sendKeyEvent
-            int meta = KeyEvent.META_CTRL_ON;
-            if(shift){
-                meta = meta | KeyEvent.META_SHIFT_LEFT_ON;
-            }
-            ic.sendKeyEvent(new KeyEvent(0,0,KeyEvent.ACTION_DOWN, ke,0,meta));
-            ic.sendKeyEvent(new KeyEvent(0,0,KeyEvent.ACTION_UP, ke, 0,meta));
-
-            ctrl = false;
-            controlKeyUpdateView();
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-            shift = false;
-            shiftLock = false;
-            shiftKeyUpdateView();
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-        }
-    }
 
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
@@ -133,8 +102,6 @@ public class CodeBoardIME extends InputMethodService
                 controlKeyUpdateView();
                 shiftKeyUpdateView();
                 break;
-            //FROM HERE could be clubbed into ke with manual metastate?
-
 
             case 17: //KEYCODE_CTRL_LEFT:
                 // emulates a press down of the ctrl key
@@ -153,86 +120,98 @@ public class CodeBoardIME extends InputMethodService
                     //Simple shift to true
                     shift = true;
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
-                } else if (!shiftLock && shift){
+                } else if (!shiftLock && shift) {
                     //Simple remove shift
                     shift = false;
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-                } else if (shift && shiftLock){
+                } else if (shift && shiftLock) {
                     //Stay shifted if previously shifted
                 }
                 shiftKeyUpdateView();
                 break;
 
-            case 9://TAB:
-                // tab - have a choice for user
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_TAB));
-                //ic.commitText("\u0009", 1);
-                //sendDownUpKeyEvents(primaryCode);
-                break;
-
-            case 27: //KEYCODE_ESCAPE:KEYCODE_DPAD_DOWN
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ESCAPE));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ESCAPE));
-                //sendDownUpKeyEvents(KEYCODE_ESCAPE);
-                break;
-
-            //These are like a directional joystick - jumps outside the inputConnection
-            case 5000:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT));
-                //sendDownUpKeyEvents(KEYCODE_DPAD_LEFT);
-                break;
-            case 5001:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN));
-                //sendDownUpKeyEvents(KEYCODE_DPAD_DOWN);
-                break;
-            case 5002:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_UP));
-                //sendDownUpKeyEvents(KEYCODE_DPAD_UP);
-                break;
-            case 5003:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT));
-                //sendDownUpKeyEvents(KEYCODE_DPAD_RIGHT);
-                break;
-
-            case 32://SPACE
-                //Don't add a space when we're switching keyboards (LongPress goes first)
-                if (long_pressed) {
-                    //In case user didn't change keyboards, update for next time
-                    long_pressed = false;
-                    break;
-                }
-                ic.commitText(" ", 1);
-                break;
-            case -5:
-                sendDownUpKeyEvents(KEYCODE_DEL);
-                break;
-            case -4:
-                sendDownUpKeyEvents(KEYCODE_ENTER);
-                break;
-            default:
-                if (ctrl) {
-                    onKeyCtrl(primaryCode, ic);
-                } else if (Character.isLetter(code)) {
-                    //Use commitText where possible
-                    if (shift) {
-                        code = Character.toUpperCase(code);
-
-                        if (!shiftLock) {
-                            shift = false;
-                            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-                            shiftKeyUpdateView();
-                        }
+            default: {
+                int meta = 0;
+                int ke = 0;
+                if (shift) {
+                    meta = KeyEvent.META_SHIFT_LEFT_ON;
+                    code = Character.toUpperCase(code);
+                    if (!shiftLock) {
+                        shift = false;
+                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+                        shiftKeyUpdateView();
                     }
-                    ic.commitText(String.valueOf(code), 1);
-                } else {
-                    //For non-letter, shift doesn't affect the output
-                    ic.commitText(String.valueOf(code), 1);
                 }
+                if (ctrl) {
+                    meta = meta | KeyEvent.META_CTRL_ON;
+                    ctrl = false;
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+                    controlKeyUpdateView();
+                }
+                switch (primaryCode) {
+                    case 9:
+                        ke = KeyEvent.KEYCODE_TAB;
+                        //ic.commitText("\u0009", 1);
+                        break;
+
+                    case 27:
+                        ke = KeyEvent.KEYCODE_ESCAPE;
+                        break;
+
+                    //These are like a directional joystick - jumps outside the inputConnection
+                    case 5000:
+                        ke = KeyEvent.KEYCODE_DPAD_LEFT;
+                        break;
+                    case 5001:
+                        ke = KeyEvent.KEYCODE_DPAD_DOWN;
+                        break;
+                    case 5002:
+                        ke = KeyEvent.KEYCODE_DPAD_UP;
+                        break;
+                    case 5003:
+                        ke = KeyEvent.KEYCODE_DPAD_RIGHT;
+                        break;
+
+                    case 32:
+                        ke = KeyEvent.KEYCODE_SPACE;
+                        //NOTE: Long press goes second now
+                        break;
+                    case -5:
+                        ke = KeyEvent.KEYCODE_DEL;
+                        break;
+                    case -4:
+                        ke = KeyEvent.KEYCODE_ENTER;
+                        break;
+                    default:
+                        if (Character.isLetter(code)) {
+                            ke = KeyEvent.keyCodeFromString("KEYCODE_" + Character.toUpperCase(code));
+                        }
+
+                }
+                if (ke != 0) {
+                    ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
+                    ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
+                } else {
+
+                    //this doesn't use modifiers
+                    ic.commitText(String.valueOf(code), 1);
+
+
+//                    //Slow - and '?' becomes '/'
+//                    KeyCharacterMap mKeyCharacterMap =
+//                            KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD);
+//                    String text = code + "";
+//                    KeyEvent[] events = mKeyCharacterMap.getEvents(text.toCharArray());
+//                    if (events.length > 0) {
+//                        for (KeyEvent event2 : events) {
+//                            int keycode = event2.getKeyCode();
+//                            ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, keycode, 0, meta));
+//                            ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, keycode, 0, meta));
+//                        }
+//                    }
+
+                }
+            }
         }
     }
 
@@ -309,7 +288,7 @@ public class CodeBoardIME extends InputMethodService
         long_pressed = true;
         if (keyCode == 16) {
             shiftLock = !shiftLock;
-            if(shiftLock){
+            if (shiftLock) {
                 shift = true;
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
             } else {
@@ -327,7 +306,7 @@ public class CodeBoardIME extends InputMethodService
         }
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null)
+        if (vibratorOn && vibrator != null)
             vibrator.vibrate(50);
     }
 
@@ -386,7 +365,7 @@ public class CodeBoardIME extends InputMethodService
         mLayout = pre.getInt("RADIO_INDEX_LAYOUT", 0);
         mSize = pre.getInt("SIZE", 45);
         mToprow = pre.getInt("ARROW_ROW", 1);
-        mCustomSymbols = pre.getString("CUSTOM_SYMBOLS", "");
+        mCustomSymbols = pre.getString("CUSTOM_SYMBOLS", "\\|/[]{}<>:");
 
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
 
@@ -400,8 +379,6 @@ public class CodeBoardIME extends InputMethodService
                 Definitions.addArrowsRow(builder);
             }
 
-            //Definitions.addNumberRow(builder);
-            //Definitions.addOperatorRow(builder);
 
             if (mKeyboardState == R.integer.keyboard_sym) {
                 Definitions.addKeyboardOperatorsRow(builder);

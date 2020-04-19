@@ -236,13 +236,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textIsSelectable="true"
-            android:text="Add your customizable symbols row here. Eg. +-=:*^/{}_[]">
+            android:text="Add your customizable symbols row here">
 
         </TextView>
         <EditText
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/default_symbols"
             android:id="@+id/input_symbols">
         </EditText>
 

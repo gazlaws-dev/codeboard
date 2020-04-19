@@ -241,9 +241,11 @@ public class MainActivity extends AppCompatActivity {
     private void LoadPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
 
-        String customSymbols = sharedPreferences.getString(CUSTOM_SYMBOLS,"");
         EditText customSymbolView = findViewById(R.id.input_symbols);
+        String customSymbols = String.valueOf(customSymbolView.getText());
+        customSymbols = sharedPreferences.getString(CUSTOM_SYMBOLS,customSymbols);
         customSymbolView.setText(customSymbols);
+        saveCustomSymbols(customSymbolView);
 
         int savedRadioColour = sharedPreferences.getInt(RADIO_INDEX_COLOUR, 0);
         RadioButton savedCheckedRadioButtonColour = (RadioButton) radioGroupColour.getChildAt(savedRadioColour);
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         int setPreview  = sharedPreferences.getInt("PREVIEW", 0);
         int setSound    = sharedPreferences.getInt("SOUND"  , 1);
         int setVibrator = sharedPreferences.getInt("VIBRATE", 1);
-        int setSize     = sharedPreferences.getInt("SIZE"   , 2);
+        int setSize     = sharedPreferences.getInt("SIZE"   , 45);
 
         int setArrow = sharedPreferences.getInt("ARROW_ROW", 1);
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);

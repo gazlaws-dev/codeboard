@@ -32,10 +32,10 @@ public class Definitions {
         keyboard.newRow()
                 .addKey("Esc", 27)
                 .addKey("Tab", 9)
-                .addKey("Select All", 53737).withSize(2.0f).asRepeatable()
+                .addKey("Sel All", 53737).asRepeatable().withSize(1.4f)
                 .addKey("Cut", 53738).asRepeatable()
-                .addKey("Copy", 53739).asRepeatable()
-                .addKey("Paste", 53740)
+                .addKey("Copy", 53739).asRepeatable().withSize(1.1f)
+                .addKey("Paste", 53740).withSize(1.3f)
                 .addKey("SYM", -15)
         ;
     }
@@ -115,7 +115,7 @@ public class Definitions {
                 .addKey('o').onShiftUppercase()
                 .addKey('p').onShiftUppercase()
                 .newRow()
-                .addKey('a').onShiftUppercase()
+                .addKey('a').onShiftUppercase().withSize(1.5f)
                 .addKey('s').onShiftUppercase()
                 .addKey('d').onShiftUppercase()
                 .addKey('f').onShiftUppercase()
@@ -123,8 +123,7 @@ public class Definitions {
                 .addKey('h').onShiftUppercase()
                 .addKey('j').onShiftUppercase()
                 .addKey('k').onShiftUppercase()
-                .addKey('l').onShiftUppercase()
-                .addKey("◀", -5).asRepeatable()
+                .addKey('l').onShiftUppercase().withSize(1.5f)
                 .newRow()
                 .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
                 .addKey('z').onShiftUppercase()
@@ -134,8 +133,7 @@ public class Definitions {
                 .addKey('b').onShiftUppercase()
                 .addKey('n').onShiftUppercase()
                 .addKey('m').onShiftUppercase()
-                .addKey('?')
-                .addKey("Enter", -4).withSize(1.5f)
+                .addKey("◀", -5).asRepeatable().withSize(1.5f)
                 ;
     }
 
@@ -151,7 +149,6 @@ public class Definitions {
                 .addKey('i').onShiftUppercase()
                 .addKey('o').onShiftUppercase()
                 .addKey('p').onShiftUppercase()
-                .addKey("◀", -5).asRepeatable()
                 .newRow()
                 .addKey('q').onShiftUppercase()
                 .addKey('s').onShiftUppercase()
@@ -163,7 +160,7 @@ public class Definitions {
                 .addKey('k').onShiftUppercase()
                 .addKey('l').onShiftUppercase()
                 .addKey('m').onShiftUppercase()
-                .addKey("Enter", -4).withSize(1.5f)
+                .addKey("◀", -5).asRepeatable()
                 .newRow()
                 .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
                 .addKey('w').onShiftUppercase()
@@ -184,27 +181,24 @@ public class Definitions {
                 .addKey("Cut", 53738).asRepeatable()
                 .addKey("Copy", 53739).asRepeatable()
                 .addKey("Paste", 53740)
-                .addKey("◀", -5).asRepeatable()
                 .newRow()
                 .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
                 .addKey("Undo", 53741)
                 .addKey("Redo", 53742)
-                .addKey("Enter", -4).withSize(1.5f)
+                .addKey("◀", -5).asRepeatable()
                 ;
     }
 
     public static void addSpaceRow(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
                 .addKey("Ctrl",17).asModifier().onCtrlShow("CTRL").withSize(1.5f)
-                .addKey('|').withSize(.7f)
-                .addKey('<').withSize(.7f)
-                .addKey('>').withSize(.7f)
+                .addKey('?').withSize(.7f)
+                .addKey(',').withSize(.7f)
+                .addKey('"').withSize(.7f)
                 .addKey("Space", 32).withSize(3.0f)
                 .addKey(';').withSize(.7f)
-                .addKey('"').withSize(.7f)
-                .addKey('\'').withSize(.7f)
-                .addKey(',').withSize(.7f)
                 .addKey('.').withSize(.7f)
+                .addKey("Enter", -4).withSize(1.5f)
                 ;
     }
 }
