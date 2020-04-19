@@ -191,13 +191,15 @@ public class Definitions {
 
     public static void addSpaceRow(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
-                .addKey("Ctrl",17).asModifier().onCtrlShow("CTRL").withSize(1.5f)
+                .addKey("Ctrl",17).asModifier().onCtrlShow("CTRL")
                 .addKey('?').withSize(.7f)
                 .addKey(',').withSize(.7f)
                 .addKey('"').withSize(.7f)
-                .addKey("Space", 32).withSize(3.0f)
+                .addKey(':').withSize(.7f)
+                .addKey("Space", 32).withSize(2f)
                 .addKey(';').withSize(.7f)
                 .addKey('.').withSize(.7f)
+                .addKey('\'').withSize(.7f)
                 .addKey("Enter", -4).withSize(1.5f)
                 ;
     }
