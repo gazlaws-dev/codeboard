@@ -7,10 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -24,6 +26,7 @@ import android.widget.SeekBar;
 public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroupColour,radioGroupLayout;
     SeekBar seekBar;
+
     KeyboardPreferences preferences;
 
     @Override
@@ -139,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-
     public void changeButton(View v) {
 
         InputMethodManager imm = (InputMethodManager)
@@ -185,6 +187,11 @@ public class MainActivity extends AppCompatActivity {
         closeKeyboard(v);
     }
 
+    public void saveCustomSymbols(View v){
+        EditText customSymbolView = findViewById(R.id.input_symbols);
+        String newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbols(newValue);
+    }
 
     public void closeKeyboard(View v) {
 
@@ -195,6 +202,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadPreferences() {
+
+        EditText customSymbolView = findViewById(R.id.input_symbols);
+        String customSymbols = preferences.getCustomSymbols();
+        customSymbolView.setText(customSymbols);
 
         int savedRadioColour = preferences.getThemeIndex();
         RadioButton savedCheckedRadioButtonColour = (RadioButton) radioGroupColour.getChildAt(savedRadioColour);

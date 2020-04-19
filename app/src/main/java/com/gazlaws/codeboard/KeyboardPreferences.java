@@ -16,6 +16,7 @@ public class KeyboardPreferences {
     private static String ENABLE_ARROW_ROW = "ARROW_ROW";
     private static String SIZE_PORTRAIT = "SIZE";
     private static String SIZE_LANDSCAPE = "SIZE_LANDSCAPE";
+    private static String CUSTOM_SYMBOLS = "CUSTOM_SYMBOLS";
 
     private SharedPreferences preferences;
 
@@ -52,7 +53,7 @@ public class KeyboardPreferences {
     }
 
     public void setSoundEnabled(boolean value){
-        write(THEME_INDEX, value);
+        write(ENABLE_SOUND, value);
     }
 
     public boolean isVibrateEnabled(){
@@ -95,6 +96,14 @@ public class KeyboardPreferences {
         write(SIZE_LANDSCAPE, value);
     }
 
+    public String getCustomSymbols() {
+        return read(CUSTOM_SYMBOLS, "\\|/[]{}<>:");
+    }
+
+    public void setCustomSymbols(String value){
+        write(CUSTOM_SYMBOLS, value);
+    }
+
     private boolean read(String key, boolean defaultValue){
         return preferences.getInt(key, defaultValue ? 1 : 0) != 0;
     }
@@ -110,6 +119,16 @@ public class KeyboardPreferences {
     private void write(String key, int value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(key, value);
+        editor.apply();
+    }
+
+    private String read(String key, String defaultValue) {
+        return preferences.getString(key, defaultValue);
+    }
+
+    private void write(String key, String value){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
         editor.apply();
     }
 
