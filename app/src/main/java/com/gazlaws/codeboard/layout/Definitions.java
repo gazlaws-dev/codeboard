@@ -2,41 +2,43 @@ package com.gazlaws.codeboard.layout;
 
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 
-import java.util.ArrayList;
-//Esc 27
-//tab 9
-//arrows 5000-5003
-//sym -15
-//backspace -5
-//shift 16
-//ctrl 17
-//enter -4
-//space 32
 public class Definitions {
+
+    private static int CODE_ESCAPE = 27;
+    private static int CODE_ARROW_LEFT = 5000;
+    private static int CODE_ARROW_DOWN = 5001;
+    private static int CODE_ARROW_UP = 5002;
+    private static int CODE_ARROW_RIGHT = 5003;
+    private static int CODE_SYMBOLS = -15;
+    private static int CODE_BACKSPACE = -5;
+    private static int CODE_SHIFT = 16;
+    private static int CODE_CONTROL = 17;
+    private static int CODE_ENTER = -4;
+    private static int CODE_SPACE = 32;
 
     public static void addArrowsRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
-                .addKey("Esc", 27)
-                .addKey("Tab", 9)
-                .addKey("◀", 5000).asRepeatable()
-                .addKey("▼", 5001).asRepeatable()
-                .addKey("▲", 5002).asRepeatable()
-                .addKey("▶", 5003).asRepeatable()
-                .addKey("SYM", -15)
+                .addKey("Esc", CODE_ESCAPE)
+                .addTabKey()
+                .addKey("◀", CODE_ARROW_LEFT).asRepeatable()
+                .addKey("▼", CODE_ARROW_DOWN).asRepeatable()
+                .addKey("▲", CODE_ARROW_UP).asRepeatable()
+                .addKey("▶", CODE_ARROW_RIGHT).asRepeatable()
+                .addKey("SYM", CODE_SYMBOLS)
         ;
     }
 
     public static void addCopyPasteRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
-                .addKey("Esc", 27)
-                .addKey("Tab", 9)
+                .addKey("Esc", CODE_ESCAPE)
+                .addTabKey()
                 .addKey("Sel All", 53737).asRepeatable().withSize(1.4f)
                 .addKey("Cut", 53738).asRepeatable()
                 .addKey("Copy", 53739).asRepeatable().withSize(1.1f)
                 .addKey("Paste", 53740).withSize(1.3f)
-                .addKey("SYM", -15)
+                .addKey("SYM", CODE_SYMBOLS)
         ;
     }
 
@@ -125,7 +127,7 @@ public class Definitions {
                 .addKey('k').onShiftUppercase()
                 .addKey('l').onShiftUppercase().withSize(1.5f)
                 .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
+                .addShiftKey()
                 .addKey('z').onShiftUppercase()
                 .addKey('x').onShiftUppercase()
                 .addKey('c').onShiftUppercase()
@@ -133,7 +135,7 @@ public class Definitions {
                 .addKey('b').onShiftUppercase()
                 .addKey('n').onShiftUppercase()
                 .addKey('m').onShiftUppercase()
-                .addKey("◀", -5).asRepeatable().withSize(1.5f)
+                .addBackspaceKey()
                 ;
     }
 
@@ -160,9 +162,9 @@ public class Definitions {
                 .addKey('k').onShiftUppercase()
                 .addKey('l').onShiftUppercase()
                 .addKey('m').onShiftUppercase()
-                .addKey("◀", -5).asRepeatable()
+                .addBackspaceKey()
                 .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
+                .addShiftKey()
                 .addKey('w').onShiftUppercase()
                 .addKey('x').onShiftUppercase()
                 .addKey('c').onShiftUppercase()
@@ -171,7 +173,43 @@ public class Definitions {
                 .addKey('n').onShiftUppercase()
                 .addKey('!').withSize(.8f)
                 .addKey('?').withSize(.8f)
-                .addKey("Tab", 9)
+                .addTabKey();
+    }
+
+    public static void addDvorakRows(KeyboardLayoutBuilder keyboard) {
+        keyboard.newRow()
+                .addKey('!')
+                .addKey('p').onShiftUppercase()
+                .addKey('y').onShiftUppercase()
+                .addKey('f').onShiftUppercase()
+                .addKey('g').onShiftUppercase()
+                .addKey('c').onShiftUppercase()
+                .addKey('r').onShiftUppercase()
+                .addKey('l').onShiftUppercase()
+                .addEnterKey()
+                .newRow()
+                .addKey('a').onShiftUppercase()
+                .addKey('o').onShiftUppercase()
+                .addKey('e').onShiftUppercase()
+                .addKey('u').onShiftUppercase()
+                .addKey('i').onShiftUppercase()
+                .addKey('d').onShiftUppercase()
+                .addKey('h').onShiftUppercase()
+                .addKey('t').onShiftUppercase()
+                .addKey('n').onShiftUppercase()
+                .addKey('s').onShiftUppercase()
+                .addBackspaceKey()
+                .newRow()
+                .addShiftKey()
+                .addKey('q').onShiftUppercase()
+                .addKey('j').onShiftUppercase()
+                .addKey('k').onShiftUppercase()
+                .addKey('x').onShiftUppercase()
+                .addKey('b').onShiftUppercase()
+                .addKey('m').onShiftUppercase()
+                .addKey('w').onShiftUppercase()
+                .addKey('v').onShiftUppercase()
+                .addKey('z').onShiftUppercase()
         ;
     }
 
@@ -182,10 +220,10 @@ public class Definitions {
                 .addKey("Copy", 53739).asRepeatable()
                 .addKey("Paste", 53740)
                 .newRow()
-                .addKey("Shft", 16).asModifier().onShiftShow("SHFT").withSize(1.5f)
+                .addShiftKey()
                 .addKey("Undo", 53741)
                 .addKey("Redo", 53742)
-                .addKey("◀", -5).asRepeatable()
+                .addBackspaceKey()
                 ;
     }
 
@@ -200,7 +238,8 @@ public class Definitions {
                 .addKey(';').withSize(.7f)
                 .addKey('.').withSize(.7f)
                 .addKey('\'').withSize(.7f)
-                .addKey("Enter", -4).withSize(1.5f)
+                .addEnterKey()
                 ;
     }
+
 }

@@ -70,6 +70,50 @@
             android:textSize="20sp" />
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Landscape Keyboard Size"
+        android:textSize="20sp" />
+
+
+    <SeekBar
+        android:id="@+id/size_landscape_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:thumbOffset="8dp"
+        android:min="40"
+        android:max="90"
+        android:onClick="closeKeyboard"
+        android:progress="70" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="Small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Large" />
+
+    </RelativeLayout>
         <SeekBar
             android:id="@+id/size_seekbar"
             android:layout_width="fill_parent"
@@ -223,14 +267,14 @@
                 android:text="Azerty"
                 android:checked="false"
                 />
-            <!--<RadioButton-->
-            <!--android:id="@+id/dvoraklayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="16dp"-->
-            <!--android:onClick="closeKeyboard"-->
-            <!--android:text="  Dvorak"-->
-            <!--/>-->
+            <RadioButton
+                android:id="@+id/dvoraklayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:onClick="closeKeyboard"
+                android:text="Dvorak"
+                />
         </RadioGroup>
         <TextView
             android:layout_width="match_parent"

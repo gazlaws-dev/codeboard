@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,11 +27,7 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroupColour,radioGroupLayout;
     SeekBar seekBar;
 
-
-   final String RADIO_INDEX_COLOUR = "RADIO_INDEX_COLOUR";
-   final String RADIO_INDEX_LAYOUT = "RADIO_INDEX_LAYOUT";
-   final String CUSTOM_SYMBOLS = "CUSTOM_SYMBOLS";
-
+    KeyboardPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,47 +36,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = new KeyboardPreferences(this);
 
         //  Declare a new thread to do a preference check
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                //  Initialize SharedPreferences
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
 
-                //  Create a new boolean and preference and set it to true
-                boolean isFirstStart = getPrefs.getBoolean("firstStart1", true);
+                boolean isFirstStart = preferences.isFirstStart();
+
+                if (!isFirstStart) {
+                    return;
+                }
 
                 //  If the activity has never started before...
-                if (isFirstStart) {
+                Button change = (Button) findViewById(R.id.change_button);
+                change.setVisibility(View.GONE);
 
+                //  Launch app intro
+                Intent i = new Intent(MainActivity.this, IntroActivity.class);
+                startActivity(i);
 
-                    Button change = (Button) findViewById(R.id.change_button);
-                    change.setVisibility(View.GONE);
-
-                    //  Launch app intro
-                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
-                    startActivity(i);
-
-                    //  Make a new preferences editor
-                    SharedPreferences.Editor e = getPrefs.edit();
-
-                    //  Edit preference to make it false because we don't want this to run again
-                    e.putBoolean("firstStart1", false);
-
-                    //  Apply changes
-                    e.apply();
-
-                } else {
-                    //Dev
-                    //SharedPreferences.Editor e = getPrefs.edit();
-                    //
-                    //e.putBoolean("firstStart1", true);
-                    //REMOVE BEFORE PUBLISHING ^
-                    //
-                    //e.apply();
-                }
+                preferences.setFirstStart(false);
 
             }
         });
@@ -107,11 +85,25 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
-//                        Toast.LENGTH_SHORT).show();
-                SavePreferences("SIZE", progressChangedValue);
+                preferences.setPortraitSize(progressChangedValue);
+            }
+        });
 
+        SeekBar landscapeSeekBar = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+        // perform seek bar change listener event used for getting the progress value
+        landscapeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = seekBar.getProgress();
 
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                preferences.setLandscapeSize(progressChangedValue);
             }
         });
 
@@ -133,11 +125,9 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                     RadioButton checkedRadioButtonColour = (RadioButton) radioGroupColour.findViewById(checkedId);
                     int checkedIndexColour = radioGroupColour.indexOfChild(checkedRadioButtonColour);
-                    SavePreferences(RADIO_INDEX_COLOUR, checkedIndexColour);
-
+                    preferences.setThemeIndex(checkedIndexColour);
                 }
             };
 
@@ -146,29 +136,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-
                     RadioButton checkedRadioButtonLayout = (RadioButton) radioGroupLayout.findViewById(checkedId);
                     int checkedIndexLayout = radioGroupLayout.indexOfChild(checkedRadioButtonLayout);
-                    SavePreferences(RADIO_INDEX_LAYOUT, checkedIndexLayout);
-
+                    preferences.setLayoutIndex(checkedIndexLayout);
                 }
             };
-
-
-    private void SavePreferences(String key, int value) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-    private void SavePreferencesAsString(String key, String value) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
 
     public void changeButton(View v) {
 
@@ -179,9 +151,9 @@ public class MainActivity extends AppCompatActivity {
 //        Button enable = (Button) findViewById(R.id.enable_button);
 //        enable.setText("Change Keyboard");
 //
-//        String id = Settings.Secure.getString(
+//        String id = KeyboardPreferences.Secure.getString(
 //                getContentResolver(),
-//                Settings.Secure.DEFAULT_INPUT_METHOD
+//                KeyboardPreferences.Secure.DEFAULT_INPUT_METHOD
 //        );
 //
 //        if(!(id.equals("com.gazlaws.codeboard/.CodeBoardIME"))){
@@ -193,41 +165,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void previewToggle(View v) {
-        CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
-        if (preview.isChecked()) {
-            SavePreferences("PREVIEW", 1);
-        } else SavePreferences("PREVIEW", 0);
-        closeKeyboard(v);
-
+        CheckBox box = (CheckBox) findViewById(R.id.check_preview);
+        preferences.setPreviewEnabled(box.isChecked());
     }
 
     public void soundToggle(View v) {
-        CheckBox preview = (CheckBox) findViewById(R.id.check_sound);
-        if (preview.isChecked()) {
-            SavePreferences("SOUND", 1);
-        } else SavePreferences("SOUND", 0);
+        CheckBox box = (CheckBox) findViewById(R.id.check_sound);
+        preferences.setSoundEnabled(box.isChecked());
         closeKeyboard(v);
     }
 
     public void vibratorToggle(View v) {
-        CheckBox preview = (CheckBox) findViewById(R.id.check_vibrator);
-        if (preview.isChecked()) {
-            SavePreferences("VIBRATE", 1);
-        } else SavePreferences("VIBRATE", 0);
+        CheckBox box = (CheckBox) findViewById(R.id.check_vibrator);
+        preferences.setVibrateEnabled(box.isChecked());
         closeKeyboard(v);
     }
 
     public void arrowToggle(View v) {
-        CheckBox preview = (CheckBox) findViewById(R.id.check_no_arrow);
-        if (preview.isChecked()) {
-            SavePreferences("ARROW_ROW", 0);
-        } else SavePreferences("ARROW_ROW", 1);
+        CheckBox box = (CheckBox) findViewById(R.id.check_no_arrow);
+        preferences.setArrowRowEnabled(box.isChecked());
         closeKeyboard(v);
     }
 
     public void saveCustomSymbols(View v){
         EditText customSymbolView = findViewById(R.id.input_symbols);
-        SavePreferencesAsString(CUSTOM_SYMBOLS, String.valueOf(customSymbolView.getText()));
+        String newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbols(newValue);
     }
 
     public void closeKeyboard(View v) {
@@ -239,57 +202,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
 
         EditText customSymbolView = findViewById(R.id.input_symbols);
-        String customSymbols = String.valueOf(customSymbolView.getText());
-        customSymbols = sharedPreferences.getString(CUSTOM_SYMBOLS,customSymbols);
+        String customSymbols = preferences.getCustomSymbols();
         customSymbolView.setText(customSymbols);
-        saveCustomSymbols(customSymbolView);
 
-        int savedRadioColour = sharedPreferences.getInt(RADIO_INDEX_COLOUR, 0);
+        int savedRadioColour = preferences.getThemeIndex();
         RadioButton savedCheckedRadioButtonColour = (RadioButton) radioGroupColour.getChildAt(savedRadioColour);
         savedCheckedRadioButtonColour.setChecked(true);
 
-        int savedRadioLayout = sharedPreferences.getInt(RADIO_INDEX_LAYOUT, 0);
+        int savedRadioLayout = preferences.getLayoutIndex();
         RadioButton savedCheckedRadioButtonLayout = (RadioButton) radioGroupLayout.getChildAt(savedRadioLayout);
         savedCheckedRadioButtonLayout.setChecked(true);
 
-        int setPreview  = sharedPreferences.getInt("PREVIEW", 0);
-        int setSound    = sharedPreferences.getInt("SOUND"  , 1);
-        int setVibrator = sharedPreferences.getInt("VIBRATE", 1);
-        int setSize     = sharedPreferences.getInt("SIZE"   , 45);
-
-        int setArrow = sharedPreferences.getInt("ARROW_ROW", 1);
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
+        preview.setChecked(preferences.isPreviewEnabled());
 
         CheckBox sound   = (CheckBox) findViewById(R.id.check_sound);
+        sound.setChecked(preferences.isSoundEnabled());
+
         CheckBox vibrate = (CheckBox) findViewById(R.id.check_vibrator);
+        vibrate.setChecked(preferences.isVibrateEnabled());
+
         CheckBox noarrow = (CheckBox) findViewById(R.id.check_no_arrow);
+        noarrow.setChecked(preferences.isArrowRowEnabled());
+
         SeekBar size = (SeekBar) findViewById(R.id.size_seekbar);
+        size.setProgress(preferences.getPortraitSize());
 
-        if (setPreview == 1)
-            preview.setChecked(true);
-        else
-            preview.setChecked(false);
-
-        if (setSound == 1)
-            sound.setChecked(true);
-        else
-            sound.setChecked(false);
-
-        if (setVibrator == 1)
-            vibrate.setChecked(true);
-        else
-            vibrate.setChecked(false);
-
-        if (setArrow == 1)
-            noarrow.setChecked(false);
-        else
-            noarrow.setChecked(true);
-
-        size.setProgress(setSize);
-
+        SeekBar sizeLandscape = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+        sizeLandscape.setProgress(preferences.getLandscapeSize());
     }
 
     public void openPlay(View v) {

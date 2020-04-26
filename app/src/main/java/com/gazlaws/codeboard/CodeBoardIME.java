@@ -1,7 +1,6 @@
 package com.gazlaws.codeboard;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -32,14 +31,6 @@ import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-import static android.content.ContentValues.TAG;
-import static android.view.KeyEvent.KEYCODE_DEL;
-import static android.view.KeyEvent.KEYCODE_ENTER;
-import static android.view.KeyEvent.KEYCODE_SPACE;
-
-
-
 /*Created by Ruby(aka gazlaws) on 13/02/2016.
  */
 
@@ -53,7 +44,8 @@ public class CodeBoardIME extends InputMethodService
     private boolean shift = false;
     private boolean ctrl = false;
     private int mKeyboardState = R.integer.keyboard_normal;
-    private int mLayout, mToprow, mSize;
+    private int mLayout, mSize;
+    private boolean mToprow;
     private String mCustomSymbols;
     private Timer timerLongPress = null;
     private boolean long_pressed = false;
@@ -341,39 +333,30 @@ public class CodeBoardIME extends InputMethodService
             mKeyboardUiFactory = new KeyboardUiFactory(this);
         }
 
-        SharedPreferences pre = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        KeyboardPreferences preferences = new KeyboardPreferences(this);
 
-        mKeyboardUiFactory.theme = getThemeByRadioIndex(pre.getInt("RADIO_INDEX_COLOUR", 0));
-
-        if (pre.getInt("PREVIEW", 0) == 1) {
-            mKeyboardUiFactory.theme.enablePreview = true;
-        } else {
-            mKeyboardUiFactory.theme.enablePreview = false;
-        }
-
-        if (pre.getInt("SOUND", 1) == 1) {
-            soundOn = true;
-        } else soundOn = false;
-
-        if (pre.getInt("VIBRATE", 1) == 1) {
-            vibratorOn = true;
-        } else vibratorOn = false;
+        mKeyboardUiFactory.theme = getThemeByIndex(preferences.getThemeIndex());
+        mKeyboardUiFactory.theme.enablePreview = preferences.isPreviewEnabled();
+        soundOn = preferences.isSoundEnabled();
+        vibratorOn = preferences.isVibrateEnabled();
 
         shift = false;
         ctrl = false;
 
-        mLayout = pre.getInt("RADIO_INDEX_LAYOUT", 0);
-        mSize = pre.getInt("SIZE", 45);
-        mToprow = pre.getInt("ARROW_ROW", 1);
-        mCustomSymbols = pre.getString("CUSTOM_SYMBOLS", "\\|/[]{}<>:");
+        mLayout = preferences.getLayoutIndex();
+        mSize = preferences.getPortraitSize();
+        int sizeLandscape = preferences.getLandscapeSize();
+        mToprow = preferences.isArrowRowEnabled();
+        mCustomSymbols = preferences.getCustomSymbols();
 
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
+        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
 
         try {
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
             builder.setBox(Box.create(0, 0, 1, 1));
 
-            if (mToprow == 0) {
+            if (mToprow) {
                 Definitions.addCopyPasteRow(builder);
             } else {
                 Definitions.addArrowsRow(builder);
@@ -389,10 +372,11 @@ public class CodeBoardIME extends InputMethodService
                 Definitions.addSymbolRows(builder);
             } else {
                 Definitions.addNumberRow(builder);
-                if (mLayout == 0) {
-                    Definitions.addQwertyRows(builder);
-                } else {
-                    Definitions.addAzertyRows(builder);
+                switch (mLayout){
+                    default:
+                    case 0: Definitions.addQwertyRows(builder); break;
+                    case 1: Definitions.addAzertyRows(builder); break;
+                    case 2: Definitions.addDvorakRows(builder); break;
                 }
             }
 
@@ -425,8 +409,7 @@ public class CodeBoardIME extends InputMethodService
         mCurrentKeyboardLayoutView.applyShiftModifier(shift);
     }
 
-
-    private ThemeInfo getThemeByRadioIndex(int index) {
+    private ThemeInfo getThemeByIndex(int index){
         switch (index) {
             case 0:
                 return ThemeDefinitions.MaterialDark();

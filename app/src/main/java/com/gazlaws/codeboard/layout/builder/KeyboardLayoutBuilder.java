@@ -137,4 +137,23 @@ public class KeyboardLayoutBuilder {
     public KeyboardLayoutBuilder onShiftUppercase() {
         return onShiftShow(currentKey.label.toUpperCase());
     }
+
+    // common key definitions (extension methods)
+
+    public KeyboardLayoutBuilder addTabKey(){
+        return addKey("Tab", 9);
+    }
+
+    public KeyboardLayoutBuilder addShiftKey(){
+        return addKey("Shft", 16).asModifier()
+            .onShiftShow("SHFT").withSize(1.5f);
+    }
+
+    public KeyboardLayoutBuilder addBackspaceKey(){
+        return addKey("⌫", -5).asRepeatable();
+    }
+
+    public KeyboardLayoutBuilder addEnterKey(){
+        return addKey("Enter", -4).withSize(1.5f);
+    }
 }
