@@ -3,6 +3,7 @@ package com.gazlaws.codeboard.layout.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.inputmethodservice.KeyboardView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -95,6 +96,7 @@ public class KeyboardButtonView extends View {
     }
 
     private void onRelease() {
+//      NOTE: If the arrow keys move out of the input view, the onRelease is never called
         if (key.info.code != 0){
             inputService.onRelease(key.info.code);
         }
@@ -123,6 +125,7 @@ public class KeyboardButtonView extends View {
 
     private void startRepeating() {
         if (timer != null){
+            stopRepeating();
             return;
         }
         timer = new Timer();

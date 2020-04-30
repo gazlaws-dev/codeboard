@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.github.paolorotolo.appintro.model.SliderPage;
 
 /**
  * Created by Ruby on 05/12/2016.
@@ -24,30 +25,26 @@ public class IntroActivity extends AppIntro {
 
         // Add your slide fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
+
+        // Instead of fragments, you can also use our default slide.
+        // Just create a `SliderPage` and provide title, description, background and image.
+        // AppIntro will do the rest.
+
+
         addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro1));
         addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro2));
-        addSlide(AppIntroFragment.newInstance("All the shortcuts!", "Click 'ctrl' for select all, cut, copy, paste, or undo." +
-                "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard \n More symbols",
-                R.drawable.intro3, Color.parseColor("#3F51B5")));
 
-        // Instead of fragments, you can also use our default slide
-        // Just set a title, description, background and image. AppIntro will do the rest.
-        //addSlide(AppIntroFragment.newInstance(title, description, image, backgroundColor));
+        SliderPage sliderPage = new SliderPage();
+        sliderPage.setTitle("All the shortcuts!");
+        sliderPage.setDescription("Click 'ctrl' for select all, cut, copy, paste, or undo." +
+                "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard \n More symbols");
+        sliderPage.setImageDrawable(R.drawable.intro3);
+        sliderPage.setBgColor(Color.parseColor("#3F51B5"));
+        addSlide(AppIntroFragment.newInstance(sliderPage));
 
-        // OPTIONAL METHODS
-        // Override bar/separator color.
-//        setBarColor(Color.parseColor("#3F51B5"));
-//        setSeparatorColor(Color.parseColor("#2196F3"));
 
         // Hide Skip/Done button.
        showSkipButton(false);
-       // setProgressButtonEnabled(false);
-
-//         Turn vibration on and set intensity.
-//         NOTE: you will probably need to ask VIBRATE permission in Manifest.
-//        setVibrate(true);
-//        setVibrateIntensity(30);
-//        setFadeAnimation();
     }
 
     @Override

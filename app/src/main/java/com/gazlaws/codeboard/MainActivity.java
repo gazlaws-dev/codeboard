@@ -1,13 +1,12 @@
 package com.gazlaws.codeboard;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -16,8 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-
-
+import android.widget.TextView;
 
 
 /**
@@ -25,7 +23,8 @@ import android.widget.SeekBar;
  */
 public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroupColour,radioGroupLayout;
-    SeekBar seekBar;
+    SeekBar sizeSeekBar;
+    TextView sizeText;
 
     KeyboardPreferences preferences;
 
@@ -50,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //  If the activity has never started before...
-                Button change = (Button) findViewById(R.id.change_button);
-                change.setVisibility(View.GONE);
-
                 //  Launch app intro
                 Intent i = new Intent(MainActivity.this, IntroActivity.class);
                 startActivity(i);
@@ -71,13 +67,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        seekBar = (SeekBar) findViewById(R.id.size_seekbar);
+        sizeSeekBar = (SeekBar) findViewById(R.id.size_seekbar);
+        sizeText = (TextView) findViewById(R.id.size_text);
+
         // perform seek bar change listener event used for getting the progress value
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progressChangedValue = seekBar.getProgress();
+        sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = sizeSeekBar.getProgress();
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
+                sizeText.setText(String.valueOf(progressChangedValue+30));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -86,26 +85,27 @@ public class MainActivity extends AppCompatActivity {
 
             public void onStopTrackingTouch(SeekBar seekBar) {
                 preferences.setPortraitSize(progressChangedValue);
+                closeKeyboard(seekBar);
             }
         });
 
-        SeekBar landscapeSeekBar = (SeekBar) findViewById(R.id.size_landscape_seekbar);
-        // perform seek bar change listener event used for getting the progress value
-        landscapeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progressChangedValue = seekBar.getProgress();
-
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChangedValue = progress;
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                preferences.setLandscapeSize(progressChangedValue);
-            }
-        });
+//        SeekBar landscapeSeekBar = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+//        // perform seek bar change listener event used for getting the progress value
+//        landscapeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            int progressChangedValue = seekBar.getProgress();
+//
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                progressChangedValue = progress;
+//            }
+//
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                preferences.setLandscapeSize(progressChangedValue);
+//            }
+//        });
 
         radioGroupColour = (RadioGroup) findViewById(R.id.radiogroupcolour);
         radioGroupColour.setOnCheckedChangeListener(radioGroupOnCheckedChangeListenerColour);
@@ -148,25 +148,17 @@ public class MainActivity extends AppCompatActivity {
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showInputMethodPicker();
 
-//        Button enable = (Button) findViewById(R.id.enable_button);
-//        enable.setText("Change Keyboard");
-//
-//        String id = KeyboardPreferences.Secure.getString(
-//                getContentResolver(),
-//                KeyboardPreferences.Secure.DEFAULT_INPUT_METHOD
-//        );
-//
-//        if(!(id.equals("com.gazlaws.codeboard/.CodeBoardIME"))){
-//            InputMethodManager imm = (InputMethodManager)
-//                    getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.showInputMethodPicker();
-//        }
-
     }
 
     public void previewToggle(View v) {
         CheckBox box = (CheckBox) findViewById(R.id.check_preview);
         preferences.setPreviewEnabled(box.isChecked());
+        closeKeyboard(v);
+    }
+    public void keyBorderToggle(View v) {
+        CheckBox box = (CheckBox) findViewById(R.id.check_border);
+        preferences.setKeyBorderEnabled(box.isChecked());
+        closeKeyboard(v);
     }
 
     public void soundToggle(View v) {
@@ -188,9 +180,89 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveCustomSymbols(View v){
-        EditText customSymbolView = findViewById(R.id.input_symbols);
+        EditText customSymbolView = findViewById(R.id.input_symbols_main);
         String newValue = String.valueOf(customSymbolView.getText());
-        preferences.setCustomSymbols(newValue);
+        preferences.setCustomSymbolsMain(newValue);
+
+        customSymbolView = findViewById(R.id.input_symbols_main_2);
+        newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbolsMain2(newValue);
+
+        customSymbolView = findViewById(R.id.input_symbols_sym);
+        newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbolsSym(newValue);
+
+        customSymbolView = findViewById(R.id.input_symbols_sym_2);
+        newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbolsSym2(newValue);
+
+        customSymbolView = findViewById(R.id.input_symbols_main_bottom);
+        newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbolsMainBottom(newValue);
+
+        customSymbolView = findViewById(R.id.input_symbols_sym_bottom);
+        newValue = String.valueOf(customSymbolView.getText());
+        preferences.setCustomSymbolsSymBottom(newValue);
+
+        closeKeyboard(v);
+    }
+    public void classicSymbols(View v){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Reset?")
+                .setMessage("This will reset all your custom symbols to the old CodeBoard layout")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        EditText customSymbolView = findViewById(R.id.input_symbols_main);
+                        String newValue ="()1234567890#";
+                        customSymbolView.setText(newValue);
+                        preferences.setCustomSymbolsMain(newValue);
+
+
+                        customSymbolView = findViewById(R.id.input_symbols_main_2);
+                        newValue = "+-=:*/{}+$[]";
+                        customSymbolView.setText(newValue);
+                        preferences.setCustomSymbolsMain2(newValue);
+
+                        customSymbolView = findViewById(R.id.input_symbols_main_bottom);
+                        newValue = "&|%\\<>;',.";
+                        customSymbolView.setText(newValue);
+                        preferences.setCustomSymbolsMainBottom(newValue);
+
+//                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .show();
+        saveCustomSymbols(v);
+    }
+
+    public void resetSymbols(View v){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Reset?")
+                .setMessage("This will reset all your custom symbols to the default")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        preferences.clearSymbols();
+                        LoadPreferences();
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .show();
+        saveCustomSymbols(v);
     }
 
     public void closeKeyboard(View v) {
@@ -203,9 +275,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void LoadPreferences() {
 
-        EditText customSymbolView = findViewById(R.id.input_symbols);
-        String customSymbols = preferences.getCustomSymbols();
-        customSymbolView.setText(customSymbols);
+        EditText customSymbolViewMain = findViewById(R.id.input_symbols_main);
+        String customSymbols = preferences.getCustomSymbolsMain();
+        customSymbolViewMain.setText(customSymbols);
+
+        EditText customSymbolViewMain2 = findViewById(R.id.input_symbols_main_2);
+        customSymbols = preferences.getCustomSymbolsMain2();
+        customSymbolViewMain2.setText(customSymbols);
+
+        EditText customSymbolViewSym = findViewById(R.id.input_symbols_sym);
+        customSymbols = preferences.getCustomSymbolsSym();
+        customSymbolViewSym.setText(customSymbols);
+
+        EditText customSymbolViewSym2 = findViewById(R.id.input_symbols_sym_2);
+        customSymbols = preferences.getCustomSymbolsSym2();
+        customSymbolViewSym2.setText(customSymbols);
+
+        EditText customSymbolViewMainBottom = findViewById(R.id.input_symbols_main_bottom);
+        customSymbols = preferences.getCustomSymbolsMainBottom();
+        customSymbolViewMainBottom.setText(customSymbols);
+
+        EditText customSymbolViewSymBottom = findViewById(R.id.input_symbols_sym_bottom);
+        customSymbols = preferences.getCustomSymbolsSymBottom();
+        customSymbolViewSymBottom.setText(customSymbols);
 
         int savedRadioColour = preferences.getThemeIndex();
         RadioButton savedCheckedRadioButtonColour = (RadioButton) radioGroupColour.getChildAt(savedRadioColour);
@@ -217,6 +309,9 @@ public class MainActivity extends AppCompatActivity {
 
         CheckBox preview = (CheckBox) findViewById(R.id.check_preview);
         preview.setChecked(preferences.isPreviewEnabled());
+
+        CheckBox border = (CheckBox) findViewById(R.id.check_border);
+        border.setChecked(preferences.isBorderEnabled());
 
         CheckBox sound   = (CheckBox) findViewById(R.id.check_sound);
         sound.setChecked(preferences.isSoundEnabled());
@@ -230,8 +325,12 @@ public class MainActivity extends AppCompatActivity {
         SeekBar size = (SeekBar) findViewById(R.id.size_seekbar);
         size.setProgress(preferences.getPortraitSize());
 
-        SeekBar sizeLandscape = (SeekBar) findViewById(R.id.size_landscape_seekbar);
-        sizeLandscape.setProgress(preferences.getLandscapeSize());
+        TextView size_text = findViewById(R.id.size_text);
+        size_text.setText(String.valueOf(preferences.getPortraitSize()+30));
+
+
+//        SeekBar sizeLandscape = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+//        sizeLandscape.setProgress(preferences.getLandscapeSize());
     }
 
     public void openPlay(View v) {

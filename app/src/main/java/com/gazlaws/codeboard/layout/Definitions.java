@@ -21,10 +21,10 @@ public class Definitions {
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
                 .addTabKey()
-                .addKey("◀", CODE_ARROW_LEFT).asRepeatable()
-                .addKey("▼", CODE_ARROW_DOWN).asRepeatable()
-                .addKey("▲", CODE_ARROW_UP).asRepeatable()
-                .addKey("▶", CODE_ARROW_RIGHT).asRepeatable()
+                .addKey("◀", CODE_ARROW_LEFT)
+                .addKey("▼", CODE_ARROW_DOWN)
+                .addKey("▲", CODE_ARROW_UP)
+                .addKey("▶", CODE_ARROW_RIGHT)
                 .addKey("SYM", CODE_SYMBOLS)
         ;
     }
@@ -34,9 +34,9 @@ public class Definitions {
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
                 .addTabKey()
-                .addKey("Sel All", 53737).asRepeatable().withSize(1.4f)
-                .addKey("Cut", 53738).asRepeatable()
-                .addKey("Copy", 53739).asRepeatable().withSize(1.1f)
+                .addKey("Sel All", 53737).withSize(1.4f)
+                .addKey("Cut", 53738)
+                .addKey("Copy", 53739).withSize(1.1f)
                 .addKey("Paste", 53740).withSize(1.3f)
                 .addKey("SYM", CODE_SYMBOLS)
         ;
@@ -58,24 +58,6 @@ public class Definitions {
                 .addKey('-')
                 .addKey('=')
                 ;
-    }
-
-    public static void addKeyboardOperatorsRow(KeyboardLayoutBuilder keyboard) {
-        keyboard.newRow()
-                .addKey('~')
-                .addKey('!')
-                .addKey('@')
-                .addKey('#')
-                .addKey('$')
-                .addKey('%')
-                .addKey('^')
-                .addKey('&')
-                .addKey('*')
-                .addKey('(')
-                .addKey(')')
-                .addKey('_')
-                .addKey('+')
-        ;
     }
 
     public static void addCustomRow(KeyboardLayoutBuilder keyboard, String symbols){
@@ -215,9 +197,9 @@ public class Definitions {
 
     public static void addSymbolRows(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
-                .addKey("Sel All", 53737).asRepeatable()
-                .addKey("Cut", 53738).asRepeatable()
-                .addKey("Copy", 53739).asRepeatable()
+                .addKey("Sel All", 53737)
+                .addKey("Cut", 53738)
+                .addKey("Copy", 53739)
                 .addKey("Paste", 53740)
                 .newRow()
                 .addShiftKey()
@@ -240,6 +222,22 @@ public class Definitions {
                 .addKey('\'').withSize(.7f)
                 .addEnterKey()
                 ;
+    }
+
+    public static void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols){
+        char[] chars = symbols.toCharArray();
+
+        keyboard.newRow().addKey("Ctrl",17).asModifier().onCtrlShow("CTRL");
+
+        for (int i = 0; i < (chars.length+1)/2 && chars.length>0 ; i++) {
+            keyboard.addKey(chars[i]).withSize(.7f);
+        }
+        keyboard.addKey("Space", 32).withSize(2f);
+        for (int i = (chars.length+1)/2; i < chars.length; i++) {
+            keyboard.addKey(chars[i]).withSize(.7f);
+        }
+        keyboard.addEnterKey();
+
     }
 
 }

@@ -16,5 +16,5 @@
     <string name="keyboard_size">Keyboard Size</string>
     <string name="smallest_for_tablets">Smallest (for tablets)</string>
     <string name="large">Large</string>
-    <string name="default_symbols"><![CDATA[\\|/[]{}<>]]></string>
+    <string name="key_borders">Key Borders?</string>
 </resources>

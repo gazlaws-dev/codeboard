@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v4.graphics.ColorUtils;
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
 
 public class UiTheme {
 
@@ -15,6 +18,7 @@ public class UiTheme {
     public Paint buttonBodyPaint;
     public float buttonBodyBorderRadius = 8.0f;
     public boolean enablePreview = false;
+    public boolean enableBorder;
     public float portraitSize;
     public float landscapeSize;
 
@@ -22,7 +26,6 @@ public class UiTheme {
         this.foregroundPaint = new Paint();
         this.buttonBodyPaint = new Paint();
         backgroundColor = 0xff000000;
-        this.fontHeight = 1.4f;
     }
 
     public static UiTheme buildFromInfo(ThemeInfo info){
@@ -30,13 +33,19 @@ public class UiTheme {
         theme.portraitSize = info.size;
         theme.landscapeSize = info.sizeLandscape;
         theme.enablePreview = info.enablePreview;
+        theme.enableBorder = info.enableBorder;
         // background - darker border
-        theme.backgroundColor = ColorUtils.blendARGB(info.backgroundColor, Color.BLACK, 0.2f);
+        Log.e(TAG, "buildFromInfo: enableBorder:"+ info.enableBorder );
+        if(info.enableBorder){
+            theme.backgroundColor = ColorUtils.blendARGB(info.backgroundColor, Color.BLACK, 0.2f);
+        } else {
+            theme.backgroundColor = info.backgroundColor;
+        }
         // button body
         theme.buttonBodyPaint.setColor(info.backgroundColor);
         // foreground
         theme.foregroundPaint.setColor(info.foregroundColor);
-        theme.fontHeight *= info.size*100;
+        theme.fontHeight = info.fontSize;
         theme.foregroundPaint.setTextSize(theme.fontHeight);
         theme.foregroundPaint.setTextAlign(Paint.Align.CENTER);
         theme.foregroundPaint.setAntiAlias(true);

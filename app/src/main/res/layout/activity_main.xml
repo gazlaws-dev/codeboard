@@ -41,6 +41,14 @@
             android:checked="false"
             android:onClick="previewToggle"
             android:text="@string/preview" />
+        <CheckBox
+            android:id="@+id/check_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:onClick="keyBorderToggle"
+            android:text="@string/key_borders" />
 
         <CheckBox
             android:id="@+id/check_sound"
@@ -70,27 +78,27 @@
             android:textSize="20sp" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="24dp"
-        android:text="Landscape Keyboard Size"
-        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:text="Landscape Keyboard Size"-->
+<!--        android:textSize="20sp" />-->
 
 
-    <SeekBar
-        android:id="@+id/size_landscape_seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:thumbOffset="8dp"
-        android:min="40"
-        android:max="90"
-        android:onClick="closeKeyboard"
-        android:progress="70" />
+<!--    <SeekBar-->
+<!--        android:id="@+id/size_landscape_seekbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:paddingLeft="16dp"-->
+<!--        android:paddingRight="16dp"-->
+<!--        android:thumbOffset="8dp"-->
+<!--        android:min="40"-->
+<!--        android:max="90"-->
+<!--        android:onClick="closeKeyboard"-->
+<!--        android:progress="70" />-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -113,7 +121,17 @@
             android:layout_alignParentRight="true"
             android:text="Large" />
 
+
     </RelativeLayout>
+<!--        Cannot set min. So just add 30 to the value Cannot set min. So just add 30 to the value-->
+        <TextView
+            android:id="@+id/size_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="45"/>
+
         <SeekBar
             android:id="@+id/size_seekbar"
             android:layout_width="fill_parent"
@@ -121,35 +139,9 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:thumbOffset="8dp"
-            android:progress="45"
-            android:max="70"
+            android:progress="15"
+            android:max="40"
             android:onClick="closeKeyboard" />
-
-        <RelativeLayout
-            android:id="@+id/relative_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/smallest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/smallest_for_tablets" />
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="@string/large" />
-
-        </RelativeLayout>
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -271,7 +263,7 @@
                 android:id="@+id/dvoraklayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:onClick="closeKeyboard"
                 android:text="Dvorak"
                 />
@@ -280,15 +272,75 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textIsSelectable="true"
-            android:text="Add your customizable symbols row here">
-
+            android:text="Main keyboard [Top Row]:">
         </TextView>
         <EditText
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/default_symbols"
-            android:id="@+id/input_symbols">
+            android:id="@+id/input_symbols_main">
+        </EditText>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Main keyboard [Second Row]:">
+        </TextView>
+        <EditText
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_symbols_main_2">
+        </EditText>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Main keyboard [Bottom row]:">
+        </TextView>
+        <EditText
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_symbols_main_bottom">
+        </EditText>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Sym keyboard [Top Row]:">
+        </TextView>
+        <EditText
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_symbols_sym">
+        </EditText>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Sym keyboard [Second Row]:">
+        </TextView>
+        <EditText
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_symbols_sym_2">
+        </EditText>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Sym keyboard [Bottom row]:">
+        </TextView>
+        <EditText
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_symbols_sym_bottom">
         </EditText>
 
         <Button
@@ -296,8 +348,25 @@
             android:layout_height="wrap_content"
             android:onClick="saveCustomSymbols"
             android:text="Save symbols">
-
         </Button>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="classicSymbols"
+            android:text="Reset symbols to Old Codeboard Layout"
+            >
+        </Button>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="resetSymbols"
+            android:text="Reset symbols to default"
+            >
+        </Button>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -307,10 +376,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:onClick="openTutorial"
             android:text="Tutorial to enable keyboard" />
-
 
 
         <Button
@@ -323,15 +391,30 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This app is free, open-source and does not read your data:"/>
+            android:text="FAQ:"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0. If you can't see the keyboard, try enabling it from Settings (follow the tutorial), and try setting the size"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Long press 'Space' to switch to another keyboard."/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Long press shift for Caps-Lock"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. This app is free, open-source and does not read your data! You can view, modify and compile the code your self on GitHub"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="48dp"
             android:onClick="openGithub"
-            android:text="Check out the source code" />
-
+            android:text="Check out the source code on GitHub" />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
