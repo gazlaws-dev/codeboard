@@ -215,7 +215,6 @@ public class CodeBoardIME extends InputMethodService
         }
     }
 
-    @Override
     public void onPress(final int primaryCode) {
 
         if (soundOn) {
@@ -234,8 +233,7 @@ public class CodeBoardIME extends InputMethodService
             if (vibrator != null)
                 vibrator.vibrate(20);
         }
-        if (timerLongPress != null)
-            timerLongPress.cancel();
+        clearLongPressTimer();
 
         timerLongPress = new Timer();
 
@@ -276,9 +274,19 @@ public class CodeBoardIME extends InputMethodService
     }
 
     @Override
+    public void onWindowHidden() {
+        super.onWindowHidden();
+        clearLongPressTimer();
+    }
+
+    @Override
+    public void onViewClicked(boolean focusChanged) {
+        super.onViewClicked(focusChanged);
+        clearLongPressTimer();
+    }
+
     public void onRelease(int primaryCode) {
-        if (timerLongPress != null)
-            timerLongPress.cancel();
+        clearLongPressTimer();
     }
 
     public void onKeyLongPress(int keyCode) {
@@ -310,14 +318,9 @@ public class CodeBoardIME extends InputMethodService
             vibrator.vibrate(50);
     }
 
-    @Override
     public void onText(CharSequence text) {
         InputConnection ic = getCurrentInputConnection();
         ic.commitText(text, 1);
-    }
-
-    @Override
-    public void swipeDown() {
     }
 
     @Override
@@ -327,6 +330,12 @@ public class CodeBoardIME extends InputMethodService
 
     @Override
     public void swipeRight() {
+
+    }
+
+    @Override
+    public void swipeDown() {
+
     }
 
     @Override
@@ -419,9 +428,7 @@ public class CodeBoardIME extends InputMethodService
         super.onStartInputView(attribute, restarting);
         setInputView(onCreateInputView());
         sEditorInfo = attribute;
-
     }
-
 
     public void controlKeyUpdateView() {
         mCurrentKeyboardLayoutView.applyCtrlModifier(ctrl);
@@ -429,6 +436,13 @@ public class CodeBoardIME extends InputMethodService
 
     public void shiftKeyUpdateView() {
         mCurrentKeyboardLayoutView.applyShiftModifier(shift);
+    }
+
+    private void clearLongPressTimer(){
+        if (timerLongPress != null){
+            timerLongPress.cancel();
+        }
+        timerLongPress = null;
     }
 
     private ThemeInfo getThemeByIndex(int index){

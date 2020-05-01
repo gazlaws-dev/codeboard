@@ -21,10 +21,10 @@ public class Definitions {
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
                 .addTabKey()
-                .addKey("◀", CODE_ARROW_LEFT)
-                .addKey("▼", CODE_ARROW_DOWN)
-                .addKey("▲", CODE_ARROW_UP)
-                .addKey("▶", CODE_ARROW_RIGHT)
+                .addKey("◀", CODE_ARROW_LEFT).asRepeatable()
+                .addKey("▼", CODE_ARROW_DOWN).asRepeatable()
+                .addKey("▲", CODE_ARROW_UP).asRepeatable()
+                .addKey("▶", CODE_ARROW_RIGHT).asRepeatable()
                 .addKey("SYM", CODE_SYMBOLS)
         ;
     }
