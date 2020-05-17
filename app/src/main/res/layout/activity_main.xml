@@ -78,28 +78,6 @@
             android:textSize="20sp" />
 
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:text="Landscape Keyboard Size"-->
-<!--        android:textSize="20sp" />-->
-
-
-<!--    <SeekBar-->
-<!--        android:id="@+id/size_landscape_seekbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingLeft="16dp"-->
-<!--        android:paddingRight="16dp"-->
-<!--        android:thumbOffset="8dp"-->
-<!--        android:min="40"-->
-<!--        android:max="90"-->
-<!--        android:onClick="closeKeyboard"-->
-<!--        android:progress="70" />-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -131,7 +109,6 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:text="45"/>
-
         <SeekBar
             android:id="@+id/size_seekbar"
             android:layout_width="fill_parent"
@@ -142,6 +119,25 @@
             android:progress="15"
             android:max="40"
             android:onClick="closeKeyboard" />
+        <TextView
+            android:id="@+id/size_landscape_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:textStyle="bold"
+            android:text="45" />
+        <SeekBar
+            android:id="@+id/size_landscape_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:thumbOffset="8dp"
+            android:max="40"
+            android:onClick="closeKeyboard"
+            android:progress="70" />
 
         <TextView
             android:layout_width="wrap_content"

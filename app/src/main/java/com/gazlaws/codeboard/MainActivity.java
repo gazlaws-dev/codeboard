@@ -24,7 +24,9 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroupColour,radioGroupLayout;
     SeekBar sizeSeekBar;
+    SeekBar landscapeSeekBar;
     TextView sizeText;
+    TextView landscapeSizeText;
 
     KeyboardPreferences preferences;
 
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
-                sizeText.setText(String.valueOf(progressChangedValue+30));
+                sizeText.setText("Portrait: "+String.valueOf(progressChangedValue+30));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -89,23 +91,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        SeekBar landscapeSeekBar = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+        landscapeSeekBar = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+        landscapeSizeText = (TextView) findViewById(R.id.size_landscape_text);
 //        // perform seek bar change listener event used for getting the progress value
-//        landscapeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            int progressChangedValue = seekBar.getProgress();
-//
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                progressChangedValue = progress;
-//            }
-//
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                preferences.setLandscapeSize(progressChangedValue);
-//            }
-//        });
+        landscapeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = landscapeSeekBar.getProgress();
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+                landscapeSizeText.setText("Landscape:"+String.valueOf(progressChangedValue+30));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                preferences.setLandscapeSize(progressChangedValue);
+            }
+        });
 
         radioGroupColour = (RadioGroup) findViewById(R.id.radiogroupcolour);
         radioGroupColour.setOnCheckedChangeListener(radioGroupOnCheckedChangeListenerColour);
@@ -326,11 +330,15 @@ public class MainActivity extends AppCompatActivity {
         size.setProgress(preferences.getPortraitSize());
 
         TextView size_text = findViewById(R.id.size_text);
-        size_text.setText(String.valueOf(preferences.getPortraitSize()+30));
+        size_text.setText("Portrait:" + String.valueOf(preferences.getPortraitSize()+30));
 
 
-//        SeekBar sizeLandscape = (SeekBar) findViewById(R.id.size_landscape_seekbar);
-//        sizeLandscape.setProgress(preferences.getLandscapeSize());
+        SeekBar sizeLandscape = (SeekBar) findViewById(R.id.size_landscape_seekbar);
+        sizeLandscape.setProgress(preferences.getLandscapeSize());
+
+        TextView landscape_size_text = findViewById(R.id.size_landscape_text);
+        landscape_size_text.setText("Landscape:" + String.valueOf(preferences.getLandscapeSize()+30));
+
     }
 
     public void openPlay(View v) {

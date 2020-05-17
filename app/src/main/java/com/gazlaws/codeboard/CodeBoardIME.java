@@ -364,7 +364,7 @@ public class CodeBoardIME extends InputMethodService
         mLayout = preferences.getLayoutIndex();
 //                 Cannot set min. in UI, So just add 30 to the value
         mSize = preferences.getPortraitSize() + 30;
-//        int sizeLandscape = preferences.getLandscapeSize();
+        int sizeLandscape = preferences.getLandscapeSize() + 30;
         mToprow = preferences.isArrowRowEnabled();
         mCustomSymbolsMain = preferences.getCustomSymbolsMain();
         mCustomSymbolsMain2 = preferences.getCustomSymbolsMain2();
@@ -375,7 +375,7 @@ public class CodeBoardIME extends InputMethodService
 
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
         mKeyboardUiFactory.theme.fontSize = getResources().getDimensionPixelSize(R.dimen.fontSize);
-//        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
+        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
 
         try {
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();

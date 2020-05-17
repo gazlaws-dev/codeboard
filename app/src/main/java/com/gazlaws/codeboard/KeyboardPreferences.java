@@ -71,7 +71,7 @@ public class KeyboardPreferences {
     }
 
     public boolean isArrowRowEnabled() {
-        return read(ENABLE_ARROW_ROW, true);
+        return read(ENABLE_ARROW_ROW, false);
     }
 
     public void setArrowRowEnabled(boolean value) {
@@ -94,7 +94,7 @@ public class KeyboardPreferences {
     }
 
     public int getPortraitSize() {
-        return read(SIZE_PORTRAIT, 40);
+        return read(SIZE_PORTRAIT, 10);
     }
 
     public void setPortraitSize(int value) {
@@ -102,7 +102,7 @@ public class KeyboardPreferences {
     }
 
     public int getLandscapeSize() {
-        return read(SIZE_LANDSCAPE, 70);
+        return read(SIZE_LANDSCAPE, 40);
     }
 
     public void setLandscapeSize(int value) {
