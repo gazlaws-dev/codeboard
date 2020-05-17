@@ -3,7 +3,7 @@ package com.gazlaws.codeboard.layout.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.inputmethodservice.KeyboardView;
-import android.util.Log;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +23,7 @@ public class KeyboardButtonView extends View {
     private final UiTheme uiTheme;
     private Timer timer;
     private String currentLabel = null;
+    private boolean isPressed = false;
 
     public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme) {
         super(context);
@@ -68,6 +69,18 @@ public class KeyboardButtonView extends View {
         super.draw(canvas);
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        autoReleaseIfPressed();
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        autoReleaseIfPressed();
+    }
+
     private void drawButtonContent(Canvas canvas) {
         float x = this.getWidth()/2;
         float y = this.getHeight()/2 + uiTheme.fontHeight/3;
@@ -85,6 +98,7 @@ public class KeyboardButtonView extends View {
     }
 
     private void onPress() {
+        isPressed = true;
         if (key.info.code != 0){
             inputService.onPress(key.info.code);
         }
@@ -96,6 +110,7 @@ public class KeyboardButtonView extends View {
     }
 
     private void onRelease() {
+        isPressed = false;
 //      NOTE: If the arrow keys move out of the input view, the onRelease is never called
         if (key.info.code != 0){
             inputService.onRelease(key.info.code);
@@ -112,6 +127,12 @@ public class KeyboardButtonView extends View {
         }
         if (this.key.info.outputText != null){
             inputService.onText(key.info.outputText);
+        }
+    }
+
+    private void autoReleaseIfPressed(){
+        if (isPressed){
+            onRelease();
         }
     }
 
