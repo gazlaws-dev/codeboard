@@ -121,6 +121,41 @@ public class Definitions {
                 ;
     }
 
+    public static void addQwertzRows(KeyboardLayoutBuilder keyboard) {
+        keyboard.newRow()
+                .addKey('q').onShiftUppercase()
+                .addKey('w').onShiftUppercase()
+                .addKey('e').onShiftUppercase()
+                .addKey('r').onShiftUppercase()
+                .addKey('t').onShiftUppercase()
+                .addKey('z').onShiftUppercase()
+                .addKey('u').onShiftUppercase()
+                .addKey('i').onShiftUppercase()
+                .addKey('o').onShiftUppercase()
+                .addKey('p').onShiftUppercase()
+                .newRow()
+                .addKey('a').onShiftUppercase().withSize(1.5f)
+                .addKey('s').onShiftUppercase()
+                .addKey('d').onShiftUppercase()
+                .addKey('f').onShiftUppercase()
+                .addKey('g').onShiftUppercase()
+                .addKey('h').onShiftUppercase()
+                .addKey('j').onShiftUppercase()
+                .addKey('k').onShiftUppercase()
+                .addKey('l').onShiftUppercase().withSize(1.5f)
+                .newRow()
+                .addShiftKey()
+                .addKey('y').onShiftUppercase()
+                .addKey('x').onShiftUppercase()
+                .addKey('c').onShiftUppercase()
+                .addKey('v').onShiftUppercase()
+                .addKey('b').onShiftUppercase()
+                .addKey('n').onShiftUppercase()
+                .addKey('m').onShiftUppercase()
+                .addBackspaceKey()
+                ;
+    }
+
     public static void addAzertyRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey('a').onShiftUppercase()

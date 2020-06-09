@@ -47,6 +47,13 @@ public class DefinitionsTest {
     }
 
     @Test
+    public void addQwertzRows() throws KeyboardLayoutException {
+        KeyboardLayoutBuilder builder = builder();
+        Definitions.addQwertzRows(builder);
+        validate(builder);
+    }
+
+    @Test
     public void addAzertyRows() throws KeyboardLayoutException {
         KeyboardLayoutBuilder builder = builder();
         Definitions.addAzertyRows(builder);
