@@ -407,9 +407,10 @@ public class CodeBoardIME extends InputMethodService
                 }
                 switch (mLayout){
                     default:
-                    case 0: definitions.addQwertyRows(builder); break;
-                    case 1: definitions.addAzertyRows(builder); break;
-                    case 2: definitions.addDvorakRows(builder); break;
+                    case 0: Definitions.addQwertyRows(builder); break;
+                    case 1: Definitions.addAzertyRows(builder); break;
+                    case 2: Definitions.addDvorakRows(builder); break;
+                    case 3: Definitions.addQwertzRows(builder); break;
                 }
                 definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
 
