@@ -1,6 +1,8 @@
 package com.gazlaws.codeboard.layout.builder;
 
 
+import android.graphics.drawable.Drawable;
+
 /**
  * contains information on how to build up the real key
  */
@@ -44,4 +46,9 @@ public class KeyInfo {
      * When control modifier is pressed, show this label instead
      */
     public String onCtrlLabel;
+
+    /**
+     * Drawable is shown on the keyboard
+     */
+    public Drawable icon;
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
@@ -17,6 +17,8 @@
             android:text="@string/change_keyboard"
             android:visibility="visible" />
 
+
+<!--        android:imeOptions="flagNoExtractUi|flagNoFullscreen"-->
         <EditText
             android:id="@+id/hint_text"
             android:layout_width="match_parent"
@@ -421,4 +423,4 @@
             android:text="Check out the source code on GitHub" />
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

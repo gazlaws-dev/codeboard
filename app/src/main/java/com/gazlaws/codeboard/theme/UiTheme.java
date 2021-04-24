@@ -3,7 +3,7 @@ package com.gazlaws.codeboard.theme;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.v4.graphics.ColorUtils;
+import androidx.core.graphics.ColorUtils;
 import android.util.Log;
 
 import static android.content.ContentValues.TAG;
