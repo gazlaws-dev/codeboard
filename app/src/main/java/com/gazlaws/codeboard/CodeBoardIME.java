@@ -351,6 +351,8 @@ public class CodeBoardIME extends InputMethodService
         }
 
         KeyboardPreferences preferences = new KeyboardPreferences(this);
+        //Need this to get resources for drawables
+        Definitions definitions = new Definitions(this);
 
         mKeyboardUiFactory.theme = getThemeByIndex(preferences.getThemeIndex());
         mKeyboardUiFactory.theme.enablePreview = preferences.isPreviewEnabled();
@@ -378,38 +380,38 @@ public class CodeBoardIME extends InputMethodService
         mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
 
         try {
-            KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder();
+            KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
             builder.setBox(Box.create(0, 0, 1, 1));
 
             if (mToprow) {
-                Definitions.addCopyPasteRow(builder);
+                definitions.addCopyPasteRow(builder);
             } else {
-                Definitions.addArrowsRow(builder);
+                definitions.addArrowsRow(builder);
             }
 
             if (mKeyboardState == R.integer.keyboard_sym) {
                 if (!mCustomSymbolsSym.isEmpty()) {
-                    Definitions.addCustomRow(builder, mCustomSymbolsSym);
+                    definitions.addCustomRow(builder, mCustomSymbolsSym);
                 }
                 if (!mCustomSymbolsSym2.isEmpty()) {
-                    Definitions.addCustomRow(builder, mCustomSymbolsSym2);
+                    definitions.addCustomRow(builder, mCustomSymbolsSym2);
                 }
-                Definitions.addSymbolRows(builder);
-                Definitions.addCustomSpaceRow(builder, mCustomSymbolsSymBottom);
+                definitions.addSymbolRows(builder);
+                definitions.addCustomSpaceRow(builder, mCustomSymbolsSymBottom);
 
             } else {
                 if (!mCustomSymbolsMain.isEmpty()) {
-                    Definitions.addCustomRow(builder, mCustomSymbolsMain);
+                    definitions.addCustomRow(builder, mCustomSymbolsMain);
                 }if (!mCustomSymbolsMain2.isEmpty()) {
-                    Definitions.addCustomRow(builder, mCustomSymbolsMain2);
+                    definitions.addCustomRow(builder, mCustomSymbolsMain2);
                 }
                 switch (mLayout){
                     default:
-                    case 0: Definitions.addQwertyRows(builder); break;
-                    case 1: Definitions.addAzertyRows(builder); break;
-                    case 2: Definitions.addDvorakRows(builder); break;
+                    case 0: definitions.addQwertyRows(builder); break;
+                    case 1: definitions.addAzertyRows(builder); break;
+                    case 2: definitions.addDvorakRows(builder); break;
                 }
-                Definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
+                definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
 
             }
 

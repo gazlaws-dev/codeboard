@@ -4,14 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-import com.github.paolorotolo.appintro.model.SliderPage;
+import com.github.appintro.AppIntro;
+import com.github.appintro.AppIntroFragment;
+import com.github.appintro.model.SliderPage;
 
 /**
  * Created by Ruby on 05/12/2016.
@@ -37,14 +37,12 @@ public class IntroActivity extends AppIntro {
         SliderPage sliderPage = new SliderPage();
         sliderPage.setTitle("All the shortcuts!");
         sliderPage.setDescription("Click 'ctrl' for select all, cut, copy, paste, or undo." +
-                "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard \n More symbols");
-        sliderPage.setImageDrawable(R.drawable.intro3);
-        sliderPage.setBgColor(Color.parseColor("#3F51B5"));
+                "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard");
+        sliderPage.setImageDrawable(R.drawable.intro_3);
+        sliderPage.setBackgroundColor(Color.parseColor("#3F51B5"));
         addSlide(AppIntroFragment.newInstance(sliderPage));
-
-
-        // Hide Skip/Done button.
-       showSkipButton(false);
+// Set wizard mode to disable skip
+        setWizardMode(true);
     }
 
     @Override

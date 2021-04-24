@@ -2,8 +2,9 @@ package com.gazlaws.codeboard.layout.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.KeyboardView;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -85,6 +86,29 @@ public class KeyboardButtonView extends View {
         float x = this.getWidth()/2;
         float y = this.getHeight()/2 + uiTheme.fontHeight/3;
         canvas.drawText(currentLabel, x, y, uiTheme.foregroundPaint);
+
+        if (key.info.icon != null){
+            Drawable d = key.info.icon;
+            d.setTint(uiTheme.foregroundPaint.getColor());
+
+            int padding = (int)uiTheme.buttonBodyPadding*2;
+            int top;
+            int left;
+            int squareSize;
+            if (this.getWidth() > this.getHeight()){
+                top = 2*padding;
+                squareSize = (this.getHeight()/2) - top;
+                left = (this.getWidth()/2) - squareSize;
+            } else {
+                left = 2*padding;
+                squareSize = this.getWidth()/2-(left);
+                top = this.getHeight()/2 - squareSize;
+            }
+            int right = left + (squareSize*2);
+            int bottom = top + (squareSize*2);
+            d.setBounds(left,top,right,bottom);
+            d.draw(canvas);
+        }
     }
 
     private void drawButtonBody(Canvas canvas) {

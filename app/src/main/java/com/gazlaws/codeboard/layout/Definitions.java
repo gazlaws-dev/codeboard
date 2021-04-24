@@ -1,9 +1,12 @@
 package com.gazlaws.codeboard.layout;
 
+import android.content.Context;
+
+import com.gazlaws.codeboard.R;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 
 public class Definitions {
-
+    private Context context;
     private static int CODE_ESCAPE = 27;
     private static int CODE_ARROW_LEFT = 5000;
     private static int CODE_ARROW_DOWN = 5001;
@@ -16,28 +19,32 @@ public class Definitions {
     private static int CODE_ENTER = -4;
     private static int CODE_SPACE = 32;
 
-    public static void addArrowsRow(KeyboardLayoutBuilder keyboard)
+    public Definitions(Context current){
+        this.context = current;
+    }
+
+    public void addArrowsRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
                 .addTabKey()
-                .addKey("◀", CODE_ARROW_LEFT).asRepeatable()
-                .addKey("▼", CODE_ARROW_DOWN).asRepeatable()
-                .addKey("▲", CODE_ARROW_UP).asRepeatable()
-                .addKey("▶", CODE_ARROW_RIGHT).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_left_24dp), CODE_ARROW_LEFT).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_down_24dp), CODE_ARROW_DOWN).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_up_24dp), CODE_ARROW_UP).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_right_24dp), CODE_ARROW_RIGHT).asRepeatable()
                 .addKey("SYM", CODE_SYMBOLS)
         ;
     }
 
-    public static void addCopyPasteRow(KeyboardLayoutBuilder keyboard)
+    public void addCopyPasteRow(KeyboardLayoutBuilder keyboard)
     {
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
                 .addTabKey()
-                .addKey("Sel All", 53737).withSize(1.4f)
-                .addKey("Cut", 53738)
-                .addKey("Copy", 53739).withSize(1.1f)
-                .addKey("Paste", 53740).withSize(1.3f)
+                .addKey(context.getDrawable(R.drawable.ic_select_all_24dp), 53737)
+                .addKey(context.getDrawable(R.drawable.ic_cut_24dp), 53738)
+                .addKey(context.getDrawable(R.drawable.ic_copy_24dp), 53739)
+                .addKey(context.getDrawable(R.drawable.ic_paste_24dp), 53740)
                 .addKey("SYM", CODE_SYMBOLS)
         ;
     }
@@ -195,28 +202,28 @@ public class Definitions {
         ;
     }
 
-    public static void addSymbolRows(KeyboardLayoutBuilder keyboard){
+    public void addSymbolRows(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
-                .addKey("Sel All", 53737)
-                .addKey("Cut", 53738)
-                .addKey("Copy", 53739)
-                .addKey("Paste", 53740)
+                .addKey(context.getDrawable(R.drawable.ic_select_all_24dp), 53737)
+                .addKey(context.getDrawable(R.drawable.ic_cut_24dp), 53738)
+                .addKey(context.getDrawable(R.drawable.ic_copy_24dp), 53739)
+                .addKey(context.getDrawable(R.drawable.ic_paste_24dp), 53740)
                 .newRow()
                 .addShiftKey()
-                .addKey("Undo", 53741)
-                .addKey("Redo", 53742)
+                .addKey(context.getDrawable(R.drawable.ic_undo_24dp), 53741)
+                .addKey(context.getDrawable(R.drawable.ic_redo_24dp), 53742)
                 .addBackspaceKey()
                 ;
     }
 
-    public static void addSpaceRow(KeyboardLayoutBuilder keyboard){
+    public void addSpaceRow(KeyboardLayoutBuilder keyboard){
         keyboard.newRow()
                 .addKey("Ctrl",17).asModifier().onCtrlShow("CTRL")
                 .addKey('?').withSize(.7f)
                 .addKey(',').withSize(.7f)
                 .addKey('"').withSize(.7f)
                 .addKey(':').withSize(.7f)
-                .addKey("Space", 32).withSize(2f)
+                .addKey(context.getDrawable(R.drawable.ic_redo_24dp), 32).withSize(2f)
                 .addKey(';').withSize(.7f)
                 .addKey('.').withSize(.7f)
                 .addKey('\'').withSize(.7f)
@@ -224,7 +231,7 @@ public class Definitions {
                 ;
     }
 
-    public static void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols){
+    public void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols){
         char[] chars = symbols.toCharArray();
 
         keyboard.newRow().addKey("Ctrl",17).asModifier().onCtrlShow("CTRL");
@@ -232,7 +239,7 @@ public class Definitions {
         for (int i = 0; i < (chars.length+1)/2 && chars.length>0 ; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addKey("Space", 32).withSize(2f);
+        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f);
         for (int i = (chars.length+1)/2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }

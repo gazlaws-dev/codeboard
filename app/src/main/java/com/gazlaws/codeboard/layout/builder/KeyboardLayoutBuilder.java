@@ -1,5 +1,9 @@
 package com.gazlaws.codeboard.layout.builder;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+import com.gazlaws.codeboard.R;
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 
@@ -7,6 +11,7 @@ import java.util.ArrayList;
 
 public class KeyboardLayoutBuilder {
 
+    private Context context;
     private Box box; // the dimensions of the keyboard
     private ArrayList<KeyboardLayoutRowBuilder> rows = new ArrayList<>();
     private KeyboardLayoutRowBuilder currentRow = null;
@@ -14,6 +19,9 @@ public class KeyboardLayoutBuilder {
     private float rowGap = 0; // space between keyboard rows
     private float keyGap = 0; // space between keys (horizontal
     private float padding = 0;
+    public KeyboardLayoutBuilder (Context current){
+        this.context = current;
+    }
 
     public KeyboardLayoutBuilder newRow()
     {
@@ -57,6 +65,10 @@ public class KeyboardLayoutBuilder {
         return this;
     }
 
+    public KeyboardLayoutBuilder addKey(Drawable icon, int code)
+    {
+        return this.addKey("",code).withIcon(icon);
+    }
     public KeyboardLayoutBuilder addKey(char key)
     {
         return this.addKey("" + key, (int)key);
@@ -90,7 +102,10 @@ public class KeyboardLayoutBuilder {
         currentKey.code = code;
         return this;
     }
-
+    public KeyboardLayoutBuilder withIcon(Drawable icon){
+        currentKey.icon = icon;
+        return this;
+    }
     public ArrayList<Key> build() throws KeyboardLayoutException {
         float availableWidth = box.width - 2*padding;
         float availableHeight = box.height - (rows.size()-1)*rowGap - 2*padding;
@@ -150,10 +165,10 @@ public class KeyboardLayoutBuilder {
     }
 
     public KeyboardLayoutBuilder addBackspaceKey(){
-        return addKey("⌫", -5).asRepeatable();
+        return addKey(context.getDrawable(R.drawable.ic_backspace_24dp), -5).asRepeatable();
     }
 
     public KeyboardLayoutBuilder addEnterKey(){
-        return addKey("Enter", -4).withSize(1.5f);
+        return addKey(context.getDrawable(R.drawable.ic_keyboard_return_24dp), -4).withSize(1.5f);
     }
 }
