@@ -19,6 +19,7 @@ public class KeyboardLayoutBuilder {
     private float rowGap = 0; // space between keyboard rows
     private float keyGap = 0; // space between keys (horizontal
     private float padding = 0;
+
     public KeyboardLayoutBuilder (Context current){
         this.context = current;
     }

@@ -1,11 +1,17 @@
-package com.gazlaws.codeboard.layout;
+package com.gazlaws.codeboard;
 
+import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
+
+import com.gazlaws.codeboard.layout.Box;
+import com.gazlaws.codeboard.layout.Definitions;
+import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
 
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
@@ -13,64 +19,83 @@ public class DefinitionsTest {
 
     @Test
     public void addArrowsRow_producesValidResult() throws KeyboardLayoutException {
+
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addArrowsRow(builder);
+        definitions.addArrowsRow(builder);
         validate(builder);
     }
 
     @Test
     public void addCopyPasteRow() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addCopyPasteRow(builder);
+        definitions.addCopyPasteRow(builder);
         validate(builder);
     }
 
     @Test
     public void addNumberRow() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addNumberRow(builder);
+        definitions.addNumberRow(builder);
         validate(builder);
     }
 
     @Test
     public void addOperatorRow() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addOperatorRow(builder);
+        definitions.addOperatorRow(builder);
         validate(builder);
     }
 
     @Test
     public void addQwertyRows() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addQwertyRows(builder);
+        definitions.addQwertyRows(builder);
         validate(builder);
     }
 
     @Test
     public void addQwertzRows() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addQwertzRows(builder);
+        definitions.addQwertzRows(builder);
         validate(builder);
     }
 
     @Test
     public void addAzertyRows() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addAzertyRows(builder);
+        definitions.addAzertyRows(builder);
         validate(builder);
     }
 
     @Test
     public void addSymbolRows() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addSymbolRows(builder);
+        definitions.addSymbolRows(builder);
         validate(builder);
     }
 
     @Test
     public void addSpaceRow() throws KeyboardLayoutException {
+        Context appContext = ApplicationProvider.getApplicationContext();
+        Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        Definitions.addSpaceRow(builder);
+        definitions.addSpaceRow(builder);
         validate(builder);
     }
 
@@ -84,6 +109,7 @@ public class DefinitionsTest {
     }
 
     private KeyboardLayoutBuilder builder() {
-        return new KeyboardLayoutBuilder().setBox(Box.create(0,0,1,1));
+        Context appContext = ApplicationProvider.getApplicationContext();
+        return new KeyboardLayoutBuilder(appContext).setBox(Box.create(0,0,1,1));
     }
 }

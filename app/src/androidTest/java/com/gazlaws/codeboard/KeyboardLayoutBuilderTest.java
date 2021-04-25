@@ -1,7 +1,13 @@
-package com.gazlaws.codeboard.layout.builder;
+package com.gazlaws.codeboard;
+
+import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
+import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
+import com.gazlaws.codeboard.layout.builder.KeyboardLayoutException;
 
 import org.junit.Test;
 
@@ -20,6 +26,7 @@ public class KeyboardLayoutBuilderTest {
     }
 
     private KeyboardLayoutBuilder builder() {
-        return new KeyboardLayoutBuilder();
+        Context appContext = ApplicationProvider.getApplicationContext();
+        return new KeyboardLayoutBuilder(appContext);
     }
 }
