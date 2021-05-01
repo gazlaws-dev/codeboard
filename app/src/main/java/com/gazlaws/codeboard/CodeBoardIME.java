@@ -1,6 +1,7 @@
 package com.gazlaws.codeboard;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.KeyboardView;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
 
+import androidx.core.graphics.ColorUtils;
+
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Definitions;
 import com.gazlaws.codeboard.layout.Key;
@@ -26,6 +29,7 @@ import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,13 +41,13 @@ public class CodeBoardIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
     EditorInfo sEditorInfo;
     private boolean vibratorOn;
+    private int vibrateLength;
     private boolean soundOn;
     private boolean shiftLock = false;
     private boolean shift = false;
     private boolean ctrl = false;
     private int mKeyboardState = R.integer.keyboard_normal;
     private int mLayout, mSize;
-    private boolean mToprow;
     private String mCustomSymbolsMain;
     private String mCustomSymbolsMain2;
     private String mCustomSymbolsSym;
@@ -95,6 +99,7 @@ public class CodeBoardIME extends InputMethodService
                 // regenerate view
                 //Simple remove shift
                 shift = false;
+                shiftLock = false;
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
                 ctrl = false;
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
@@ -132,7 +137,6 @@ public class CodeBoardIME extends InputMethodService
 
             default: {
                 int meta = 0;
-                int ke = 0;
                 if (shift) {
                     meta = KeyEvent.META_SHIFT_LEFT_ON;
                     code = Character.toUpperCase(code);
@@ -148,6 +152,7 @@ public class CodeBoardIME extends InputMethodService
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
                     controlKeyUpdateView();
                 }
+                int ke = 0;
                 switch (primaryCode) {
                     case 9:
                         ke = KeyEvent.KEYCODE_TAB;
@@ -196,7 +201,6 @@ public class CodeBoardIME extends InputMethodService
                     //this doesn't use modifiers
                     ic.commitText(String.valueOf(code), 1);
 
-
 //                    //Slow - and '?' becomes '/'
 //                    KeyCharacterMap mKeyCharacterMap =
 //                            KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD);
@@ -231,7 +235,7 @@ public class CodeBoardIME extends InputMethodService
 
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null)
-                vibrator.vibrate(20);
+                vibrator.vibrate(vibrateLength);
         }
         clearLongPressTimer();
 
@@ -349,45 +353,47 @@ public class CodeBoardIME extends InputMethodService
         if (mKeyboardUiFactory == null) {
             mKeyboardUiFactory = new KeyboardUiFactory(this);
         }
+        KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
+        mKeyboardUiFactory.theme = getThemeInfo();
+        // Keyboard Features
+        vibrateLength = sharedPreferences.getVibrateLength();
+        vibratorOn = sharedPreferences.isVibrateEnabled();
+        soundOn = sharedPreferences.isSoundEnabled();
+        mKeyboardUiFactory.theme.enablePreview = sharedPreferences.isPreviewEnabled();
+        mKeyboardUiFactory.theme.enableBorder = sharedPreferences.isBorderEnabled();
+        mKeyboardUiFactory.theme.fontSize = sharedPreferences.getFontSizeAsSp();
+        mSize = sharedPreferences.getPortraitSize();
+        int sizeLandscape = sharedPreferences.getLandscapeSize();
+        mKeyboardUiFactory.theme.size = mSize / 100.0f;
+        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
+        mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
+        mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
+        if (sharedPreferences.getNavBarDark()){
+            Objects.requireNonNull(getWindow().getWindow()).
+                    setNavigationBarColor(
+                            ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
+                                    Color.BLACK, 0.2f));
+        } else if (sharedPreferences.getNavBar()) {
+            Objects.requireNonNull(getWindow().getWindow()).
+                    setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
+        }
+        //Key Layout
+        mCustomSymbolsMain = sharedPreferences.getCustomSymbolsMain();
+        mCustomSymbolsMain2 = sharedPreferences.getCustomSymbolsMain2();
+        mCustomSymbolsSym = sharedPreferences.getCustomSymbolsSym();
+        mCustomSymbolsSym2 = sharedPreferences.getCustomSymbolsSym2();
+        mCustomSymbolsMainBottom = sharedPreferences.getCustomSymbolsMainBottom();
+        mCustomSymbolsSymBottom = sharedPreferences.getCustomSymbolsSymBottom();
+        mLayout = sharedPreferences.getLayoutIndex();
 
-        KeyboardPreferences preferences = new KeyboardPreferences(this);
         //Need this to get resources for drawables
         Definitions definitions = new Definitions(this);
-
-        mKeyboardUiFactory.theme = getThemeByIndex(preferences.getThemeIndex());
-        mKeyboardUiFactory.theme.enablePreview = preferences.isPreviewEnabled();
-        mKeyboardUiFactory.theme.enableBorder = preferences.isBorderEnabled();
-        soundOn = preferences.isSoundEnabled();
-        vibratorOn = preferences.isVibrateEnabled();
-
-        shift = false;
-        ctrl = false;
-
-        mLayout = preferences.getLayoutIndex();
-//                 Cannot set min. in UI, So just add 30 to the value
-        mSize = preferences.getPortraitSize() + 30;
-        int sizeLandscape = preferences.getLandscapeSize() + 30;
-        mToprow = preferences.isArrowRowEnabled();
-        mCustomSymbolsMain = preferences.getCustomSymbolsMain();
-        mCustomSymbolsMain2 = preferences.getCustomSymbolsMain2();
-        mCustomSymbolsSym = preferences.getCustomSymbolsSym();
-        mCustomSymbolsSym2 = preferences.getCustomSymbolsSym2();
-        mCustomSymbolsMainBottom = preferences.getCustomSymbolsMainBottom();
-        mCustomSymbolsSymBottom = preferences.getCustomSymbolsSymBottom();
-
-        mKeyboardUiFactory.theme.size = mSize / 100.0f;
-        mKeyboardUiFactory.theme.fontSize = getResources().getDimensionPixelSize(R.dimen.fontSize);
-        mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
-
         try {
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
             builder.setBox(Box.create(0, 0, 1, 1));
 
-            if (mToprow) {
-                definitions.addCopyPasteRow(builder);
-            } else {
-                definitions.addArrowsRow(builder);
-            }
+            //Todo: allow rearranging of top row
+            definitions.addArrowsRow(builder);
 
             if (mKeyboardState == R.integer.keyboard_sym) {
                 if (!mCustomSymbolsSym.isEmpty()) {
@@ -402,7 +408,8 @@ public class CodeBoardIME extends InputMethodService
             } else {
                 if (!mCustomSymbolsMain.isEmpty()) {
                     definitions.addCustomRow(builder, mCustomSymbolsMain);
-                }if (!mCustomSymbolsMain2.isEmpty()) {
+                }
+                if (!mCustomSymbolsMain2.isEmpty()) {
                     definitions.addCustomRow(builder, mCustomSymbolsMain2);
                 }
                 switch (mLayout){
@@ -413,7 +420,6 @@ public class CodeBoardIME extends InputMethodService
                     case 3: Definitions.addQwertzRows(builder); break;
                 }
                 definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
-
             }
 
             Collection<Key> keyboardLayout = builder.build();
@@ -425,7 +431,11 @@ public class CodeBoardIME extends InputMethodService
         }
         return null;
     }
-
+    @Override
+    public void onUpdateExtractingVisibility(EditorInfo ei) {
+        ei.imeOptions |= EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+        super.onUpdateExtractingVisibility(ei);
+    }
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
@@ -448,23 +458,8 @@ public class CodeBoardIME extends InputMethodService
         timerLongPress = null;
     }
 
-    private ThemeInfo getThemeByIndex(int index){
-        switch (index) {
-            case 0:
-                return ThemeDefinitions.MaterialDark();
-            case 1:
-                return ThemeDefinitions.MaterialWhite();
-            case 2:
-                return ThemeDefinitions.PureBlack();
-            case 3:
-                return ThemeDefinitions.White();
-            case 4:
-                return ThemeDefinitions.Blue();
-            case 5:
-                return ThemeDefinitions.Purple();
-            default:
-                return ThemeDefinitions.Default();
-        }
+    private ThemeInfo getThemeInfo(){
+        return ThemeDefinitions.Default();
     }
 
 

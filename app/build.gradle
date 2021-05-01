@@ -43,9 +43,13 @@ dependencies {
 
     api 'androidx.appcompat:appcompat:1.2.0'
     api 'androidx.legacy:legacy-support-v13:1.0.0'
+    api 'androidx.preference:preference:1.1.1'
 
     //https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:6.1.0'
+
+    //Colour picker
+    implementation 'com.pes.materialcolorpicker:library:1.2.5'
 
     // Required for local unit tests (JUnit 4 framework)
     testImplementation 'junit:junit:4.12'

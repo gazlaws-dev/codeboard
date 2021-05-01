@@ -1,188 +1,187 @@
 package com.gazlaws.codeboard;
 
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
+import androidx.preference.PreferenceManager;
 
 public class KeyboardPreferences {
-
-    private static String SETTINGS_FILE = "KEYBOARD_PREFERENCES";
-    private static String FIRST_START = "FIRST_START";
-    private static String THEME_INDEX = "RADIO_INDEX_COLOUR";
-    private static String LAYOUT_INDEX = "RADIO_INDEX_LAYOUT";
-    private static String ENABLE_PREVIEW = "PREVIEW";
-    private static String ENABLE_BORDER = "BORDER";
-    private static String ENABLE_SOUND = "SOUND";
-    private static String ENABLE_VIBRATE = "VIBRATE";
-    private static String ENABLE_ARROW_ROW = "ARROW_ROW";
-    private static String SIZE_PORTRAIT = "SIZE";
-    private static String SIZE_LANDSCAPE = "SIZE_LANDSCAPE";
-    private static String CUSTOM_SYMBOLS_MAIN = "CUSTOM_SYMBOLS_MAIN";
-    private static String CUSTOM_SYMBOLS_MAIN_2 = "CUSTOM_SYMBOLS_MAIN_2";
-    private static String CUSTOM_SYMBOLS_SYM = "CUSTOM_SYMBOLS_SYM";
-    private static String CUSTOM_SYMBOLS_SYM_2 = "CUSTOM_SYMBOLS_SYM_2";
-    private static String CUSTOM_SYMBOLS_MAIN_BOTTOM = "CUSTOM_SYMBOLS_MAIN_BOTTOM";
-    private static String CUSTOM_SYMBOLS_SYM_BOTTOM = "CUSTOM_SYMBOLS_SYM_BOTTOM";
-
     private SharedPreferences preferences;
+    private Resources res;
 
-    public KeyboardPreferences(ContextWrapper context) {
-        this.preferences = context.getSharedPreferences(SETTINGS_FILE, Context.MODE_PRIVATE);
+    public KeyboardPreferences(ContextWrapper contextWrapper) {
+        res = contextWrapper.getResources();
+        this.preferences =
+                PreferenceManager.getDefaultSharedPreferences(contextWrapper);
     }
 
     public boolean isFirstStart() {
-        return read(FIRST_START, true);
+        return read("FIRST_START", true);
     }
-
     public void setFirstStart(boolean value) {
-        write(FIRST_START, value);
-    }
-
-    public int getLayoutIndex() {
-        return read(LAYOUT_INDEX, 0);
-    }
-
-    public void setLayoutIndex(int value) {
-        write(LAYOUT_INDEX, value);
-    }
-
-    public int getThemeIndex() {
-        return read(THEME_INDEX, 0);
-    }
-
-    public void setThemeIndex(int value) {
-        write(THEME_INDEX, value);
+        write("FIRST_START", value);
     }
 
     public boolean isSoundEnabled() {
-        return read(ENABLE_SOUND, true);
+        return read("sound",
+                res.getBoolean(R.bool.sound));
     }
-
-    public void setSoundEnabled(boolean value) {
-        write(ENABLE_SOUND, value);
+    public void setSoundEnabled(boolean bool){
+        write("sound",bool);
     }
-
     public boolean isVibrateEnabled() {
-        return read(ENABLE_VIBRATE, true);
+        return read("vibrate",
+                res.getBoolean(R.bool.vibrate));
+    }
+    //Note: EditTextPreference saves these as strings. Could be null
+    public int getVibrateLength(){
+        return Integer.parseInt(safeRead("vibrate_ms",
+                String.valueOf(res.getInteger(R.integer.vibrate_length))));
+    }
+    public void setVibrateLength(int length){
+        write("vibrate_ms",String.valueOf(length));
     }
 
-    public void setVibrateEnabled(boolean value) {
-        write(ENABLE_VIBRATE, value);
+    public int getBgColor() {
+        return Integer.parseInt(safeRead("bg_colour_picker",
+                String.valueOf(res.getInteger(R.integer.bg_color))));
     }
 
-    public boolean isArrowRowEnabled() {
-        return read(ENABLE_ARROW_ROW, false);
+    public void setBgColor(String color) {
+        write("bg_colour_picker",
+                color);
+    }
+    public int getFgColor() {
+        return Integer.parseInt(safeRead("fg_colour_picker",
+                String.valueOf(res.getInteger(R.integer.fg_color))));
     }
 
-    public void setArrowRowEnabled(boolean value) {
-        write(ENABLE_ARROW_ROW, value);
+    public void setFgColor(String color) {
+        write("fg_colour_picker",
+                color);
+    }
+    public int getPortraitSize(){
+            return Integer.parseInt(safeRead("size_portrait",
+                    String.valueOf(res.getInteger(R.integer.size_portrait))));
+    }
+    public int getLandscapeSize(){
+            return Integer.parseInt(safeRead("size_landscape",
+                    String.valueOf(res.getInteger(R.integer.size_landscape))));
     }
 
-    public boolean isPreviewEnabled() {
-        return read(ENABLE_PREVIEW, false);
+
+    public float getFontSizeAsSp() {
+        String fontSize = safeRead("font_size",
+                String.valueOf(res.getInteger(R.integer.font_size)));
+        DisplayMetrics dm = res.getDisplayMetrics();
+        float sp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, Float.parseFloat(fontSize), dm);
+        return sp;
     }
 
-    public void setPreviewEnabled(boolean value) {
-        write(ENABLE_PREVIEW, value);
-    }
-    public boolean isBorderEnabled() {
-        return read(ENABLE_BORDER, true);
+    public boolean isPreviewEnabled(){
+        return read("preview",
+                res.getBoolean(R.bool.preview));
     }
 
-    public void setKeyBorderEnabled(boolean value) {
-        write(ENABLE_BORDER, value);
-    }
-
-    public int getPortraitSize() {
-        return read(SIZE_PORTRAIT, 10);
-    }
-
-    public void setPortraitSize(int value) {
-        write(SIZE_PORTRAIT, value);
-    }
-
-    public int getLandscapeSize() {
-        return read(SIZE_LANDSCAPE, 40);
-    }
-
-    public void setLandscapeSize(int value) {
-        write(SIZE_LANDSCAPE, value);
+    public boolean isBorderEnabled(){
+        return read("borders",
+                res.getBoolean(R.bool.borders));
     }
 
     public String getCustomSymbolsMain() {
-        return read(CUSTOM_SYMBOLS_MAIN, "`1234567890-=");
+        return read("input_symbols_main", res.getString(R.string.input_symbols_main));
     }
+    public void setCustomSymbolsMain(String symbols) {
+        write("input_symbols_main", symbols);
+    }
+
     public String getCustomSymbolsMain2() {
-        return read(CUSTOM_SYMBOLS_MAIN_2, "");
+        return read("input_symbols_main_2", res.getString(R.string.input_symbols_main_2));
     }
-
-    public String getCustomSymbolsSym2() {
-        return read(CUSTOM_SYMBOLS_SYM_2, "\\|/[]{}<>:");
-    }
-
-    public String getCustomSymbolsSym() {
-        return read(CUSTOM_SYMBOLS_SYM, "~!@#$%^&*()_+");
+    public void setCustomSymbolsMain2(String symbols) {
+        write("input_symbols_main_2", symbols);
     }
 
     public String getCustomSymbolsMainBottom() {
-        return read(CUSTOM_SYMBOLS_MAIN_BOTTOM, "?,\":;.\'");
+        return read("input_symbols_main_bottom", res.getString(R.string.input_symbols_main_bottom));
     }
+    public void setCustomSymbolsMainBottom(String symbols) {
+        write("input_symbols_main_bottom", symbols);
+    }
+
+    public String getCustomSymbolsSym() {
+        return read("input_symbols_sym", res.getString(R.string.input_symbols_sym_2));
+    }
+    public void setCustomSymbolsSym(String symbols) {
+        write("input_symbols_sym", symbols);
+    }
+
+    public String getCustomSymbolsSym2() {
+        return read("input_symbols_sym_2", res.getString(R.string.input_symbols_sym));
+    }
+
+    public void setCustomSymbolsSym2(String symbols) {
+        write("input_symbols_sym_2", symbols);
+    }
+
+
     public String getCustomSymbolsSymBottom() {
-        return read(CUSTOM_SYMBOLS_SYM_BOTTOM, "?,\":;.\'");
+        return read("input_symbols_sym_bottom", res.getString(R.string.input_symbols_sym_bottom));
     }
-    public void setCustomSymbolsMain(String value) {
-        write(CUSTOM_SYMBOLS_MAIN, value);
-    }
-    public void setCustomSymbolsMain2(String value) {
-        write(CUSTOM_SYMBOLS_MAIN_2, value);
-    }
-    public void setCustomSymbolsSym(String value) {
-        write(CUSTOM_SYMBOLS_SYM, value);
+    public void setCustomSymbolsSymBottom(String symbols) {
+        write("input_symbols_sym_bottom", symbols);
     }
 
-    public void setCustomSymbolsSym2(String value) {
-        write(CUSTOM_SYMBOLS_SYM_2, value);
+    public boolean getNavBar(){
+        return read("navbar",res.getBoolean(R.bool.navbar));
+    }
+    public boolean getNavBarDark(){
+        return read("navbar_dark",res.getBoolean(R.bool.navbar_dark));
+    }
+    public int getLayoutIndex() {
+        return Integer.parseInt(safeRead("layout", "0"));
     }
 
-    public void setCustomSymbolsMainBottom(String value) {
-        write(CUSTOM_SYMBOLS_MAIN_BOTTOM, value);
+    public int getThemeIndex() {
+        return Integer.parseInt(safeRead("theme","0"));
     }
-    public void setCustomSymbolsSymBottom(String value) {
-        write(CUSTOM_SYMBOLS_SYM_BOTTOM, value);
+
+    public void resetAllToDefault(){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+        setFirstStart(false);
     }
-    public void clearSymbols(){
-        preferences.edit().remove(CUSTOM_SYMBOLS_MAIN).apply();
-        preferences.edit().remove(CUSTOM_SYMBOLS_MAIN_2).apply();
-        preferences.edit().remove(CUSTOM_SYMBOLS_SYM).apply();
-        preferences.edit().remove(CUSTOM_SYMBOLS_SYM_2).apply();
-        preferences.edit().remove(CUSTOM_SYMBOLS_MAIN_BOTTOM).apply();
-        preferences.edit().remove(CUSTOM_SYMBOLS_SYM_BOTTOM).apply();
-    }
+
     private boolean read(String key, boolean defaultValue) {
-        return preferences.getInt(key, defaultValue ? 1 : 0) != 0;
+        return preferences.getBoolean(key, defaultValue);
     }
-
     private void write(String key, boolean value) {
-        write(key, value ? 1 : 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
     }
-
     private int read(String key, int defaultValue) {
         return preferences.getInt(key, defaultValue);
     }
-
-    private void write(String key, int value) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
     private String read(String key, String defaultValue) {
         return preferences.getString(key, defaultValue);
     }
-
+    private String safeRead(String key, String defaultValue) {
+        String s = read(key,defaultValue);
+        if(s == null){
+            return "0";
+        }
+        return s;
+    }
     private void write(String key, String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
         editor.apply();
     }
+
+
 }

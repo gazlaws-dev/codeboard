@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="sound">false</bool>
+    <bool name="vibrate">true</bool>
+    <bool name="preview">false</bool>
+    <bool name="borders">false</bool>
+    <bool name="navbar">true</bool>
+    <bool name="navbar_dark">true</bool>
+    <integer name="vibrate_length">1</integer>
+    <integer name="size_portrait">40</integer>
+    <integer name="size_landscape">70</integer>
+    <integer name="bg_color">0xff263238</integer>
+    <integer name="fg_color">0xffffffff</integer>
+    <integer name="font_size">20</integer>
+    <string name="input_symbols_main">`1234567890-=</string>
+    <string name="input_symbols_main_2" />
+    <string name="input_symbols_main_bottom">\?,\":;.\'</string>
+    <string name="input_symbols_sym"><![CDATA[~!@#$%^&*()_+]]></string>
+    <string name="input_symbols_sym_2"><![CDATA[\\|/[]{}<>:]]></string>
+    <string name="input_symbols_sym_bottom">\?,\":;.\'</string>
+</resources>

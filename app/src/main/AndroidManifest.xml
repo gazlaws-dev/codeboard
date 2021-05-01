@@ -4,13 +4,15 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-       >
+        android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+        >
         <service
             android:name=".CodeBoardIME"
             android:label="@string/codeboard_ime"

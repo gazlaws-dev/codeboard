@@ -6,14 +6,14 @@ public class ThemeDefinitions {
     private static int blackColor = 0xff000000;
 
     public static ThemeInfo Default(){
+        return MaterialDark();
+    }
+
+    public static ThemeInfo MaterialDark(){
         ThemeInfo theme = new ThemeInfo();
         theme.foregroundColor = whiteColor;
         theme.backgroundColor = 0xff263238;
         return theme;
-    }
-
-    public static ThemeInfo MaterialDark(){
-        return Default();
     }
 
     public static ThemeInfo MaterialWhite(){

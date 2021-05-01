@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="View Keyboard">
+        <Preference
+            android:key="change_keyboard"
+            android:summary="@string/change_keyboard"
+            android:title="@string/change_keyboard" />
+        <EditTextPreference
+            android:key="edit_dialog"
+            android:title="@string/reopen_hint"
+            android:imeOptions="flagNoExtractUi"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Features">
+        <SwitchPreferenceCompat
+            android:key="sound"
+            android:title="@string/sound_on_keypress"
+            android:defaultValue="@bool/sound" />
+        <SwitchPreferenceCompat
+            android:key="vibrate"
+            android:title="@string/vibrate_on_keypress"
+            android:defaultValue="@bool/vibrate"/>
+        <EditTextPreference
+            android:key="vibrate_ms"
+            android:title="Vibration Length (ms)"
+            android:defaultValue="@integer/vibrate_length"
+            app:useSimpleSummaryProvider="true"
+            android:dependency="vibrate"
+            android:imeOptions="flagNoExtractUi"
+            />
+        <EditTextPreference
+            android:key="font_size"
+            android:title="Font Size"
+            android:defaultValue="@integer/font_size"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"
+            />
+        <EditTextPreference
+            android:key="size_portrait"
+            android:title="@string/keyboard_size"
+            android:defaultValue="@integer/size_portrait"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"
+            />
+        <EditTextPreference
+            android:key="size_landscape"
+            android:title="@string/keyboard_size_landscape"
+            android:defaultValue="@integer/size_portrait"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"
+            />
+        <SwitchPreferenceCompat
+            android:key="preview"
+            android:title="@string/preview"
+            android:defaultValue="@bool/preview"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Colour">
+
+        <ListPreference
+            android:entries="@array/Themes"
+            android:entryValues="@array/ThemeValue"
+            android:defaultValue="0"
+            android:key="theme"
+            android:title="Choose Theme" />
+        <Preference
+            android:key="bg_colour_picker"
+            android:title="Set custom background colour"
+            android:defaultValue="@integer/bg_color"
+            />
+        <Preference
+            android:key="fg_colour_picker"
+            android:title="Set custom foreground colour"
+            android:defaultValue="@integer/fg_color" />
+        <SwitchPreferenceCompat
+            android:key="borders"
+            android:title="@string/key_borders"
+            android:defaultValue="@bool/borders"/>
+        <SwitchPreferenceCompat
+            android:key="navbar"
+            android:title="Dynamic Navigation Bar"
+            android:defaultValue="@bool/navbar"/>
+        <SwitchPreferenceCompat
+            android:key="navbar_dark"
+            android:title="Navbar matches border color"
+            android:defaultValue="@bool/navbar_dark"
+            android:dependency="navbar"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Layout">
+        <ListPreference
+            android:entries="@array/Layouts"
+            android:entryValues="@array/Values"
+            android:defaultValue="0"
+            android:key="layout"
+            app:useSimpleSummaryProvider="true"
+            android:title="Set Keyboard Layout" />
+        <EditTextPreference
+            android:key="input_symbols_main"
+            android:title="Main keyboard [Top Row]:"
+            android:defaultValue="@string/input_symbols_main"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+        <EditTextPreference
+            android:key="input_symbols_main_2"
+            android:title="Main keyboard [Second Row]:"
+            android:defaultValue="@string/input_symbols_main_2"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+        <EditTextPreference
+            android:key="input_symbols_main_bottom"
+            android:title="Main keyboard [Bottom Row]:"
+            android:defaultValue="@string/input_symbols_main_bottom"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+        <EditTextPreference
+            android:key="input_symbols_sym"
+            android:title="Sym keyboard [Top Row]:"
+            android:defaultValue="@string/input_symbols_sym"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+        <EditTextPreference
+            android:key="input_symbols_sym_2"
+            android:title="Sym keyboard [Second Row]:"
+            android:defaultValue="@string/input_symbols_sym_2"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+        <EditTextPreference
+            android:key="input_symbols_sym_bottom"
+            android:title="Sym keyboard [Bottom Row]:"
+            android:defaultValue="@string/input_symbols_sym_bottom"
+            app:useSimpleSummaryProvider="true"
+            android:imeOptions="flagNoExtractUi"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Backup and Restore">
+        <Preference
+            android:key="backup"
+            android:title="Backup" />
+        <Preference
+            android:key="restore_default"
+            android:title="Reset symbols to default" />
+        <Preference
+            android:key="restore_old"
+            android:title="Reset symbols to Old Codeboard layout" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="About">
+        <Preference android:title="Restart Tutorial">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.gazlaws.codeboard.IntroActivity"
+                android:targetPackage="com.gazlaws.codeboard" />
+        </Preference>
+        <Preference android:title="Rate on Google Play">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="market://details?id=com.gazlaws.codeboard" />
+        </Preference>
+        <Preference
+            android:summary="This app is free, open-source and does not read your data! You can view, modify and compile the code your self on GitHub"
+            android:title="Open on GitHub">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/gazlaws-dev/codeboard" />
+        </Preference>
+
+    </PreferenceCategory>
+</PreferenceScreen>
