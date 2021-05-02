@@ -9,6 +9,7 @@ public class ThemeDefinitions {
         return MaterialDark();
     }
 
+
     public static ThemeInfo MaterialDark(){
         ThemeInfo theme = new ThemeInfo();
         theme.foregroundColor = whiteColor;
@@ -18,7 +19,7 @@ public class ThemeDefinitions {
 
     public static ThemeInfo MaterialWhite(){
         ThemeInfo theme = Default();
-        theme.foregroundColor = 0xff37474f;
+        theme.foregroundColor = blackColor;
         theme.backgroundColor = 0xffeceff1;
         return theme;
     }

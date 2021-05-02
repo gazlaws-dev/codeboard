@@ -62,10 +62,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                Log.e(CodeBoardIME.class.getSimpleName(), "onPreferenceChange: " + newValue.toString());
-                setThemeByIndex(Integer.parseInt(newValue.toString()));
-                return true;
+                if (!keyboardPreferences.getCustomTheme()) {
+                    int index= Integer.parseInt(newValue.toString());
+                    preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
+                    setThemeByIndex(index);
+                    return true;
+                }
+                preference.setSummary("Custom Theme is set");
+                return false;
             }
         });
     }
@@ -77,7 +81,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             //Run Intent
             return false;
         }
-
         switch (preference.getKey()) {
             case "change_keyboard":
                 InputMethodManager imm = (InputMethodManager)
@@ -87,6 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             case "bg_colour_picker":
             case "fg_colour_picker":
                 openColourPicker(preference.getKey());
+                getPreferenceManager().findPreference("theme").setSummary("Custom Theme is set");
                 break;
             case "restore_default":
                 confirmReset();
@@ -109,6 +113,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         keyboardPreferences.resetAllToDefault();
+                        getPreferenceScreen().removeAll();
+                        addPreferencesFromResource(R.xml.preferences);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -137,6 +143,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         newValue = "&|%\\<>;',.";
                         keyboardPreferences.setCustomSymbolsMainBottom(newValue);
                         keyboardPreferences.setCustomSymbolsSymBottom(newValue);
+                        getPreferenceScreen().removeAll();
+                        addPreferencesFromResource(R.xml.preferences);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -150,22 +158,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setThemeByIndex(int index) {
         ThemeInfo themeInfo;
         switch (index) {
-            case 0:
+            case 1:
                 themeInfo = ThemeDefinitions.MaterialDark();
                 break;
-            case 1:
+            case 2:
                 themeInfo = ThemeDefinitions.MaterialWhite();
                 break;
-            case 2:
+            case 3:
                 themeInfo = ThemeDefinitions.PureBlack();
                 break;
-            case 3:
+            case 4:
                 themeInfo = ThemeDefinitions.White();
                 break;
-            case 4:
+            case 5:
                 themeInfo = ThemeDefinitions.Blue();
                 break;
-            case 5:
+            case 6:
                 themeInfo = ThemeDefinitions.Purple();
                 break;
             default:
@@ -192,7 +200,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         cp.setCallback(new ColorPickerCallback() {
             @Override
             public void onColorChosen(@ColorInt int color) {
-                keyboardPreferences.setBgColor(String.valueOf(color));
                 if (key.equals("bg_colour_picker")) {
                     keyboardPreferences.setBgColor(String.valueOf(color));
                 } else if (key.equals("fg_colour_picker")){

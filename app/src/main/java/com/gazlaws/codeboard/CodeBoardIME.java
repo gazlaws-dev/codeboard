@@ -1,12 +1,28 @@
 package com.gazlaws.codeboard;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
 import android.os.Vibrator;
+import android.service.quicksettings.TileService;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,7 +31,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
+import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.ColorUtils;
 
 import com.gazlaws.codeboard.layout.Box;
@@ -28,8 +47,11 @@ import com.gazlaws.codeboard.layout.ui.KeyboardUiFactory;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Random;
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,6 +61,7 @@ import java.util.TimerTask;
 
 public class CodeBoardIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
+    private static final String NOTIFICATION_CHANNEL_ID = "Codeboard";
     EditorInfo sEditorInfo;
     private boolean vibratorOn;
     private int vibrateLength;
@@ -92,17 +115,25 @@ public class CodeBoardIME extends InputMethodService
                 break;
             case -15:
                 //SYM
-                mKeyboardState = mKeyboardState == R.integer.keyboard_normal
-                        ? R.integer.keyboard_sym
-                        : R.integer.keyboard_normal;
+                if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
+                    mKeyboardState = R.integer.keyboard_sym;
+                } else if (ctrl) {
+                    mKeyboardState = R.integer.keyboard_clipboard;
+                } else {
+                    mKeyboardState = R.integer.keyboard_normal;
+                }
 
                 // regenerate view
                 //Simple remove shift
-                shift = false;
-                shiftLock = false;
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-                ctrl = false;
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+                if (shift) {
+                    shift = false;
+                    shiftLock = false;
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+                }
+                if (ctrl) {
+                    ctrl = false;
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+                }
                 setInputView(onCreateInputView());
                 controlKeyUpdateView();
                 shiftKeyUpdateView();
@@ -114,7 +145,6 @@ public class CodeBoardIME extends InputMethodService
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
                 else
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-
                 ctrl = !ctrl;
                 controlKeyUpdateView();
                 break;
@@ -197,22 +227,8 @@ public class CodeBoardIME extends InputMethodService
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
                 } else {
-
                     //this doesn't use modifiers
                     ic.commitText(String.valueOf(code), 1);
-
-//                    //Slow - and '?' becomes '/'
-//                    KeyCharacterMap mKeyCharacterMap =
-//                            KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD);
-//                    String text = code + "";
-//                    KeyEvent[] events = mKeyCharacterMap.getEvents(text.toCharArray());
-//                    if (events.length > 0) {
-//                        for (KeyEvent event2 : events) {
-//                            int keycode = event2.getKeyCode();
-//                            ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, keycode, 0, meta));
-//                            ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, keycode, 0, meta));
-//                        }
-//                    }
 
                 }
             }
@@ -227,12 +243,10 @@ public class CodeBoardIME extends InputMethodService
             keypressSoundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     mp.release();
-
                 }
             });
         }
         if (vibratorOn) {
-
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null)
                 vibrator.vibrate(vibrateLength);
@@ -247,29 +261,20 @@ public class CodeBoardIME extends InputMethodService
             public void run() {
 
                 try {
-
                     Handler uiHandler = new Handler(Looper.getMainLooper());
-
                     Runnable runnable = new Runnable() {
-
                         @Override
                         public void run() {
-
                             try {
-
                                 CodeBoardIME.this.onKeyLongPress(primaryCode);
-
                             } catch (Exception e) {
-                                Log.e(CodeBoardIME.class.getSimpleName(), "uiHandler.run: " + e.getMessage(), e);
+                                Log.e(getClass().getSimpleName(), "uiHandler.run: " + e.getMessage(), e);
                             }
-
                         }
                     };
-
                     uiHandler.post(runnable);
-
                 } catch (Exception e) {
-                    Log.e(CodeBoardIME.class.getSimpleName(), "Timer.run: " + e.getMessage(), e);
+                    Log.e(getClass().getSimpleName(), "Timer.run: " + e.getMessage(), e);
                 }
             }
 
@@ -325,6 +330,7 @@ public class CodeBoardIME extends InputMethodService
     public void onText(CharSequence text) {
         InputConnection ic = getCurrentInputConnection();
         ic.commitText(text, 1);
+        clearLongPressTimer();
     }
 
     @Override
@@ -354,7 +360,14 @@ public class CodeBoardIME extends InputMethodService
             mKeyboardUiFactory = new KeyboardUiFactory(this);
         }
         KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
-        mKeyboardUiFactory.theme = getThemeInfo();
+        setNotification(sharedPreferences.getNotification());
+        if (sharedPreferences.getCustomTheme()) {
+            mKeyboardUiFactory.theme = getDefaultThemeInfo();
+            mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
+            mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
+        } else {
+            mKeyboardUiFactory.theme = setThemeByIndex(sharedPreferences, sharedPreferences.getThemeIndex());
+        }
         // Keyboard Features
         vibrateLength = sharedPreferences.getVibrateLength();
         vibratorOn = sharedPreferences.isVibrateEnabled();
@@ -366,9 +379,7 @@ public class CodeBoardIME extends InputMethodService
         int sizeLandscape = sharedPreferences.getLandscapeSize();
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
         mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
-        mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
-        mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
-        if (sharedPreferences.getNavBarDark()){
+        if (sharedPreferences.getNavBarDark()) {
             Objects.requireNonNull(getWindow().getWindow()).
                     setNavigationBarColor(
                             ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
@@ -405,22 +416,50 @@ public class CodeBoardIME extends InputMethodService
                 definitions.addSymbolRows(builder);
                 definitions.addCustomSpaceRow(builder, mCustomSymbolsSymBottom);
 
-            } else {
+            } else if (mKeyboardState == R.integer.keyboard_normal) {
                 if (!mCustomSymbolsMain.isEmpty()) {
                     definitions.addCustomRow(builder, mCustomSymbolsMain);
                 }
                 if (!mCustomSymbolsMain2.isEmpty()) {
                     definitions.addCustomRow(builder, mCustomSymbolsMain2);
                 }
-                switch (mLayout){
+                switch (mLayout) {
                     default:
-                    case 0: Definitions.addQwertyRows(builder); break;
-                    case 1: Definitions.addAzertyRows(builder); break;
-                    case 2: Definitions.addDvorakRows(builder); break;
-                    case 3: Definitions.addQwertzRows(builder); break;
+                    case 0:
+                        Definitions.addQwertyRows(builder);
+                        break;
+                    case 1:
+                        Definitions.addAzertyRows(builder);
+                        break;
+                    case 2:
+                        Definitions.addDvorakRows(builder);
+                        break;
+                    case 3:
+                        Definitions.addQwertzRows(builder);
+                        break;
                 }
                 definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
+            } else if (mKeyboardState == R.integer.keyboard_clipboard) {
+
+                ClipboardManager clipboard = (ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboard.hasPrimaryClip()) {
+                    ClipData pr = clipboard.getPrimaryClip();
+                    //Android only allows one item in Clipboard
+                    String s = pr.getItemAt(0).getText().toString();
+                    builder.newRow().addKey(s);
+                } else {
+                    builder.newRow().addKey("No history found").withOutputText("");
+                }
+                builder.addKey(sharedPreferences.getPin1());
+                builder.newRow()
+                        .addKey(sharedPreferences.getPin2())
+                        .addKey(sharedPreferences.getPin3());
+                builder.newRow()
+                        .addKey(sharedPreferences.getPin4())
+                        .addKey(sharedPreferences.getPin5());
             }
+
 
             Collection<Key> keyboardLayout = builder.build();
             mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
@@ -431,11 +470,13 @@ public class CodeBoardIME extends InputMethodService
         }
         return null;
     }
+
     @Override
     public void onUpdateExtractingVisibility(EditorInfo ei) {
         ei.imeOptions |= EditorInfo.IME_FLAG_NO_EXTRACT_UI;
         super.onUpdateExtractingVisibility(ei);
     }
+
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
@@ -451,16 +492,145 @@ public class CodeBoardIME extends InputMethodService
         mCurrentKeyboardLayoutView.applyShiftModifier(shift);
     }
 
-    private void clearLongPressTimer(){
-        if (timerLongPress != null){
+    private void clearLongPressTimer() {
+        if (timerLongPress != null) {
             timerLongPress.cancel();
         }
         timerLongPress = null;
     }
 
-    private ThemeInfo getThemeInfo(){
+    private ThemeInfo setThemeByIndex(KeyboardPreferences keyboardPreferences, int index) {
+        ThemeInfo themeInfo = ThemeDefinitions.Default();
+        switch (index) {
+            case 0:
+                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        themeInfo = ThemeDefinitions.MaterialDark();
+                        break;
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        themeInfo = ThemeDefinitions.MaterialWhite();
+                        break;
+                }
+                break;
+            case 1:
+                themeInfo = ThemeDefinitions.MaterialDark();
+                break;
+            case 2:
+                themeInfo = ThemeDefinitions.MaterialWhite();
+                break;
+            case 3:
+                themeInfo = ThemeDefinitions.PureBlack();
+                break;
+            case 4:
+                themeInfo = ThemeDefinitions.White();
+                break;
+            case 5:
+                themeInfo = ThemeDefinitions.Blue();
+                break;
+            case 6:
+                themeInfo = ThemeDefinitions.Purple();
+                break;
+            default:
+                themeInfo = ThemeDefinitions.Default();
+                break;
+        }
+        keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
+        keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        return themeInfo;
+    }
+
+    private ThemeInfo getDefaultThemeInfo() {
         return ThemeDefinitions.Default();
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_channel_name);
+            String description = getString(R.string.notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private NotificationReceiver mNotificationReceiver;
+
+    private static final int NOTIFICATION_ONGOING_ID = 1001;
+
+    private void setNotification(boolean visible) {
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+
+        if (visible && mNotificationReceiver == null) {
+            createNotificationChannel();
+            int icon = R.drawable.icon;
+            CharSequence text = "Keyboard notification enabled.";
+            long when = System.currentTimeMillis();
+
+            // TODO: clean this up?
+            mNotificationReceiver = new NotificationReceiver(this);
+            final IntentFilter pFilter = new IntentFilter(NotificationReceiver.ACTION_SHOW);
+            pFilter.addAction(NotificationReceiver.ACTION_SETTINGS);
+            registerReceiver(mNotificationReceiver, pFilter);
+
+            Intent notificationIntent = new Intent(NotificationReceiver.ACTION_SHOW);
+            PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
+            //PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+            Intent configIntent = new Intent(NotificationReceiver.ACTION_SETTINGS);
+            PendingIntent configPendingIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(), 2, configIntent, 0);
+
+            String title = "Show Codeboard Keyboard";
+            String body = "Select this to open the keyboard. Disable in settings.";
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.icon_large)
+                    .setColor(0xff220044)
+                    .setAutoCancel(false) //Make this notification automatically dismissed when the user touches it -> false.
+                    .setTicker(text)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setContentIntent(contentIntent)
+                    .setOngoing(true)
+                    .addAction(R.drawable.newiconsmall, getString(R.string.notification_action_settings),
+                            configPendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(NOTIFICATION_ONGOING_ID, mBuilder.build());
+
+        } else if (!visible && mNotificationReceiver != null) {
+            mNotificationManager.cancel(NOTIFICATION_ONGOING_ID);
+            unregisterReceiver(mNotificationReceiver);
+            mNotificationReceiver = null;
+        }
+    }
+
+    @Override
+    public AbstractInputMethodImpl onCreateInputMethodInterface() {
+        return new MyInputMethodImpl();
+    }
+
+    IBinder mToken;
+
+    public class MyInputMethodImpl extends InputMethodImpl {
+        @Override
+        public void attachToken(IBinder token) {
+            super.attachToken(token);
+            Log.i(getClass().getSimpleName(), "attachToken " + token);
+            if (mToken == null) {
+                mToken = token;
+            }
+        }
+    }
 
 }

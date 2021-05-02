@@ -3,9 +3,6 @@
     <string name="codeboard_ime">CodeBoard IME</string>
     <string name="subtype_en_US">CodeBoard-%s</string>
     <string name="subtype_fr_FR">CodeBoard-%s</string>
-    <string name="printf">printf(\"\");</string>
-    <string name="scanf">scanf(\"\");</string>
-    <string name="for_">for(;;){\n\t}</string>
     <string name="app_intro">CodeBoard - Intro</string>
     <string name="change_keyboard">Change Keyboard</string>
     <string name="reopen_hint">Re-open keyboard here to see changes</string>
@@ -16,4 +13,8 @@
     <string name="keyboard_size">Keyboard Size</string>
     <string name="keyboard_size_landscape">Keyboard Size (Landscape Mode)</string>
     <string name="key_borders">Key Borders</string>
+    <string name="my_default_tile_label">Open Keyboard</string>
+    <string name="notification_channel_name">CodeboardNotification</string>
+    <string name="notification_channel_description">Allow keyboard to be force opened</string>
+    <string name="notification_action_settings">Open Codeboard keyboard</string>
 </resources>

@@ -8,8 +8,8 @@ android {
         applicationId "com.gazlaws.codeboard"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 19
-        versionName "5.0.3"
+        versionCode 20
+        versionName "6.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -44,6 +44,8 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.2.0'
     api 'androidx.legacy:legacy-support-v13:1.0.0'
     api 'androidx.preference:preference:1.1.1'
+
+    implementation 'com.google.android.material:material:1.4.0-alpha02'
 
     //https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:6.1.0'

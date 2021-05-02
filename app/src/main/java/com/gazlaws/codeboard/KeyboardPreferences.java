@@ -21,6 +21,7 @@ public class KeyboardPreferences {
     public boolean isFirstStart() {
         return read("FIRST_START", true);
     }
+
     public void setFirstStart(boolean value) {
         write("FIRST_START", value);
     }
@@ -29,20 +30,24 @@ public class KeyboardPreferences {
         return read("sound",
                 res.getBoolean(R.bool.sound));
     }
-    public void setSoundEnabled(boolean bool){
-        write("sound",bool);
+
+    public void setSoundEnabled(boolean bool) {
+        write("sound", bool);
     }
+
     public boolean isVibrateEnabled() {
         return read("vibrate",
                 res.getBoolean(R.bool.vibrate));
     }
+
     //Note: EditTextPreference saves these as strings. Could be null
-    public int getVibrateLength(){
+    public int getVibrateLength() {
         return Integer.parseInt(safeRead("vibrate_ms",
                 String.valueOf(res.getInteger(R.integer.vibrate_length))));
     }
-    public void setVibrateLength(int length){
-        write("vibrate_ms",String.valueOf(length));
+
+    public void setVibrateLength(int length) {
+        write("vibrate_ms", String.valueOf(length));
     }
 
     public int getBgColor() {
@@ -54,6 +59,7 @@ public class KeyboardPreferences {
         write("bg_colour_picker",
                 color);
     }
+
     public int getFgColor() {
         return Integer.parseInt(safeRead("fg_colour_picker",
                 String.valueOf(res.getInteger(R.integer.fg_color))));
@@ -63,13 +69,15 @@ public class KeyboardPreferences {
         write("fg_colour_picker",
                 color);
     }
-    public int getPortraitSize(){
-            return Integer.parseInt(safeRead("size_portrait",
-                    String.valueOf(res.getInteger(R.integer.size_portrait))));
+
+    public int getPortraitSize() {
+        return Integer.parseInt(safeRead("size_portrait",
+                String.valueOf(res.getInteger(R.integer.size_portrait))));
     }
-    public int getLandscapeSize(){
-            return Integer.parseInt(safeRead("size_landscape",
-                    String.valueOf(res.getInteger(R.integer.size_landscape))));
+
+    public int getLandscapeSize() {
+        return Integer.parseInt(safeRead("size_landscape",
+                String.valueOf(res.getInteger(R.integer.size_landscape))));
     }
 
 
@@ -81,12 +89,12 @@ public class KeyboardPreferences {
         return sp;
     }
 
-    public boolean isPreviewEnabled(){
+    public boolean isPreviewEnabled() {
         return read("preview",
                 res.getBoolean(R.bool.preview));
     }
 
-    public boolean isBorderEnabled(){
+    public boolean isBorderEnabled() {
         return read("borders",
                 res.getBoolean(R.bool.borders));
     }
@@ -94,6 +102,7 @@ public class KeyboardPreferences {
     public String getCustomSymbolsMain() {
         return read("input_symbols_main", res.getString(R.string.input_symbols_main));
     }
+
     public void setCustomSymbolsMain(String symbols) {
         write("input_symbols_main", symbols);
     }
@@ -101,6 +110,7 @@ public class KeyboardPreferences {
     public String getCustomSymbolsMain2() {
         return read("input_symbols_main_2", res.getString(R.string.input_symbols_main_2));
     }
+
     public void setCustomSymbolsMain2(String symbols) {
         write("input_symbols_main_2", symbols);
     }
@@ -108,6 +118,7 @@ public class KeyboardPreferences {
     public String getCustomSymbolsMainBottom() {
         return read("input_symbols_main_bottom", res.getString(R.string.input_symbols_main_bottom));
     }
+
     public void setCustomSymbolsMainBottom(String symbols) {
         write("input_symbols_main_bottom", symbols);
     }
@@ -115,6 +126,7 @@ public class KeyboardPreferences {
     public String getCustomSymbolsSym() {
         return read("input_symbols_sym", res.getString(R.string.input_symbols_sym_2));
     }
+
     public void setCustomSymbolsSym(String symbols) {
         write("input_symbols_sym", symbols);
     }
@@ -131,25 +143,28 @@ public class KeyboardPreferences {
     public String getCustomSymbolsSymBottom() {
         return read("input_symbols_sym_bottom", res.getString(R.string.input_symbols_sym_bottom));
     }
+
     public void setCustomSymbolsSymBottom(String symbols) {
         write("input_symbols_sym_bottom", symbols);
     }
 
-    public boolean getNavBar(){
-        return read("navbar",res.getBoolean(R.bool.navbar));
+    public boolean getNavBar() {
+        return read("navbar", res.getBoolean(R.bool.navbar));
     }
-    public boolean getNavBarDark(){
-        return read("navbar_dark",res.getBoolean(R.bool.navbar_dark));
+
+    public boolean getNavBarDark() {
+        return read("navbar_dark", res.getBoolean(R.bool.navbar_dark));
     }
+
     public int getLayoutIndex() {
         return Integer.parseInt(safeRead("layout", "0"));
     }
 
     public int getThemeIndex() {
-        return Integer.parseInt(safeRead("theme","0"));
+        return Integer.parseInt(safeRead("theme", "0"));
     }
 
-    public void resetAllToDefault(){
+    public void resetAllToDefault() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
@@ -159,29 +174,62 @@ public class KeyboardPreferences {
     private boolean read(String key, boolean defaultValue) {
         return preferences.getBoolean(key, defaultValue);
     }
+
     private void write(String key, boolean value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
+
     private int read(String key, int defaultValue) {
         return preferences.getInt(key, defaultValue);
     }
+
     private String read(String key, String defaultValue) {
         return preferences.getString(key, defaultValue);
     }
+
     private String safeRead(String key, String defaultValue) {
-        String s = read(key,defaultValue);
-        if(s == null){
+        String s = read(key, defaultValue);
+        if (s == null) {
             return "0";
         }
         return s;
     }
+
     private void write(String key, String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
         editor.apply();
     }
 
+
+    public boolean getCustomTheme() {
+        return read("custom_theme", res.getBoolean(R.bool.custom_theme));
+    }
+
+    public String getPin1() {
+        return read("pin1", res.getString(R.string.pin1));
+    }
+
+    public String getPin2() {
+        return read("pin2", res.getString(R.string.pin2));
+    }
+
+    public String getPin3() {
+        return read("pin3", res.getString(R.string.pin3));
+    }
+
+    public String getPin4() {
+        return read("pin4", res.getString(R.string.pin4));
+    }
+
+    public String getPin5() {
+        return read("pin5", res.getString(R.string.pin5));
+    }
+
+    public boolean getNotification() {
+        return read("notification", res.getBoolean(R.bool.notification));
+    }
 
 }
