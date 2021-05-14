@@ -4,9 +4,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import androidx.core.graphics.ColorUtils;
-import android.util.Log;
-
-import static android.content.ContentValues.TAG;
 
 public class UiTheme {
 
@@ -35,7 +32,6 @@ public class UiTheme {
         theme.enablePreview = info.enablePreview;
         theme.enableBorder = info.enableBorder;
         // background - darker border
-        Log.e(TAG, "buildFromInfo: enableBorder:"+ info.enableBorder );
         if(info.enableBorder){
             theme.backgroundColor = ColorUtils.blendARGB(info.backgroundColor, Color.BLACK, 0.2f);
         } else {

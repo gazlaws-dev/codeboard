@@ -7,6 +7,8 @@ import android.inputmethodservice.KeyboardView;
 import androidx.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
@@ -32,6 +34,8 @@ public class KeyboardButtonView extends View {
         this.key = key;
         this.uiTheme = uiTheme;
         this.currentLabel = key.info.label;
+        //Enable shadow
+        this.setOutlineProvider(ViewOutlineProvider.BOUNDS);
     }
 
     @Override
@@ -123,9 +127,9 @@ public class KeyboardButtonView extends View {
 
     private void onPress() {
         isPressed = true;
-        if (key.info.code != 0){
+//        if (key.info.code != 0){
             inputService.onPress(key.info.code);
-        }
+//        }
         if (key.info.isRepeatable){
             startRepeating();
         }
@@ -184,18 +188,20 @@ public class KeyboardButtonView extends View {
 
     private void animatePress(){
         if (uiTheme.enablePreview){
-            this.animate().translationY(-200.0f).setDuration(10);
-            this.animate().scaleX(2.0f).setDuration(10);
-            this.animate().scaleY(2.0f).setDuration(10);
+            this.setTranslationY(-200.0f);
+            this.setScaleX(1.2f);
+            this.setScaleY(1.2f);
+            this.setElevation(21.0f);
         } else {
             this.setAlpha(.1f);
         }
     }
     private void animateRelease() {
         if (uiTheme.enablePreview){
-            this.animate().translationY(0.0f).setDuration(100);
-            this.animate().scaleX(1.0f).setDuration(100);
-            this.animate().scaleY(1.0f).setDuration(100);
+            this.setTranslationY(0.0f);
+            this.setScaleX(1.0f);
+            this.setScaleY(1.0f);
+            this.setElevation(0.0f);
         } else {
             this.animate().alpha(1.0f).setDuration(400);
         }

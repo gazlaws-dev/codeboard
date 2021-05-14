@@ -36,23 +36,6 @@ public class DefinitionsTest {
         validate(builder);
     }
 
-    @Test
-    public void addNumberRow() throws KeyboardLayoutException {
-        Context appContext = ApplicationProvider.getApplicationContext();
-        Definitions definitions = new Definitions(appContext);
-        KeyboardLayoutBuilder builder = builder();
-        definitions.addNumberRow(builder);
-        validate(builder);
-    }
-
-    @Test
-    public void addOperatorRow() throws KeyboardLayoutException {
-        Context appContext = ApplicationProvider.getApplicationContext();
-        Definitions definitions = new Definitions(appContext);
-        KeyboardLayoutBuilder builder = builder();
-        definitions.addOperatorRow(builder);
-        validate(builder);
-    }
 
     @Test
     public void addQwertyRows() throws KeyboardLayoutException {
@@ -82,22 +65,14 @@ public class DefinitionsTest {
     }
 
     @Test
-    public void addSymbolRows() throws KeyboardLayoutException {
+    public void addClipboardRow() throws KeyboardLayoutException {
         Context appContext = ApplicationProvider.getApplicationContext();
         Definitions definitions = new Definitions(appContext);
         KeyboardLayoutBuilder builder = builder();
-        definitions.addSymbolRows(builder);
+        definitions.addClipboardActions(builder);
         validate(builder);
     }
 
-    @Test
-    public void addSpaceRow() throws KeyboardLayoutException {
-        Context appContext = ApplicationProvider.getApplicationContext();
-        Definitions definitions = new Definitions(appContext);
-        KeyboardLayoutBuilder builder = builder();
-        definitions.addSpaceRow(builder);
-        validate(builder);
-    }
 
     private void validate(KeyboardLayoutBuilder builder) throws KeyboardLayoutException {
         for(Key key : builder.build()){

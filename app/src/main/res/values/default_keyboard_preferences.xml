@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="sound">false</bool>
+    <bool name="vibrate">true</bool>
+    <bool name="preview">false</bool>
+    <bool name="borders">true</bool>
+    <bool name="custom_theme">false</bool>
+    <bool name="navbar">true</bool>
+    <bool name="navbar_dark">false</bool>
+    <bool name="top_row_actions">false</bool>
+    <bool name="notification">false</bool>
+    <integer name="theme">1</integer>
+    <integer name="vibrate_length">1</integer>
+    <integer name="size_portrait">40</integer>
+    <integer name="size_landscape">70</integer>
+    <integer name="bg_color">0xff263238</integer>
+    <integer name="fg_color">0xffffffff</integer>
+    <integer name="font_size">20</integer>
+    <string name="input_symbols_main">`1234567890-=</string>
+    <string name="input_symbols_main_2" />
+    <string name="input_symbols_main_bottom">\?,\":;.\'</string>
+    <string name="input_symbols_sym"><![CDATA[~!@#$%^&*()_+]]></string>
+    <string name="input_symbols_sym_2"><![CDATA[\\|/[]{}<>:]]></string>
+    <string name="input_symbols_sym_3" />
+    <string name="input_symbols_sym_4" />
+<!--    <string name="input_symbols_sym_bottom">\?,\":;.\'</string>-->
+    <string name="pin1">printf(\"\");</string>
+    <string name="pin2">scanf(\"\");</string>
+    <string name="pin3">for(;;){\n\t}</string>
+    <string name="pin4">if(){\n\t}</string>
+    <string name="pin5"><![CDATA[#include <stdio.h> int main() {       return 0; }]]></string>
+    <string name="pin6">\@gmail.com</string>
+    <string name="pin7">ಠ_ಠ</string>
+
+</resources>

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -21,27 +23,17 @@ public class IntroActivity extends AppIntro {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Note here that we DO NOT use setContentView();
-
-        // Add your slide fragments here.
-        // AppIntro will automatically generate the dots indicator and buttons.
-
-        // Instead of fragments, you can also use our default slide.
-        // Just create a `SliderPage` and provide title, description, background and image.
-        // AppIntro will do the rest.
-
-
-        addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro1));
-        addSlide(CodeboardIntro.newInstance(R.layout.codeboard_intro2));
+        addSlide(IntroFragment.newInstance(R.layout.codeboard_intro1));
+        addSlide(IntroFragment.newInstance(R.layout.codeboard_intro2));
 
         SliderPage sliderPage = new SliderPage();
         sliderPage.setTitle("All the shortcuts!");
         sliderPage.setDescription("Click 'ctrl' for select all, cut, copy, paste, or undo." +
                 "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard");
-        sliderPage.setImageDrawable(R.drawable.intro_3);
+        sliderPage.setImageDrawable(R.drawable.intro_tutorial);
         sliderPage.setBackgroundColor(Color.parseColor("#3F51B5"));
         addSlide(AppIntroFragment.newInstance(sliderPage));
-// Set wizard mode to disable skip
+        // Set wizard mode to disable skip
         setWizardMode(true);
     }
 
@@ -64,16 +56,16 @@ public class IntroActivity extends AppIntro {
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
     }
-    public void enableButtonIntro(View v){
 
-        Intent intent=new Intent(android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS);
+    public void enableButtonIntro(View v) {
+        Intent intent = new Intent(android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS);
         startActivity(intent);
-            }
+    }
 
-    public void changeButtonIntro(View v){
-
+    public void changeButtonIntro(View v) {
         InputMethodManager imm = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showInputMethodPicker();}
+        imm.showInputMethodPicker();
+    }
 }
 
