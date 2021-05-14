@@ -29,7 +29,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                 imm.showSoftInputFromInputMethod(mIME.mToken, InputMethodManager.SHOW_FORCED);
             }
         } else if (action.equals(ACTION_SETTINGS)) {
-            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); context.sendBroadcast(it);
+            //Seems to be disabled for android 12
+//            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+//            context.sendBroadcast(it);
             context.startActivity(new Intent(mIME, MainActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("notification", 1));
