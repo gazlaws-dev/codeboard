@@ -8,21 +8,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Message;
-import android.os.Messenger;
 import android.os.Vibrator;
-import android.service.quicksettings.TileService;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,7 +25,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -47,13 +40,12 @@ import com.gazlaws.codeboard.layout.ui.KeyboardUiFactory;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 
-import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Random;
-import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 
 /*Created by Ruby(aka gazlaws) on 13/02/2016.
  */
@@ -67,27 +59,23 @@ public class CodeBoardIME extends InputMethodService
     private int vibrateLength;
     private boolean soundOn;
     private boolean shiftLock = false;
+    private boolean ctrlLock = false;
     private boolean shift = false;
     private boolean ctrl = false;
     private int mKeyboardState = R.integer.keyboard_normal;
-    private int mLayout, mSize;
-    private String mCustomSymbolsMain;
-    private String mCustomSymbolsMain2;
-    private String mCustomSymbolsSym;
-    private String mCustomSymbolsSym2;
-    private String mCustomSymbolsMainBottom;
-    private String mCustomSymbolsSymBottom;
     private Timer timerLongPress = null;
-    private boolean long_pressed = false;
     private KeyboardUiFactory mKeyboardUiFactory = null;
     private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
 
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
-
+        //NOTE: Long press goes second, this is onDown
         InputConnection ic = getCurrentInputConnection();
         char code = (char) primaryCode;
+        Log.i(getClass().getSimpleName(), "onKey: " + primaryCode);
+
         switch (primaryCode) {
+            //First handle cases that  don't use shift/ctrl meta modifiers
             case 53737:
                 ic.performContextMenuAction(android.R.id.selectAll);
                 break;
@@ -106,14 +94,7 @@ public class CodeBoardIME extends InputMethodService
             case 53742:
                 ic.performContextMenuAction(android.R.id.redo);
                 break;
-            case -13:
-                //Switch keyboard button
-                InputMethodManager imm = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null)
-                    imm.showInputMethodPicker();
-                break;
-            case -15:
+            case -1:
                 //SYM
                 if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
                     mKeyboardState = R.integer.keyboard_sym;
@@ -122,7 +103,6 @@ public class CodeBoardIME extends InputMethodService
                 } else {
                     mKeyboardState = R.integer.keyboard_normal;
                 }
-
                 // regenerate view
                 //Simple remove shift
                 if (shift) {
@@ -132,6 +112,7 @@ public class CodeBoardIME extends InputMethodService
                 }
                 if (ctrl) {
                     ctrl = false;
+                    ctrlLock = false;
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
                 }
                 setInputView(onCreateInputView());
@@ -141,11 +122,18 @@ public class CodeBoardIME extends InputMethodService
 
             case 17: //KEYCODE_CTRL_LEFT:
                 // emulates a press down of the ctrl key
-                if (ctrl)
-                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-                else
+                if (!ctrlLock && !ctrl) {
+                    //Simple ctrl to true
+                    ctrl = true;
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-                ctrl = !ctrl;
+                } else if (!ctrlLock && ctrl) {
+                    //Simple remove ctrl
+                    ctrl = false;
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+                }
+                //else if (ctrl && ctrlLock) {
+                //Stay ctrled if previously ctrled
+                //}
                 controlKeyUpdateView();
                 break;
 
@@ -159,16 +147,17 @@ public class CodeBoardIME extends InputMethodService
                     //Simple remove shift
                     shift = false;
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-                } else if (shift && shiftLock) {
-                    //Stay shifted if previously shifted
                 }
+                //else if (shift && shiftLock) {
+                //Stay shifted if previously shifted
+                //}
                 shiftKeyUpdateView();
                 break;
 
             default: {
                 int meta = 0;
                 if (shift) {
-                    meta = KeyEvent.META_SHIFT_LEFT_ON;
+                    meta = KeyEvent.META_SHIFT_ON;
                     code = Character.toUpperCase(code);
                     if (!shiftLock) {
                         shift = false;
@@ -178,22 +167,89 @@ public class CodeBoardIME extends InputMethodService
                 }
                 if (ctrl) {
                     meta = meta | KeyEvent.META_CTRL_ON;
-                    ctrl = false;
-                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-                    controlKeyUpdateView();
+                    if (!ctrlLock) {
+                        ctrl = false;
+                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+                        controlKeyUpdateView();
+                    }
                 }
+                //Now shift/ctrl metadata is set
+                //Convert primaryCode to KeyEvent:
+                //primaryCode is the char value, it doesn't correspond to the KeyEvent that we want to press
                 int ke = 0;
                 switch (primaryCode) {
                     case 9:
                         ke = KeyEvent.KEYCODE_TAB;
                         //ic.commitText("\u0009", 1);
                         break;
-
-                    case 27:
+                    case -2:
                         ke = KeyEvent.KEYCODE_ESCAPE;
                         break;
+                    case 32:
+                        ke = KeyEvent.KEYCODE_SPACE;
+                        break;
+                    case -5:
+                        ke = KeyEvent.KEYCODE_DEL;
+                        break;
+                    case -4:
+                        ke = KeyEvent.KEYCODE_ENTER;
+                        break;
+                    case -6:
+                        ke = KeyEvent.KEYCODE_F1;
+                        break;
+                    case -7:
+                        ke = KeyEvent.KEYCODE_F2;
+                        break;
+                    case -8:
+                        ke = KeyEvent.KEYCODE_F3;
+                        break;
+                    case -9:
+                        ke = KeyEvent.KEYCODE_F4;
+                        break;
+                    case -10:
+                        ke = KeyEvent.KEYCODE_F5;
+                        break;
+                    case -11:
+                        ke = KeyEvent.KEYCODE_F6;
+                        break;
+                    case -12:
+                        ke = KeyEvent.KEYCODE_F7;
+                        break;
+                    case -13:
+                        ke = KeyEvent.KEYCODE_F8;
+                        break;
+                    case -14:
+                        ke = KeyEvent.KEYCODE_F9;
+                        break;
+                    case -15:
+                        ke = KeyEvent.KEYCODE_F10;
+                        break;
+                    case -16:
+                        ke = KeyEvent.KEYCODE_F11;
+                        break;
+                    case -17:
+                        ke = KeyEvent.KEYCODE_F12;
+                        break;
+                    case -18:
+                        ke = KeyEvent.KEYCODE_MOVE_HOME;
+                        break;
+                    case -19:
+                        ke = KeyEvent.KEYCODE_MOVE_END;
+                        break;
+                    case -20:
+                        ke = KeyEvent.KEYCODE_INSERT;
+                        break;
+                    case -21:
+                        ke = KeyEvent.KEYCODE_FORWARD_DEL;
+                        break;
+                    case -22:
+                        ke = KeyEvent.KEYCODE_PAGE_UP;
+                        break;
+                    case -23:
+                        ke = KeyEvent.KEYCODE_PAGE_DOWN;
+                        break;
 
-                    //These are like a directional joystick - jumps outside the inputConnection
+                    //These are like a directional joystick - can jump outside the inputConnection
                     case 5000:
                         ke = KeyEvent.KEYCODE_DPAD_LEFT;
                         break;
@@ -206,37 +262,33 @@ public class CodeBoardIME extends InputMethodService
                     case 5003:
                         ke = KeyEvent.KEYCODE_DPAD_RIGHT;
                         break;
-
-                    case 32:
-                        ke = KeyEvent.KEYCODE_SPACE;
-                        //NOTE: Long press goes second now
-                        break;
-                    case -5:
-                        ke = KeyEvent.KEYCODE_DEL;
-                        break;
-                    case -4:
-                        ke = KeyEvent.KEYCODE_ENTER;
-                        break;
                     default:
+                        //(t key) code 116-> ke 48
                         if (Character.isLetter(code)) {
                             ke = KeyEvent.keyCodeFromString("KEYCODE_" + Character.toUpperCase(code));
                         }
-
+//                        if (primaryCode >= 48 && primaryCode <= 57) {
+//                            ke = KeyEvent.keyCodeFromString("KEYCODE_" + code);
+//                        }
                 }
                 if (ke != 0) {
+                    Log.i(getClass().getSimpleName(), "onKey: keyEvent " + ke);
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
                 } else {
-                    //this doesn't use modifiers
+                    //All non-letter characters are handled here
+                    // This doesn't use modifiers.
+                    // For most users, this usage makes sense.
+                    //eg. (0 key) code 48 -> ke 7
+                    // If we handled '0' with a keyEvent, shift+0 would result in ')'
+                    Log.i(getClass().getSimpleName(), "onKey: committext " + String.valueOf(code));
                     ic.commitText(String.valueOf(code), 1);
-
                 }
             }
         }
     }
 
     public void onPress(final int primaryCode) {
-
         if (soundOn) {
             MediaPlayer keypressSoundPlayer = MediaPlayer.create(this, R.raw.keypress_sound);
             keypressSoundPlayer.start();
@@ -251,15 +303,12 @@ public class CodeBoardIME extends InputMethodService
             if (vibrator != null)
                 vibrator.vibrate(vibrateLength);
         }
+
         clearLongPressTimer();
-
         timerLongPress = new Timer();
-
         timerLongPress.schedule(new TimerTask() {
-
             @Override
             public void run() {
-
                 try {
                     Handler uiHandler = new Handler(Looper.getMainLooper());
                     Runnable runnable = new Runnable() {
@@ -277,9 +326,7 @@ public class CodeBoardIME extends InputMethodService
                     Log.e(getClass().getSimpleName(), "Timer.run: " + e.getMessage(), e);
                 }
             }
-
         }, ViewConfiguration.getLongPressTimeout());
-
     }
 
     @Override
@@ -300,9 +347,8 @@ public class CodeBoardIME extends InputMethodService
 
     public void onKeyLongPress(int keyCode) {
         // Process long-click here
-        // This is followed by an onKey()
+        // This is following an onKey()
         InputConnection ic = getCurrentInputConnection();
-        long_pressed = true;
         if (keyCode == 16) {
             shiftLock = !shiftLock;
             if (shiftLock) {
@@ -315,6 +361,18 @@ public class CodeBoardIME extends InputMethodService
             shiftKeyUpdateView();
         }
 
+        if (keyCode == 17) {
+            ctrlLock = !ctrlLock;
+            if (ctrlLock) {
+                ctrl = true;
+                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
+            } else {
+                ctrl = false;
+                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+            }
+            controlKeyUpdateView();
+        }
+
         if (keyCode == 32) {
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -322,9 +380,11 @@ public class CodeBoardIME extends InputMethodService
                 imm.showInputMethodPicker();
         }
 
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibratorOn && vibrator != null)
-            vibrator.vibrate(50);
+        if (vibratorOn) {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null)
+                vibrator.vibrate(vibrateLength);
+        }
     }
 
     public void onText(CharSequence text) {
@@ -375,7 +435,7 @@ public class CodeBoardIME extends InputMethodService
         mKeyboardUiFactory.theme.enablePreview = sharedPreferences.isPreviewEnabled();
         mKeyboardUiFactory.theme.enableBorder = sharedPreferences.isBorderEnabled();
         mKeyboardUiFactory.theme.fontSize = sharedPreferences.getFontSizeAsSp();
-        mSize = sharedPreferences.getPortraitSize();
+        int mSize = sharedPreferences.getPortraitSize();
         int sizeLandscape = sharedPreferences.getLandscapeSize();
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
         mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
@@ -389,13 +449,15 @@ public class CodeBoardIME extends InputMethodService
                     setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
         }
         //Key Layout
-        mCustomSymbolsMain = sharedPreferences.getCustomSymbolsMain();
-        mCustomSymbolsMain2 = sharedPreferences.getCustomSymbolsMain2();
-        mCustomSymbolsSym = sharedPreferences.getCustomSymbolsSym();
-        mCustomSymbolsSym2 = sharedPreferences.getCustomSymbolsSym2();
-        mCustomSymbolsMainBottom = sharedPreferences.getCustomSymbolsMainBottom();
-        mCustomSymbolsSymBottom = sharedPreferences.getCustomSymbolsSymBottom();
-        mLayout = sharedPreferences.getLayoutIndex();
+        boolean mToprow = sharedPreferences.getTopRowActions();
+        String mCustomSymbolsMain = sharedPreferences.getCustomSymbolsMain();
+        String mCustomSymbolsMain2 = sharedPreferences.getCustomSymbolsMain2();
+        String mCustomSymbolsSym = sharedPreferences.getCustomSymbolsSym();
+        String mCustomSymbolsSym2 = sharedPreferences.getCustomSymbolsSym2();
+        String mCustomSymbolsSym3 = sharedPreferences.getCustomSymbolsSym3();
+        String mCustomSymbolsSym4 = sharedPreferences.getCustomSymbolsSym4();
+        String mCustomSymbolsMainBottom = sharedPreferences.getCustomSymbolsMainBottom();
+        int mLayout = sharedPreferences.getLayoutIndex();
 
         //Need this to get resources for drawables
         Definitions definitions = new Definitions(this);
@@ -403,25 +465,36 @@ public class CodeBoardIME extends InputMethodService
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
             builder.setBox(Box.create(0, 0, 1, 1));
 
-            //Todo: allow rearranging of top row
-            definitions.addArrowsRow(builder);
+            if (mToprow) {
+                definitions.addCopyPasteRow(builder);
+            } else {
+                definitions.addArrowsRow(builder);
+            }
 
             if (mKeyboardState == R.integer.keyboard_sym) {
                 if (!mCustomSymbolsSym.isEmpty()) {
-                    definitions.addCustomRow(builder, mCustomSymbolsSym);
+                    Definitions.addCustomRow(builder, mCustomSymbolsSym);
                 }
                 if (!mCustomSymbolsSym2.isEmpty()) {
-                    definitions.addCustomRow(builder, mCustomSymbolsSym2);
+                    Definitions.addCustomRow(builder, mCustomSymbolsSym2);
                 }
-                definitions.addSymbolRows(builder);
-                definitions.addCustomSpaceRow(builder, mCustomSymbolsSymBottom);
-
+                if (!mCustomSymbolsSym3.isEmpty()) {
+                    Definitions.addCustomRow(builder, mCustomSymbolsSym3);
+                }
+                if (!mCustomSymbolsSym4.isEmpty()) {
+                    Definitions.addCustomRow(builder, mCustomSymbolsSym4);
+                }
+                if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
+                    definitions.addSymbolRows(builder);
+                } else {
+                    definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
+                }
             } else if (mKeyboardState == R.integer.keyboard_normal) {
                 if (!mCustomSymbolsMain.isEmpty()) {
-                    definitions.addCustomRow(builder, mCustomSymbolsMain);
+                    Definitions.addCustomRow(builder, mCustomSymbolsMain);
                 }
                 if (!mCustomSymbolsMain2.isEmpty()) {
-                    definitions.addCustomRow(builder, mCustomSymbolsMain2);
+                    Definitions.addCustomRow(builder, mCustomSymbolsMain2);
                 }
                 switch (mLayout) {
                     default:
@@ -440,16 +513,18 @@ public class CodeBoardIME extends InputMethodService
                 }
                 definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
             } else if (mKeyboardState == R.integer.keyboard_clipboard) {
+                definitions.addClipboardActions(builder);
 
                 ClipboardManager clipboard = (ClipboardManager)
                         getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard.hasPrimaryClip()) {
+                if (clipboard.hasPrimaryClip()
+                        && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
                     ClipData pr = clipboard.getPrimaryClip();
                     //Android only allows one item in Clipboard
                     String s = pr.getItemAt(0).getText().toString();
                     builder.newRow().addKey(s);
                 } else {
-                    builder.newRow().addKey("No history found").withOutputText("");
+                    builder.newRow().addKey("Nothing copied").withOutputText("");
                 }
                 builder.addKey(sharedPreferences.getPin1());
                 builder.newRow()
@@ -458,8 +533,10 @@ public class CodeBoardIME extends InputMethodService
                 builder.newRow()
                         .addKey(sharedPreferences.getPin4())
                         .addKey(sharedPreferences.getPin5());
+                builder.newRow()
+                        .addKey(sharedPreferences.getPin6())
+                        .addKey(sharedPreferences.getPin7());
             }
-
 
             Collection<Key> keyboardLayout = builder.build();
             mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
@@ -563,25 +640,24 @@ public class CodeBoardIME extends InputMethodService
 
     private static final int NOTIFICATION_ONGOING_ID = 1001;
 
+    //Code from Hacker keyboard's source
     private void setNotification(boolean visible) {
-        String ns = Context.NOTIFICATION_SERVICE;
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (visible && mNotificationReceiver == null) {
-            createNotificationChannel();
-            int icon = R.drawable.icon;
             CharSequence text = "Keyboard notification enabled.";
-            long when = System.currentTimeMillis();
+            Log.i(getClass().getSimpleName(), "setNotification:" + text);
 
-            // TODO: clean this up?
+            createNotificationChannel();
             mNotificationReceiver = new NotificationReceiver(this);
             final IntentFilter pFilter = new IntentFilter(NotificationReceiver.ACTION_SHOW);
             pFilter.addAction(NotificationReceiver.ACTION_SETTINGS);
             registerReceiver(mNotificationReceiver, pFilter);
 
             Intent notificationIntent = new Intent(NotificationReceiver.ACTION_SHOW);
-            PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
-            //PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            PendingIntent contentIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
 
             Intent configIntent = new Intent(NotificationReceiver.ACTION_SETTINGS);
             PendingIntent configPendingIntent =
@@ -590,18 +666,21 @@ public class CodeBoardIME extends InputMethodService
             String title = "Show Codeboard Keyboard";
             String body = "Select this to open the keyboard. Disable in settings.";
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.icon_large)
-                    .setColor(0xff220044)
-                    .setAutoCancel(false) //Make this notification automatically dismissed when the user touches it -> false.
-                    .setTicker(text)
-                    .setContentTitle(title)
-                    .setContentText(body)
-                    .setContentIntent(contentIntent)
-                    .setOngoing(true)
-                    .addAction(R.drawable.newiconsmall, getString(R.string.notification_action_settings),
-                            configPendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                            .setSmallIcon(R.drawable.icon_large)
+                            .setColor(0xff220044)
+                            .setAutoCancel(false)
+                            .setTicker(text)
+                            .setContentTitle(title)
+                            .setContentText(body)
+                            .setContentIntent(contentIntent)
+                            .setOngoing(true)
+                            .addAction(R.drawable.icon_large, getString(R.string.notification_action_open_keyboard),
+                                    contentIntent)
+                            .addAction(R.drawable.icon_large, getString(R.string.notification_action_settings),
+                                    configPendingIntent)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 

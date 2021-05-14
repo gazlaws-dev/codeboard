@@ -85,7 +85,8 @@ public class KeyboardPreferences {
         String fontSize = safeRead("font_size",
                 String.valueOf(res.getInteger(R.integer.font_size)));
         DisplayMetrics dm = res.getDisplayMetrics();
-        float sp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, Float.parseFloat(fontSize), dm);
+        float sp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                Float.parseFloat(fontSize), dm);
         return sp;
     }
 
@@ -135,14 +136,23 @@ public class KeyboardPreferences {
         return read("input_symbols_sym_2", res.getString(R.string.input_symbols_sym));
     }
 
+    public String getCustomSymbolsSym3() {
+        return read("input_symbols_sym_3", res.getString(R.string.input_symbols_sym_3));
+    }
+
+    public String getCustomSymbolsSym4() {
+        return read("input_symbols_sym_4", res.getString(R.string.input_symbols_sym_4));
+    }
     public void setCustomSymbolsSym2(String symbols) {
         write("input_symbols_sym_2", symbols);
     }
-
-
-    public String getCustomSymbolsSymBottom() {
-        return read("input_symbols_sym_bottom", res.getString(R.string.input_symbols_sym_bottom));
+    public void setCustomSymbolsSym3(String symbols) {
+        write("input_symbols_sym_3", symbols);
     }
+    public void setCustomSymbolsSym4(String symbols) {
+        write("input_symbols_sym_4", symbols);
+    }
+
 
     public void setCustomSymbolsSymBottom(String symbols) {
         write("input_symbols_sym_bottom", symbols);
@@ -164,10 +174,51 @@ public class KeyboardPreferences {
         return Integer.parseInt(safeRead("theme", "0"));
     }
 
+    public boolean getCustomTheme() {
+        return read("custom_theme", res.getBoolean(R.bool.custom_theme));
+    }
+
+    public String getPin1() {
+        return read("pin1", res.getString(R.string.pin1));
+    }
+
+    public String getPin2() {
+        return read("pin2", res.getString(R.string.pin2));
+    }
+
+    public String getPin3() {
+        return read("pin3", res.getString(R.string.pin3));
+    }
+
+    public String getPin4() {
+        return read("pin4", res.getString(R.string.pin4));
+    }
+
+    public String getPin5() {
+        return read("pin5", res.getString(R.string.pin5));
+    }
+
+    public String getPin6() {
+        return read("pin6", res.getString(R.string.pin6));
+    }
+
+    public String getPin7() {
+        return read("pin7", res.getString(R.string.pin7));
+    }
+
+    public boolean getNotification() {
+        return read("notification", res.getBoolean(R.bool.notification));
+    }
+
+    public Boolean getTopRowActions() {
+        return read("top_row_actions",
+                res.getBoolean(R.bool.top_row_actions));
+    }
+
     public void resetAllToDefault() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
         setFirstStart(false);
     }
 
@@ -201,35 +252,6 @@ public class KeyboardPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
         editor.apply();
-    }
-
-
-    public boolean getCustomTheme() {
-        return read("custom_theme", res.getBoolean(R.bool.custom_theme));
-    }
-
-    public String getPin1() {
-        return read("pin1", res.getString(R.string.pin1));
-    }
-
-    public String getPin2() {
-        return read("pin2", res.getString(R.string.pin2));
-    }
-
-    public String getPin3() {
-        return read("pin3", res.getString(R.string.pin3));
-    }
-
-    public String getPin4() {
-        return read("pin4", res.getString(R.string.pin4));
-    }
-
-    public String getPin5() {
-        return read("pin5", res.getString(R.string.pin5));
-    }
-
-    public boolean getNotification() {
-        return read("notification", res.getBoolean(R.bool.notification));
     }
 
 }

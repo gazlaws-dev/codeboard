@@ -30,7 +30,7 @@ public class IntroActivity extends AppIntro {
         sliderPage.setTitle("All the shortcuts!");
         sliderPage.setDescription("Click 'ctrl' for select all, cut, copy, paste, or undo." +
                 "\nCtrl+Shift+Z for redo" + "\n Long press Space to change keyboard");
-        sliderPage.setImageDrawable(R.drawable.intro_3);
+        sliderPage.setImageDrawable(R.drawable.intro_tutorial);
         sliderPage.setBackgroundColor(Color.parseColor("#3F51B5"));
         addSlide(AppIntroFragment.newInstance(sliderPage));
         // Set wizard mode to disable skip

@@ -1,11 +1,15 @@
 package com.gazlaws.codeboard;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -18,13 +22,16 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
+import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+
+public class SettingsFragment extends PreferenceFragmentCompat implements IOnFocusListenable {
     KeyboardPreferences keyboardPreferences;
 
     @Override
@@ -63,7 +70,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (!keyboardPreferences.getCustomTheme()) {
-                    int index= Integer.parseInt(newValue.toString());
+                    int index = Integer.parseInt(newValue.toString());
                     preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
                     setThemeByIndex(index);
                     return true;
@@ -72,6 +79,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return false;
             }
         });
+
+        Bundle bundle = this.getArguments();
+//        Log.d(this.getClass().getSimpleName(), "onCreatePreferences: "+bundle );
+        if (bundle != null &&
+                (bundle.getInt("notification") == 1)) {
+            scrollToPreference("notification");
+        }
+
+    }
+
+    public static CharSequence getCurrentImeLabel(Context context) {
+        CharSequence readableName = null;
+        String keyboard = Settings.Secure.getString(context.getContentResolver(), DEFAULT_INPUT_METHOD);
+        ComponentName componentName = ComponentName.unflattenFromString(keyboard);
+        if (componentName != null) {
+            String packageName = componentName.getPackageName();
+            try {
+                PackageManager packageManager = context.getPackageManager();
+                ApplicationInfo info = packageManager.getApplicationInfo(packageName, 0);
+                readableName = info.loadLabel(packageManager);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return readableName;
     }
 
     @Override
@@ -86,6 +118,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 InputMethodManager imm = (InputMethodManager)
                         requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showInputMethodPicker();
+                preference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
                 break;
             case "bg_colour_picker":
             case "fg_colour_picker":
@@ -105,8 +138,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void confirmReset() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_dialog_alert)
+        new AlertDialog.Builder(getActivity())
                 .setTitle("Reset?")
                 .setMessage("This will reset all your custom symbols to the default")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -126,8 +158,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     public void classicSymbols() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_dialog_alert)
+        new AlertDialog.Builder(getActivity())
                 .setTitle("Reset?")
                 .setMessage("This will reset all your custom symbols to the old CodeBoard layout")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -188,7 +219,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         int color = 0;
         if (key.equals("bg_colour_picker")) {
             color = keyboardPreferences.getBgColor();
-        } else if (key.equals("fg_colour_picker")){
+        } else if (key.equals("fg_colour_picker")) {
             color = keyboardPreferences.getFgColor();
         }
         ColorPicker cp = new ColorPicker(getActivity(),
@@ -202,14 +233,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public void onColorChosen(@ColorInt int color) {
                 if (key.equals("bg_colour_picker")) {
                     keyboardPreferences.setBgColor(String.valueOf(color));
-                } else if (key.equals("fg_colour_picker")){
+                } else if (key.equals("fg_colour_picker")) {
                     keyboardPreferences.setFgColor(String.valueOf(color));
                 }
             }
         });
     }
 
-    private void setNotification(boolean visible) {
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            Preference imePreference = (Preference) getPreferenceManager().findPreference("change_keyboard");
+            imePreference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
+        }
     }
 }
