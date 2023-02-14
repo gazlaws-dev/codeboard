@@ -67,6 +67,12 @@ public class CodeBoardIME extends InputMethodService
     private KeyboardUiFactory mKeyboardUiFactory = null;
     private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
 
+    /* Added by Dimitris Stoukogiannis (aka ShadyGeek) on 14/2/2023.
+        This boolean variable is used to check whether the space button is long pressed or not.
+            If the value is false it means that the user hasn't long pressed on the space button, else it means he has.
+                If he didn't long press, then on release a "space" will be printed, otherwise the alter keyboard option will appear.*/
+    private boolean longPressedSpace = false;
+
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
         //NOTE: Long press goes second, this is onDown
@@ -186,6 +192,9 @@ public class CodeBoardIME extends InputMethodService
                         ke = KeyEvent.KEYCODE_ESCAPE;
                         break;
                     case 32:
+                        /* Added by Dimitris Stoukogiannis (aka ShadyGeek) on 14/2/2023.
+                            Boolean variable is set to false, once the space button is pressed by the user */
+                        longPressedSpace = false;
                         ke = KeyEvent.KEYCODE_SPACE;
                         break;
                     case -5:
@@ -272,9 +281,14 @@ public class CodeBoardIME extends InputMethodService
 //                        }
                 }
                 if (ke != 0) {
+
                     Log.i(getClass().getSimpleName(), "onKey: keyEvent " + ke);
-                    ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
-                    ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
+
+                    /* Added by Dimitris Stoukogiannis (aka ShadyGeek) on 14/2/2023.
+                        The if statement was added in order to prevent the space button from having an action down event attached to it. */
+                    if (primaryCode != 32) { ic.sendKeyEvent (new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta)); }
+
+                    ic.sendKeyEvent (new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
                 } else {
                     //All non-letter characters are handled here
                     // This doesn't use modifiers.
@@ -342,6 +356,16 @@ public class CodeBoardIME extends InputMethodService
     }
 
     public void onRelease(int primaryCode) {
+
+        /* Added by Dimitris Stoukogiannis (aka ShadyGeek) on 14/2/2023.
+            Here we check, after the release of the space button whether, whether it was long pressed or not.
+                If it was, we don't do anything, but If it was, we print a "space" to the screen. */
+        if ((primaryCode == 32) && (! longPressedSpace)) {
+
+            InputConnection ic = getCurrentInputConnection ();
+            ic.commitText (String.valueOf ((char) primaryCode), 1);
+        }
+
         clearLongPressTimer();
     }
 
@@ -374,6 +398,11 @@ public class CodeBoardIME extends InputMethodService
         }
 
         if (keyCode == 32) {
+
+            /* Added by Dimitris Stoukogiannis (aka ShadyGeek) on 14/2/2023.
+                Here we set boolean variable to true, because the space button has been long pressed by the user. */
+            longPressedSpace = true;
+
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null)
