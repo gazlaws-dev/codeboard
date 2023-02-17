@@ -66,6 +66,7 @@ public class CodeBoardIME extends InputMethodService
     private Timer timerLongPress = null;
     private KeyboardUiFactory mKeyboardUiFactory = null;
     private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
+    private boolean longPressedSpaceButton = false;
 
     @Override
     public void onKey(int primaryCode, int[] KeyCodes) {
@@ -272,8 +273,19 @@ public class CodeBoardIME extends InputMethodService
 //                        }
                 }
                 if (ke != 0) {
+
                     Log.i(getClass().getSimpleName(), "onKey: keyEvent " + ke);
-                    ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
+
+                    /*
+                     *   The if statement was added in order to prevent the space button
+                     *   from having an action down event attached to it.
+                     *   Reason being that we first want to check
+                     *   whether the space button has been long pressed or not
+                     *   and afterwards produce the right output to the screen.
+                     *   TODO: Investigate whether KeyEvent.ACTION_UP is still required.
+                     */
+                    if (primaryCode != 32) { ic.sendKeyEvent (new KeyEvent (0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta)); }
+
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
                 } else {
                     //All non-letter characters are handled here
@@ -342,6 +354,21 @@ public class CodeBoardIME extends InputMethodService
     }
 
     public void onRelease(int primaryCode) {
+
+        /*
+         *   After the space button is released,
+         *   we check whether it was long pressed or not.
+         *   If it was, we don't do anything,
+         *   but If it wasn't, we print a "space" to the screen.
+         */
+        if ((primaryCode == 32) && (! longPressedSpaceButton)) {
+
+            InputConnection ic = getCurrentInputConnection ();
+            ic.commitText (String.valueOf ((char) primaryCode), 1);
+        }
+
+        longPressedSpaceButton = false;
+
         clearLongPressTimer();
     }
 
@@ -374,6 +401,9 @@ public class CodeBoardIME extends InputMethodService
         }
 
         if (keyCode == 32) {
+
+            longPressedSpaceButton = true;
+
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null)
