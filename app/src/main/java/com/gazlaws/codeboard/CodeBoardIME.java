@@ -187,7 +187,6 @@ public class CodeBoardIME extends InputMethodService
                         ke = KeyEvent.KEYCODE_ESCAPE;
                         break;
                     case 32:
-                        longPressedSpaceButton = false;
                         ke = KeyEvent.KEYCODE_SPACE;
                         break;
                     case -5:
@@ -283,7 +282,7 @@ public class CodeBoardIME extends InputMethodService
                      *   Reason being that we first want to check
                      *   whether the space button has been long pressed or not
                      *   and afterwards produce the right output to the screen.
-                     *   Note : The ACTION_UP KeyEvent doesn't bother us either way.
+                     *   TODO: Investigate whether KeyEvent.ACTION_UP is still required.
                      */
                     if (primaryCode != 32) { ic.sendKeyEvent (new KeyEvent (0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta)); }
 
@@ -367,6 +366,8 @@ public class CodeBoardIME extends InputMethodService
             InputConnection ic = getCurrentInputConnection ();
             ic.commitText (String.valueOf ((char) primaryCode), 1);
         }
+
+        longPressedSpaceButton = false;
 
         clearLongPressTimer();
     }
