@@ -1,5 +1,4 @@
-name: Codeboard Android CI
-
+name: Codeboard Android CI New
 on: [push]
 
 jobs:
