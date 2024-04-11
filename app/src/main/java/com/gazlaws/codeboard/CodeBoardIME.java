@@ -1,5 +1,7 @@
 package com.gazlaws.codeboard;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
@@ -16,6 +19,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.ResultReceiver;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,8 +30,10 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.media.MediaPlayer; // for keypress sound
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.RemoteInput;
 import androidx.core.graphics.ColorUtils;
 
 import com.gazlaws.codeboard.layout.Box;
@@ -46,6 +52,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY;
+import static android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS;
 
 /*Created by Ruby(aka gazlaws) on 13/02/2016.
  */
@@ -73,7 +81,7 @@ public class CodeBoardIME extends InputMethodService
         //NOTE: Long press goes second, this is onDown
         InputConnection ic = getCurrentInputConnection();
         char code = (char) primaryCode;
-        Log.i(getClass().getSimpleName(), "onKey: " + primaryCode);
+        Log.d(getClass().getSimpleName(), "onKey: " + primaryCode);
 
         switch (primaryCode) {
             //First handle cases that  don't use shift/ctrl meta modifiers
@@ -274,7 +282,7 @@ public class CodeBoardIME extends InputMethodService
                 }
                 if (ke != 0) {
 
-                    Log.i(getClass().getSimpleName(), "onKey: keyEvent " + ke);
+                    Log.d(getClass().getSimpleName(), "onKey: keyEvent " + ke);
 
                     /*
                      *   The if statement was added in order to prevent the space button
@@ -284,7 +292,9 @@ public class CodeBoardIME extends InputMethodService
                      *   and afterwards produce the right output to the screen.
                      *   TODO: Investigate whether KeyEvent.ACTION_UP is still required.
                      */
-                    if (primaryCode != 32) { ic.sendKeyEvent (new KeyEvent (0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta)); }
+                    if (primaryCode != 32) {
+                        ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
+                    }
 
                     ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
                 } else {
@@ -342,6 +352,19 @@ public class CodeBoardIME extends InputMethodService
     }
 
     @Override
+    public void onExtractingInputChanged(EditorInfo ei){
+        Log.d(getClass().getSimpleName(), "onExtractingInputChanged: ");
+    }
+    @Override
+    public void requestHideSelf(int flags){
+        int new_flag = HIDE_IMPLICIT_ONLY;
+        new_flag = flags;
+        Log.d(getClass().getSimpleName(), "requestHideSelf: "+new_flag + ","+ flags);
+        // do nothing
+        super.requestHideSelf(new_flag);
+    }
+
+    @Override
     public void onWindowHidden() {
         super.onWindowHidden();
         clearLongPressTimer();
@@ -361,10 +384,10 @@ public class CodeBoardIME extends InputMethodService
          *   If it was, we don't do anything,
          *   but If it wasn't, we print a "space" to the screen.
          */
-        if ((primaryCode == 32) && (! longPressedSpaceButton)) {
+        if ((primaryCode == 32) && (!longPressedSpaceButton)) {
 
-            InputConnection ic = getCurrentInputConnection ();
-            ic.commitText (String.valueOf ((char) primaryCode), 1);
+            InputConnection ic = getCurrentInputConnection();
+            ic.commitText(String.valueOf((char) primaryCode), 1);
         }
 
         longPressedSpaceButton = false;
@@ -671,6 +694,7 @@ public class CodeBoardIME extends InputMethodService
     private static final int NOTIFICATION_ONGOING_ID = 1001;
 
     //Code from Hacker keyboard's source
+    @SuppressLint("MissingPermission")
     private void setNotification(boolean visible) {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -682,19 +706,55 @@ public class CodeBoardIME extends InputMethodService
             createNotificationChannel();
             mNotificationReceiver = new NotificationReceiver(this);
             final IntentFilter pFilter = new IntentFilter(NotificationReceiver.ACTION_SHOW);
-            pFilter.addAction(NotificationReceiver.ACTION_SETTINGS);
-            registerReceiver(mNotificationReceiver, pFilter);
 
-            Intent notificationIntent = new Intent(NotificationReceiver.ACTION_SHOW);
-            PendingIntent contentIntent =
-                    PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                registerReceiver(mNotificationReceiver, pFilter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(mNotificationReceiver, pFilter);
+            }
 
-            Intent configIntent = new Intent(NotificationReceiver.ACTION_SETTINGS);
-            PendingIntent configPendingIntent =
-                    PendingIntent.getBroadcast(getApplicationContext(), 2, configIntent, 0);
 
+            Intent imeIntent = new Intent(NotificationReceiver.ACTION_SHOW);
+            PendingIntent imePendingIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(),
+                            1, imeIntent, PendingIntent.FLAG_IMMUTABLE);
+
+            // BUG: IM closes when notification drawer is closed
+            // try making a input field here?
+            // Key for the string that's delivered in the action's intent.
+            String KEY_TEXT_REPLY = "key_text_reply";
+
+            RemoteInput remoteInput = new RemoteInput.Builder(KEY_TEXT_REPLY)
+                    .setLabel("Now click first icon")
+                    .build();
+
+
+            // Build a PendingIntent for the keyboard action to trigger first
+            int flags = PendingIntent.FLAG_MUTABLE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                flags = PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT;
+            }
+            PendingIntent replyPendingIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(),
+                            2,
+                            imeIntent,
+                            flags);
+
+
+            // Create the reply action and add the remote input.
+            NotificationCompat.Action action =
+                    new NotificationCompat.Action.Builder(R.drawable.icon_large,
+                            getString(R.string.notification_action_open_keyboard_workaround), replyPendingIntent)
+                            .addRemoteInput(remoteInput)
+                            .build();
+
+            Intent settingsIntent = new Intent(this, MainActivity.class);
+            settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent settingsPendingIntent =
+                    PendingIntent.getActivity(this,0
+                            , settingsIntent, PendingIntent.FLAG_IMMUTABLE);
             String title = "Show Codeboard Keyboard";
-            String body = "Select this to open the keyboard. Disable in settings.";
+            String body = "Select this to open the keyboard. Disable in settings. You may have to fix open the fix as a workaround for newer Android versions";
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
@@ -704,17 +764,17 @@ public class CodeBoardIME extends InputMethodService
                             .setTicker(text)
                             .setContentTitle(title)
                             .setContentText(body)
-                            .setContentIntent(contentIntent)
+                            .setContentIntent(imePendingIntent)
                             .setOngoing(true)
                             .addAction(R.drawable.icon_large, getString(R.string.notification_action_open_keyboard),
-                                    contentIntent)
+                                    imePendingIntent)
                             .addAction(R.drawable.icon_large, getString(R.string.notification_action_settings),
-                                    configPendingIntent)
+                                    settingsPendingIntent)
+                            .addAction(action)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-            // notificationId is a unique int for each notification that you must define
             notificationManager.notify(NOTIFICATION_ONGOING_ID, mBuilder.build());
 
         } else if (!visible && mNotificationReceiver != null) {
