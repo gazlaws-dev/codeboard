@@ -183,7 +183,7 @@ public class KeyboardButtonView extends View {
             public void run() {
                 submitKeyEvent();
             }
-        },400, 50);
+        },200, 10);
     }
 
     private void animatePress(){
