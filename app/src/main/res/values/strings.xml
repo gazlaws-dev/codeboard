@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">CodeBoard</string>
+    <string name="codeboard_ime">CodeBoard IME</string>
+    <string name="subtype_en_US">CodeBoard-%s</string>
+    <string name="subtype_fr_FR">CodeBoard-%s</string>
+    <string name="app_intro">CodeBoard - Intro</string>
+    <string name="change_keyboard">Change Keyboard</string>
+    <string name="reopen_hint">Click here to see changes</string>
+    <string name="top_row_actions">Replace arrows with cut/copy/paste shortcuts?</string>
+    <string name="preview">Popup previews of characters</string>
+    <string name="sound_on_keypress">Sound on keypress</string>
+    <string name="vibrate_on_keypress">Vibrate on keypress</string>
+    <string name="keyboard_size">Keyboard Size</string>
+    <string name="keyboard_size_landscape">Keyboard Size (Landscape Mode)</string>
+    <string name="key_borders">Key Borders</string>
+    <string name="my_default_tile_label">Open Keyboard</string>
+    <string name="notification_channel_name">CodeboardNotification</string>
+    <string name="notification_channel_description">Allow keyboard to be force opened</string>
+    <string name="notification_action_open_keyboard">Open Codeboard keyboard</string>
+    <string name="notification_action_settings">Settings</string>
+    <string name="github_summary">This app is free, open-source and does not read your data! You can view, modify and compile the code your self on GitHub.</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<input-method xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.gazlaws.codeboard.MainActivity"
+    android:icon="@drawable/icon_old_1"
+    android:supportsSwitchingToNextInputMethod="true">
+    <subtype
+        android:label="@string/subtype_en_US"
+            android:imeSubtypeLocale="en_US"
+            android:imeSubtypeMode="Keyboard"/>
+    <subtype
+        android:label="@string/subtype_fr_FR"
+        android:imeSubtypeLocale="fr_FR"
+        android:imeSubtypeMode="Keyboard"
+        />
+
+</input-method>

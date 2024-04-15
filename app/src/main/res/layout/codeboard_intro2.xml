@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+    <TextView
+        android:layout_margin="48dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/background_light"
+        android:text="Next, choose CodeBoard as your keyboard"/>
+
+        <Button
+            android:id="@+id/change_button_intro"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Keyboard"
+            android:onClick="changeButtonIntro"
+            />
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_large"
+        android:layout_marginBottom="64dp"/>
+
+</LinearLayout>
