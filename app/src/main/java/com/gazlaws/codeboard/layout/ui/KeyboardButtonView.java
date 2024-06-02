@@ -7,12 +7,9 @@ import android.inputmethodservice.KeyboardView;
 import androidx.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.animation.ObjectAnimator;
-import android.view.View;
 import android.animation.AnimatorSet;
-import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -53,6 +50,7 @@ public class KeyboardButtonView extends View {
       onPress();
       break;
     case MotionEvent.ACTION_UP:
+    case MotionEvent.ACTION_CANCEL:  // Added this case
       onRelease();
       break;
     default:
@@ -93,9 +91,11 @@ public class KeyboardButtonView extends View {
   }
 
   private void drawButtonContent(Canvas canvas) {
-    float x = this.getWidth() / 2;
-    float y = this.getHeight() / 2 + uiTheme.fontHeight / 3;
-    canvas.drawText(currentLabel, x, y, uiTheme.foregroundPaint);
+    if (currentLabel != null) {
+      float x = this.getWidth() / 2;
+      float y = this.getHeight() / 2 + uiTheme.fontHeight / 3;
+      canvas.drawText(currentLabel, x, y, uiTheme.foregroundPaint);
+    }
 
     if (key.info.icon != null) {
       Drawable d = key.info.icon;
@@ -123,9 +123,9 @@ public class KeyboardButtonView extends View {
 
   private void onPress() {
     isPressed = true;
-    //        if (key.info.code != 0){
-    inputService.onPress(key.info.code);
-    //        }
+    if (key.info.code != 0){
+      inputService.onPress(key.info.code);
+    }
     if (key.info.isRepeatable) {
       startRepeating();
     }
@@ -134,7 +134,6 @@ public class KeyboardButtonView extends View {
 
   private void onRelease() {
     isPressed = false;
-    //      NOTE: If the arrow keys move out of the input view, the onRelease is never called
     if (key.info.code != 0) {
       inputService.onRelease(key.info.code);
     }
@@ -159,27 +158,30 @@ public class KeyboardButtonView extends View {
   }
 
   private void stopRepeating() {
-    if (timer == null) {
-      return;
+    synchronized (this) {
+      if (timer == null) {
+        return;
+      }
+      timer.cancel();
+      timer = null;
     }
-    timer.cancel();
-    timer = null;
   }
 
   private void startRepeating() {
-    if (timer != null) {
-      stopRepeating();
-      return;
-    }
-    timer = new Timer();
-    timer.scheduleAtFixedRate(new TimerTask() {
-      @Override
-      public void run() {
-        submitKeyEvent();
+    synchronized (this) {
+      if (timer != null) {
+        stopRepeating();
+        return;
       }
-    }, 200, 10);
+      timer = new Timer();
+      timer.scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+          submitKeyEvent();
+        }
+      }, 200, 10);
+    }
   }
-
 
   private void drawButtonBody(Canvas canvas) {
     float left = uiTheme.buttonBodyPadding;
@@ -198,24 +200,20 @@ public class KeyboardButtonView extends View {
 
   public void applyShiftModifier(boolean shiftPressed) {
     if (this.key.info.onShiftLabel != null) {
-      String nextLabel = shiftPressed ?
-        this.key.info.onShiftLabel :
-        this.key.info.label;
+      String nextLabel = shiftPressed ? this.key.info.onShiftLabel : this.key.info.label;
       setCurrentLabel(nextLabel);
     }
   }
 
   public void applyCtrlModifier(boolean ctrlPressed) {
     if (this.key.info.onCtrlLabel != null) {
-      String nextLabel = ctrlPressed ?
-        this.key.info.onCtrlLabel :
-        this.key.info.label;
+      String nextLabel = ctrlPressed ? this.key.info.onCtrlLabel : this.key.info.label;
       setCurrentLabel(nextLabel);
     }
   }
 
   private void setCurrentLabel(String nextLabel) {
-    if (nextLabel != currentLabel) {
+    if (nextLabel != null && !nextLabel.equals(currentLabel)) {
       currentLabel = nextLabel;
       this.invalidate();
     }
