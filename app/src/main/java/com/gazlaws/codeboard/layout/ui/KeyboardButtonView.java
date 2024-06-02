@@ -130,7 +130,6 @@ public class KeyboardButtonView extends View {
       startRepeating();
     }
     submitKeyEvent();
-    animatePress();
   }
 
   private void onRelease() {
@@ -142,7 +141,6 @@ public class KeyboardButtonView extends View {
     if (key.info.isRepeatable) {
       stopRepeating();
     }
-    animateRelease();
   }
 
   private void submitKeyEvent() {
@@ -182,65 +180,6 @@ public class KeyboardButtonView extends View {
     }, 200, 10);
   }
 
-  private void animatePress() {
-    if (uiTheme.enablePreview) {
-      // Define translation animation
-      ObjectAnimator translateY = ObjectAnimator.ofFloat(this, "translationY", -200.0 f);
-      translateY.setDuration(200);
-
-      // Define scale animation
-      ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1.2 f);
-      scaleX.setDuration(200);
-      ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1.2 f);
-      scaleY.setDuration(200);
-
-      // Define elevation animation
-      ObjectAnimator elevation = ObjectAnimator.ofFloat(this, "elevation", 21.0 f);
-      elevation.setDuration(200);
-
-      // Define gradient color animation
-      ObjectAnimator gradientAnimation = ObjectAnimator.ofArgb(this, "gradientColor", uiTheme.buttonBodyStartColor, uiTheme.buttonBodyEndColor);
-      gradientAnimation.setDuration(200);
-
-      // Combine animations into a set
-      AnimatorSet animatorSet = new AnimatorSet();
-      animatorSet.playTogether(translateY, scaleX, scaleY, elevation, gradientAnimation);
-      animatorSet.start();
-    } else {
-      this.setAlpha(0.1 f);
-    }
-  }
-
-  private void animateRelease() {
-    if (uiTheme.enablePreview) {
-      // Define translation animation
-      ObjectAnimator translateY = ObjectAnimator.ofFloat(this, "translationY", 0.0 f);
-      translateY.setDuration(200);
-
-      // Define scale animation
-      ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1.0 f);
-      scaleX.setDuration(200);
-      ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1.0 f);
-      scaleY.setDuration(200);
-
-      // Define elevation animation
-      ObjectAnimator elevation = ObjectAnimator.ofFloat(this, "elevation", 0.0 f);
-      elevation.setDuration(200);
-
-      // Define gradient color animation
-      ObjectAnimator gradientAnimation = ObjectAnimator.ofArgb(this, "gradientColor", uiTheme.buttonBodyEndColor, uiTheme.buttonBodyStartColor);
-      gradientAnimation.setDuration(200);
-
-      // Combine animations into a set
-      AnimatorSet animatorSet = new AnimatorSet();
-      animatorSet.playTogether(translateY, scaleX, scaleY, elevation, gradientAnimation);
-      animatorSet.start();
-    } else {
-      ObjectAnimator alpha = ObjectAnimator.ofFloat(this, "alpha", 1.0 f);
-      alpha.setDuration(400);
-      alpha.start();
-    }
-  }
 
   private void drawButtonBody(Canvas canvas) {
     float left = uiTheme.buttonBodyPadding;
