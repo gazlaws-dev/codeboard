@@ -11,10 +11,17 @@ public class ThemeDefinitions {
 
 
     public static ThemeInfo MaterialDark(){
-        ThemeInfo theme = new ThemeInfo();
-        theme.foregroundColor = whiteColor;
-        theme.backgroundColor = 0xff263238;
-        return theme;
+        return new ThemeInfo(
+            whiteColor,             // Foreground color
+            0xff263238,             // Background color
+            true,                   // Enable preview
+            true,                   // Enable border
+            14.0f,                  // Size
+            16.0f,                  // Font size
+            18.0f,                  // Landscape size
+            0xff000000,             // Button body start color
+            0xff444444              // Button body end color
+        );
     }
 
     public static ThemeInfo MaterialWhite(){
@@ -47,5 +54,4 @@ public class ThemeDefinitions {
         theme.backgroundColor = 0xff4a148c;
         return theme;
     }
-
 }
