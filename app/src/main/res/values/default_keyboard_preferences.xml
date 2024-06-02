@@ -31,6 +31,6 @@
     <string name="pin4">if(){\n\t}</string>
     <string name="pin5">Github Token</string>
     <string name="pin6">\@gmail.com</string>
-    <string name="pin7">git add . && git commit -m ''</string>
+    <string name="pin7">git commit -m ''</string>
 
 </resources>
