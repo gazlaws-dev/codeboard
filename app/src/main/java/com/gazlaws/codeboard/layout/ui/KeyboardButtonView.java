@@ -177,7 +177,7 @@ public class KeyboardButtonView extends View {
         public void run() {
           submitKeyEvent();
         }
-      }, 200, 100);
+      }, 200, 70);
     }
   }
 

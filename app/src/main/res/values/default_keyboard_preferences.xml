@@ -11,7 +11,7 @@
     <bool name="notification">false</bool>
     <integer name="theme">1</integer>
     <integer name="vibrate_length">1</integer>
-    <integer name="size_portrait">44</integer>
+    <integer name="size_portrait">30</integer>
     <integer name="size_landscape">48</integer>
     <integer name="bg_color">0xff263238</integer>
     <integer name="fg_color">0xffffffff</integer>
@@ -25,12 +25,12 @@
     <string name="input_symbols_sym_4" />
 <!--    <string name="input_symbols_sym_bottom">\?,\":;.\'</string>--><!-- 
     <string name="pin1">Yourgmail@gmail.com</string> -->
-    <string name="pin1">legendabrar@gmail.com</string>
-    <string name="pin2">000000000000000000</string>
+    <string name="pin1">Yourgmail@gmail.com</string>
+    <string name="pin2">git push</string>
     <string name="pin3">for(;;){\n\t}</string>
     <string name="pin4">if(){\n\t}</string>
-    <string name="pin5">000000000000000000</string>
+    <string name="pin5">Github Token</string>
     <string name="pin6">\@gmail.com</string>
-    <string name="pin7">000000000000000000</string>
+    <string name="pin7">git add . && git commit -m ''</string>
 
 </resources>
