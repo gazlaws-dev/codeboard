@@ -8,8 +8,6 @@ import androidx.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
-import android.animation.ObjectAnimator;
-import android.animation.AnimatorSet;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -46,15 +44,15 @@ public class KeyboardButtonView extends View {
   public boolean onTouchEvent(MotionEvent e) {
     int action = e.getAction();
     switch (action) {
-    case MotionEvent.ACTION_DOWN:
-      onPress();
-      break;
-    case MotionEvent.ACTION_UP:
-    case MotionEvent.ACTION_CANCEL:  // Added this case
-      onRelease();
-      break;
-    default:
-      break;
+      case MotionEvent.ACTION_DOWN:
+        onPress();
+        break;
+      case MotionEvent.ACTION_UP:
+      case MotionEvent.ACTION_CANCEL:
+        onRelease();
+        break;
+      default:
+        break;
     }
     return true;
   }
@@ -147,7 +145,7 @@ public class KeyboardButtonView extends View {
       inputService.onKey(key.info.code, null);
     }
     if (this.key.info.outputText != null) {
-      inputService.onText(key.info.outputText);
+      inputService.onText(this.key.info.outputText);
     }
   }
 
