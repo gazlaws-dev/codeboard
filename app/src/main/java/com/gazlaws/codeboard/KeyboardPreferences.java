@@ -3,6 +3,7 @@ package com.gazlaws.codeboard;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
@@ -18,8 +19,7 @@ public class KeyboardPreferences {
 
     public KeyboardPreferences(ContextWrapper contextWrapper) {
         res = contextWrapper.getResources();
-        this.preferences =
-                PreferenceManager.getDefaultSharedPreferences(contextWrapper);
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(contextWrapper);
     }
 
     public boolean isFirstStart() {
@@ -31,8 +31,7 @@ public class KeyboardPreferences {
     }
 
     public boolean isSoundEnabled() {
-        return read("sound",
-                res.getBoolean(R.bool.sound));
+        return read("sound", res.getBoolean(R.bool.sound));
     }
 
     public void setSoundEnabled(boolean bool) {
@@ -40,14 +39,11 @@ public class KeyboardPreferences {
     }
 
     public boolean isVibrateEnabled() {
-        return read("vibrate",
-                res.getBoolean(R.bool.vibrate));
+        return read("vibrate", res.getBoolean(R.bool.vibrate));
     }
 
-    //Note: EditTextPreference saves these as strings. Could be null
     public int getVibrateLength() {
-        return Integer.parseInt(safeRead("vibrate_ms",
-                String.valueOf(res.getInteger(R.integer.vibrate_length))));
+        return Integer.parseInt(safeRead("vibrate_ms", String.valueOf(res.getInteger(R.integer.vibrate_length))));
     }
 
     public void setVibrateLength(int length) {
@@ -55,77 +51,65 @@ public class KeyboardPreferences {
     }
 
     public int getBgColor() {
-        return Integer.parseInt(safeRead("bg_colour_picker",
-                String.valueOf(res.getInteger(R.integer.bg_color))));
+        return Integer.parseInt(safeRead("bg_colour_picker", String.valueOf(res.getInteger(R.integer.bg_color))));
     }
 
     public void setBgColor(String color) {
-        write("bg_colour_picker",
-                color);
+        write("bg_colour_picker", color);
     }
 
     public int getFgColor() {
-        return Integer.parseInt(safeRead("fg_colour_picker",
-                String.valueOf(res.getInteger(R.integer.fg_color))));
+        return Integer.parseInt(safeRead("fg_colour_picker", String.valueOf(res.getInteger(R.integer.fg_color))));
     }
 
     public void setFgColor(String color) {
-        write("fg_colour_picker",
-                color);
+        write("fg_colour_picker", color);
     }
 
     public boolean isGradientEnabled() {
-        return sharedPreferences.getBoolean(KEY_GRADIENT_ENABLED, false);
+        return preferences.getBoolean(KEY_GRADIENT_ENABLED, false);
     }
 
     public void setGradientEnabled(boolean enabled) {
-        sharedPreferences.edit().putBoolean(KEY_GRADIENT_ENABLED, enabled).apply();
+        preferences.edit().putBoolean(KEY_GRADIENT_ENABLED, enabled).apply();
     }
 
     public int getGradientStartColor() {
-        return sharedPreferences.getInt(KEY_GRADIENT_START_COLOR, Color.WHITE);
+        return preferences.getInt(KEY_GRADIENT_START_COLOR, Color.WHITE);
     }
 
     public void setGradientStartColor(int color) {
-        sharedPreferences.edit().putInt(KEY_GRADIENT_START_COLOR, color).apply();
+        preferences.edit().putInt(KEY_GRADIENT_START_COLOR, color).apply();
     }
 
     public int getGradientEndColor() {
-        return sharedPreferences.getInt(KEY_GRADIENT_END_COLOR, Color.BLACK);
+        return preferences.getInt(KEY_GRADIENT_END_COLOR, Color.BLACK);
     }
 
     public void setGradientEndColor(int color) {
-        sharedPreferences.edit().putInt(KEY_GRADIENT_END_COLOR, color).apply();
+        preferences.edit().putInt(KEY_GRADIENT_END_COLOR, color).apply();
     }
 
     public int getPortraitSize() {
-        return Integer.parseInt(safeRead("size_portrait",
-                String.valueOf(res.getInteger(R.integer.size_portrait))));
+        return Integer.parseInt(safeRead("size_portrait", String.valueOf(res.getInteger(R.integer.size_portrait))));
     }
 
     public int getLandscapeSize() {
-        return Integer.parseInt(safeRead("size_landscape",
-                String.valueOf(res.getInteger(R.integer.size_landscape))));
+        return Integer.parseInt(safeRead("size_landscape", String.valueOf(res.getInteger(R.integer.size_landscape))));
     }
 
-
     public float getFontSizeAsSp() {
-        String fontSize = safeRead("font_size",
-                String.valueOf(res.getInteger(R.integer.font_size)));
+        String fontSize = safeRead("font_size", String.valueOf(res.getInteger(R.integer.font_size)));
         DisplayMetrics dm = res.getDisplayMetrics();
-        float sp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                Float.parseFloat(fontSize), dm);
-        return sp;
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, Float.parseFloat(fontSize), dm);
     }
 
     public boolean isPreviewEnabled() {
-        return read("preview",
-                res.getBoolean(R.bool.preview));
+        return read("preview", res.getBoolean(R.bool.preview));
     }
 
     public boolean isBorderEnabled() {
-        return read("borders",
-                res.getBoolean(R.bool.borders));
+        return read("borders", res.getBoolean(R.bool.borders));
     }
 
     public String getCustomSymbolsMain() {
@@ -171,16 +155,18 @@ public class KeyboardPreferences {
     public String getCustomSymbolsSym4() {
         return read("input_symbols_sym_4", res.getString(R.string.input_symbols_sym_4));
     }
+
     public void setCustomSymbolsSym2(String symbols) {
         write("input_symbols_sym_2", symbols);
     }
+
     public void setCustomSymbolsSym3(String symbols) {
         write("input_symbols_sym_3", symbols);
     }
+
     public void setCustomSymbolsSym4(String symbols) {
         write("input_symbols_sym_4", symbols);
     }
-
 
     public void setCustomSymbolsSymBottom(String symbols) {
         write("input_symbols_sym_bottom", symbols);
@@ -239,8 +225,7 @@ public class KeyboardPreferences {
     }
 
     public Boolean getTopRowActions() {
-        return read("top_row_actions",
-                res.getBoolean(R.bool.top_row_actions));
+        return read("top_row_actions", res.getBoolean(R.bool.top_row_actions));
     }
 
     public void resetAllToDefault() {
@@ -281,5 +266,4 @@ public class KeyboardPreferences {
         editor.putString(key, value);
         editor.apply();
     }
-
 }
