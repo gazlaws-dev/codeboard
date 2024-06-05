@@ -15,6 +15,7 @@ import android.graphics.Shader;
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.theme.UiTheme;
+import com.gazlaws.codeboard.KeyboardPreferences;
 
 import java.util.Timer;
 import java.util.TimerTask;
