@@ -18,7 +18,9 @@ public class ThemeDefinitions {
             true,                   // Enable border
             14.0f,                  // Size
             16.0f,                  // Font size
-            18.0f                   // Landscape size
+            18.0f,                  // Landscape size
+            0x00000000,             // Button body start color
+            0x00009999              // Button body end color
         );
     }
 
