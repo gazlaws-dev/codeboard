@@ -78,7 +78,7 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="gradient_enabled"
-            android:title="Enable Gradient">
+            android:title="Enable Gradient" />
         <Preference
             android:defaultValue="@integer/gradient_start_color"
             android:dependency="gradient_enabled"
