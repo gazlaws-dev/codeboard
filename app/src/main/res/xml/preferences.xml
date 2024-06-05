@@ -55,7 +55,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Colour">
-
         <ListPreference
             android:defaultValue="@integer/theme"
             android:entries="@array/Themes"
@@ -77,6 +76,21 @@
             android:key="fg_colour_picker"
             android:title="Foreground colour" />
         <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="gradient_enabled"
+            android:title="Enable Gradient"
+            android:dependency="custom_theme" />
+        <Preference
+            android:defaultValue="@integer/gradient_start_color"
+            android:dependency="gradient_enabled"
+            android:key="gradient_start_color_picker"
+            android:title="Gradient Start Color" />
+        <Preference
+            android:defaultValue="@integer/gradient_end_color"
+            android:dependency="gradient_enabled"
+            android:key="gradient_end_color_picker"
+            android:title="Gradient End Color" />
+        <SwitchPreferenceCompat
             android:defaultValue="@bool/borders"
             android:key="borders"
             android:title="@string/key_borders" />
@@ -89,6 +103,7 @@
             android:key="navbar_dark"
             android:title="Navbar matches border color" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="Layout">
         <ListPreference
             android:defaultValue="0"

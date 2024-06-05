@@ -39,7 +39,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
       setPreferencesFromResource(R.xml.preferences, rootKey);
       keyboardPreferences = new KeyboardPreferences(requireActivity());
   
-      //  Declare a new thread to do a preference check
+      // Declare a new thread to do a preference check
       Thread t = new Thread(new Runnable() {
           @Override
           public void run() {
@@ -105,6 +105,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
               openColourPicker("gradient_end_color");
               return true;
           });
+      }
+  
+      if (gradientEnabledPref != null) {
+          gradientEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+              @Override
+              public boolean onPreferenceChange(Preference preference, Object newValue) {
+                  boolean enabled = (boolean) newValue;
+                  gradientStartColorPref.setEnabled(enabled);
+                  gradientEndColorPref.setEnabled(enabled);
+                  return true;
+              }
+          });
+  
+          boolean gradientEnabled = gradientEnabledPref.isChecked();
+          if (gradientStartColorPref != null) gradientStartColorPref.setEnabled(gradientEnabled);
+          if (gradientEndColorPref != null) gradientEndColorPref.setEnabled(gradientEnabled);
       }
   }
 
