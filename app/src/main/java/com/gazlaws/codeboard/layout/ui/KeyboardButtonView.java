@@ -25,17 +25,19 @@ public class KeyboardButtonView extends View {
 
     private final Key key;
     private final KeyboardView.OnKeyboardActionListener inputService;
+    private final KeyboardPreferences keyboardPreferences; 
     private final UiTheme uiTheme;
     private Timer timer;
     private String currentLabel = null;
     private boolean isPressed = false;
 
-    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme) {
+    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme , KeyboardPreferences keyboardPreferences) {
         super(context);
         this.inputService = inputService;
         this.key = key;
         this.uiTheme = uiTheme;
         this.currentLabel = key.info.label;
+        this.keyboardPreferences = keyboardPreferences; 
         // Enable shadow
         this.setOutlineProvider(ViewOutlineProvider.BOUNDS);
     }
