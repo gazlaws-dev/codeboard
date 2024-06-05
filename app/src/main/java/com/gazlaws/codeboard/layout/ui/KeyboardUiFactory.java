@@ -11,6 +11,7 @@ import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 import com.gazlaws.codeboard.theme.UiTheme;
+import com.gazlaws.codeboard.KeyboardPreferences;
 
 import java.util.Collection;
 
