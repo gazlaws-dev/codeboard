@@ -91,12 +91,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
 
         gradientStartColorPref.setOnPreferenceClickListener(preference -> {
-            openColorPicker("gradient_start_color");
+            openColourPicker("gradient_start_color");
             return true;
         });
 
         gradientEndColorPref.setOnPreferenceClickListener(preference -> {
-            openColorPicker("gradient_end_color");
+            openColourPicker("gradient_end_color");
             return true;
         });
     }
