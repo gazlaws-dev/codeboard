@@ -489,7 +489,7 @@ public class CodeBoardIME extends InputMethodService
     public View onCreateInputView() {
 
         if (mKeyboardUiFactory == null) {
-            mKeyboardUiFactory = new KeyboardUiFactory(this);
+            mKeyboardUiFactory = new KeyboardUiFactory(this, new KeyboardPreferences(this));
         }
         KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
         setNotification(sharedPreferences.getNotification());
