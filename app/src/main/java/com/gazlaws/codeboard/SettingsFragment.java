@@ -34,72 +34,79 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
 
     KeyboardPreferences keyboardPreferences;
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
-        keyboardPreferences = new KeyboardPreferences(requireActivity());
-
-        //  Declare a new thread to do a preference check
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (keyboardPreferences.isFirstStart()) {
-                    Intent i = new Intent(getActivity(), IntroActivity.class);
-                    startActivity(i);
-                    keyboardPreferences.setFirstStart(false);
-                }
-            }
-        });
-        t.start();
-
-        //Only allow numbers
-        String[] numberOnlyPrefereces = {"vibrate_ms", "font_size", "size_portrait", "size_landscape"};
-        for (String key : numberOnlyPrefereces) {
-            EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
-            editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                }
-            });
-        }
-
-        ListPreference themePreference = (ListPreference) getPreferenceManager().findPreference("theme");
-        assert themePreference != null;
-        themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!keyboardPreferences.getCustomTheme()) {
-                    int index = Integer.parseInt(newValue.toString());
-                    preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
-                    setThemeByIndex(index);
-                    return true;
-                }
-                preference.setSummary("Custom Theme is set");
-                return false;
-            }
-        });
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null && bundle.getInt("notification") == 1) {
-            scrollToPreference("notification");
-        }
-
-        // Add gradient preferences
-        SwitchPreferenceCompat gradientEnabledPref = findPreference("gradient_enabled");
-        Preference gradientStartColorPref = findPreference("gradient_start_color_picker");
-        Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
-
-        gradientStartColorPref.setOnPreferenceClickListener(preference -> {
-            openColourPicker("gradient_start_color");
-            return true;
-        });
-
-        gradientEndColorPref.setOnPreferenceClickListener(preference -> {
-            openColourPicker("gradient_end_color");
-            return true;
-        });
-    }
+  @Override
+  public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+      setPreferencesFromResource(R.xml.preferences, rootKey);
+      keyboardPreferences = new KeyboardPreferences(requireActivity());
+  
+      //  Declare a new thread to do a preference check
+      Thread t = new Thread(new Runnable() {
+          @Override
+          public void run() {
+              if (keyboardPreferences.isFirstStart()) {
+                  Intent i = new Intent(getActivity(), IntroActivity.class);
+                  startActivity(i);
+                  keyboardPreferences.setFirstStart(false);
+              }
+          }
+      });
+      t.start();
+  
+      // Only allow numbers
+      String[] numberOnlyPreferences = {"vibrate_ms", "font_size", "size_portrait", "size_landscape"};
+      for (String key : numberOnlyPreferences) {
+          EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
+          if (editTextPreference != null) {
+              editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                  @Override
+                  public void onBindEditText(@NonNull EditText editText) {
+                      editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                  }
+              });
+          }
+      }
+  
+      ListPreference themePreference = findPreference("theme");
+      if (themePreference != null) {
+          themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+              @Override
+              public boolean onPreferenceChange(Preference preference, Object newValue) {
+                  if (!keyboardPreferences.getCustomTheme()) {
+                      int index = Integer.parseInt(newValue.toString());
+                      preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
+                      setThemeByIndex(index);
+                      return true;
+                  }
+                  preference.setSummary("Custom Theme is set");
+                  return false;
+              }
+          });
+      }
+  
+      Bundle bundle = this.getArguments();
+      if (bundle != null && bundle.getInt("notification") == 1) {
+          scrollToPreference("notification");
+      }
+  
+      // Add gradient preferences
+      SwitchPreferenceCompat gradientEnabledPref = findPreference("gradient_enabled");
+      Preference gradientStartColorPref = findPreference("gradient_start_color_picker");
+      Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
+  
+      if (gradientStartColorPref != null) {
+          gradientStartColorPref.setOnPreferenceClickListener(preference -> {
+              openColourPicker("gradient_start_color");
+              return true;
+          });
+      }
+  
+      if (gradientEndColorPref != null) {
+          gradientEndColorPref.setOnPreferenceClickListener(preference -> {
+              openColourPicker("gradient_end_color");
+              return true;
+          });
+      }
+  }
 
     public static CharSequence getCurrentImeLabel(Context context) {
         CharSequence readableName = null;
