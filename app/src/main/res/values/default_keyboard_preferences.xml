@@ -17,8 +17,8 @@
     <integer name="size_landscape">48</integer>
     <integer name="bg_color">0xff263238</integer>
     <integer name="fg_color">0xffffffff</integer>
-    <integer name="gradient_start_color">0xFF00FF00</integer>
-    <integer name="gradient_end_color">0xFFFF0000</integer>
+    <integer name="gradient_start_color">0xaa313131</integer>
+    <integer name="gradient_end_color">0xff22262b</integer>
     <integer name="font_size">16</integer>
     <string name="input_symbols_main">_1234567890-=</string>
     <string name="input_symbols_main_2" />
