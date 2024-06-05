@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -21,6 +20,7 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
@@ -30,8 +30,8 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
-
 public class SettingsFragment extends PreferenceFragmentCompat implements IOnFocusListenable {
+
     KeyboardPreferences keyboardPreferences;
 
     @Override
@@ -81,12 +81,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         });
 
         Bundle bundle = this.getArguments();
-//        Log.d(this.getClass().getSimpleName(), "onCreatePreferences: "+bundle );
-        if (bundle != null &&
-                (bundle.getInt("notification") == 1)) {
+        if (bundle != null && bundle.getInt("notification") == 1) {
             scrollToPreference("notification");
         }
 
+        // Add gradient preferences
+        SwitchPreferenceCompat gradientEnabledPref = findPreference("gradient_enabled");
+        Preference gradientStartColorPref = findPreference("gradient_start_color_picker");
+        Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
+
+        gradientStartColorPref.setOnPreferenceClickListener(preference -> {
+            openColorPicker("gradient_start_color");
+            return true;
+        });
+
+        gradientEndColorPref.setOnPreferenceClickListener(preference -> {
+            openColorPicker("gradient_end_color");
+            return true;
+        });
     }
 
     public static CharSequence getCurrentImeLabel(Context context) {
@@ -239,7 +251,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             }
         });
     }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

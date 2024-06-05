@@ -12,6 +12,10 @@ public class KeyboardPreferences {
     private SharedPreferences preferences;
     private Resources res;
 
+    private static final String KEY_GRADIENT_ENABLED = "gradient_enabled";
+    private static final String KEY_GRADIENT_START_COLOR = "gradient_start_color";
+    private static final String KEY_GRADIENT_END_COLOR = "gradient_end_color";
+
     public KeyboardPreferences(ContextWrapper contextWrapper) {
         res = contextWrapper.getResources();
         this.preferences =
@@ -68,6 +72,30 @@ public class KeyboardPreferences {
     public void setFgColor(String color) {
         write("fg_colour_picker",
                 color);
+    }
+
+    public boolean isGradientEnabled() {
+        return sharedPreferences.getBoolean(KEY_GRADIENT_ENABLED, false);
+    }
+
+    public void setGradientEnabled(boolean enabled) {
+        sharedPreferences.edit().putBoolean(KEY_GRADIENT_ENABLED, enabled).apply();
+    }
+
+    public int getGradientStartColor() {
+        return sharedPreferences.getInt(KEY_GRADIENT_START_COLOR, Color.WHITE);
+    }
+
+    public void setGradientStartColor(int color) {
+        sharedPreferences.edit().putInt(KEY_GRADIENT_START_COLOR, color).apply();
+    }
+
+    public int getGradientEndColor() {
+        return sharedPreferences.getInt(KEY_GRADIENT_END_COLOR, Color.BLACK);
+    }
+
+    public void setGradientEndColor(int color) {
+        sharedPreferences.edit().putInt(KEY_GRADIENT_END_COLOR, color).apply();
     }
 
     public int getPortraitSize() {

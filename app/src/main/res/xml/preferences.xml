@@ -215,6 +215,5 @@
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/gazlaws-dev/codeboard" />
         </Preference>
-
     </PreferenceCategory>
 </PreferenceScreen>
