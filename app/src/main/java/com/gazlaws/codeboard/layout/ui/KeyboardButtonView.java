@@ -198,7 +198,7 @@ public class KeyboardButtonView extends View {
             Shader shader = new LinearGradient(left, top, right, bottom, startColor, endColor, Shader.TileMode.CLAMP);
             paint.setShader(shader);
         } else {
-            paint.setColor(uiTheme.buttonBodyColor);
+            Shader shader = new LinearGradient(left, top, right, bottom, uiTheme.buttonBodyStartColor, uiTheme.buttonBodyEndColor, Shader.TileMode.CLAMP);
         }
 
         canvas.drawRoundRect(left, top, right, bottom, uiTheme.buttonBodyBorderRadius, uiTheme.buttonBodyBorderRadius, paint);
