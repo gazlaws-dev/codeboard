@@ -89,7 +89,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
       }
   
       // Add gradient preferences
-      SwitchPreferenceCompat gradientEnabledPref = findPreference("gradient_enabled");
+      SwitchPreferenceCompat gradientEnabledPref = findPreference("custom_gradient_enabled");
       Preference gradientStartColorPref = findPreference("gradient_start_color_picker");
       Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
   

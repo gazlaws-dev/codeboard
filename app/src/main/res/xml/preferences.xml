@@ -76,9 +76,14 @@
             android:key="fg_colour_picker"
             android:title="Foreground colour" />
         <SwitchPreferenceCompat
-            android:defaultValue="false"
+            android:defaultValue="@bool/gradient"
             android:key="gradient_enabled"
-            android:title="Enable Gradient" />
+            android:title="@string/gradient_enable" />
+        <SwitchPreferenceCompat
+            android:dependency="gradient_enabled"
+            android:defaultValue="false"
+            android:key="custom_gradient_enabled"
+            android:title="Custom Gradient" />
         <Preference
             android:defaultValue="@integer/gradient_start_color"
             android:dependency="gradient_enabled"
