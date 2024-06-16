@@ -10,8 +10,8 @@ public class ThemeInfo {
     public float sizeLandscape;
 
     // Add these fields for the gradient colors
-    private static int buttonStartColour = 0xff000000;
-    private static int buttonEndColour = 0xff00ffff;
+    public int buttonBodyStartColor;
+    public int buttonBodyEndColor;
 
 
     // Constructor
