@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -21,6 +20,7 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
@@ -30,64 +30,99 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
-
 public class SettingsFragment extends PreferenceFragmentCompat implements IOnFocusListenable {
+
     KeyboardPreferences keyboardPreferences;
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
-        keyboardPreferences = new KeyboardPreferences(requireActivity());
-
-        //  Declare a new thread to do a preference check
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (keyboardPreferences.isFirstStart()) {
-                    Intent i = new Intent(getActivity(), IntroActivity.class);
-                    startActivity(i);
-                    keyboardPreferences.setFirstStart(false);
-                }
-            }
-        });
-        t.start();
-
-        //Only allow numbers
-        String[] numberOnlyPrefereces = {"vibrate_ms", "font_size", "size_portrait", "size_landscape"};
-        for (String key : numberOnlyPrefereces) {
-            EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
-            editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                }
-            });
-        }
-
-        ListPreference themePreference = (ListPreference) getPreferenceManager().findPreference("theme");
-        assert themePreference != null;
-        themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!keyboardPreferences.getCustomTheme()) {
-                    int index = Integer.parseInt(newValue.toString());
-                    preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
-                    setThemeByIndex(index);
-                    return true;
-                }
-                preference.setSummary("Custom Theme is set");
-                return false;
-            }
-        });
-
-        Bundle bundle = this.getArguments();
-//        Log.d(this.getClass().getSimpleName(), "onCreatePreferences: "+bundle );
-        if (bundle != null &&
-                (bundle.getInt("notification") == 1)) {
-            scrollToPreference("notification");
-        }
-
-    }
+  @Override
+  public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+      setPreferencesFromResource(R.xml.preferences, rootKey);
+      keyboardPreferences = new KeyboardPreferences(requireActivity());
+  
+      // Declare a new thread to do a preference check
+      Thread t = new Thread(new Runnable() {
+          @Override
+          public void run() {
+              if (keyboardPreferences.isFirstStart()) {
+                  Intent i = new Intent(getActivity(), IntroActivity.class);
+                  startActivity(i);
+                  keyboardPreferences.setFirstStart(false);
+              }
+          }
+      });
+      t.start();
+  
+      // Only allow numbers
+      String[] numberOnlyPreferences = {"vibrate_ms", "font_size", "size_portrait", "size_landscape"};
+      for (String key : numberOnlyPreferences) {
+          EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
+          if (editTextPreference != null) {
+              editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                  @Override
+                  public void onBindEditText(@NonNull EditText editText) {
+                      editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                  }
+              });
+          }
+      }
+  
+      ListPreference themePreference = findPreference("theme");
+      if (themePreference != null) {
+          themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+              @Override
+              public boolean onPreferenceChange(Preference preference, Object newValue) {
+                  if (!keyboardPreferences.getCustomTheme()) {
+                      int index = Integer.parseInt(newValue.toString());
+                      preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
+                      setThemeByIndex(index);
+                      return true;
+                  }
+                  preference.setSummary("Custom Theme is set");
+                  return false;
+              }
+          });
+      }
+  
+      Bundle bundle = this.getArguments();
+      if (bundle != null && bundle.getInt("notification") == 1) {
+          scrollToPreference("notification");
+      }
+  
+      // Add gradient preferences
+      SwitchPreferenceCompat gradientEnabledPref = findPreference("custom_gradient_enabled");
+      Preference gradientStartColorPref = findPreference("gradient_start_color_picker");
+      Preference gradientEndColorPref = findPreference("gradient_end_color_picker");
+  
+      if (gradientStartColorPref != null) {
+          gradientStartColorPref.setOnPreferenceClickListener(preference -> {
+              openColourPicker("gradient_start_color");
+              return true;
+          });
+      }
+  
+      if (gradientEndColorPref != null) {
+          gradientEndColorPref.setOnPreferenceClickListener(preference -> {
+              openColourPicker("gradient_end_color");
+              return true;
+          });
+      }
+  
+      if (gradientEnabledPref != null) {
+          gradientEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+              @Override
+              public boolean onPreferenceChange(Preference preference, Object newValue) {
+                  boolean enabled = (boolean) newValue;
+                  gradientStartColorPref.setEnabled(enabled);
+                  gradientEndColorPref.setEnabled(enabled);
+                  return true;
+              }
+          });
+  
+          boolean gradientEnabled = gradientEnabledPref.isChecked();
+          if (gradientStartColorPref != null) gradientStartColorPref.setEnabled(gradientEnabled);
+          if (gradientEndColorPref != null) gradientEndColorPref.setEnabled(gradientEnabled);
+      }
+  }
 
     public static CharSequence getCurrentImeLabel(Context context) {
         CharSequence readableName = null;
@@ -213,6 +248,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
         keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        // Work by gpt below 2 lines
+        keyboardPreferences.setGradientStartColor(themeInfo.buttonBodyStartColor);
+        keyboardPreferences.setGradientEndColor(themeInfo.buttonBodyEndColor);
     }
 
     public void openColourPicker(final String key) {
@@ -239,7 +277,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             }
         });
     }
-
+    // Above function only
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

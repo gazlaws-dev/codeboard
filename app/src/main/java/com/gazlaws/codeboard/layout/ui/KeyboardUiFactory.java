@@ -11,16 +11,19 @@ import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 import com.gazlaws.codeboard.theme.UiTheme;
+import com.gazlaws.codeboard.KeyboardPreferences;
 
 import java.util.Collection;
 
 public class KeyboardUiFactory {
 
     private final KeyboardView.OnKeyboardActionListener inputService;
+    private final KeyboardPreferences keyboardPreferences; // Add this line
     public ThemeInfo theme = ThemeDefinitions.Default();
 
-    public KeyboardUiFactory(KeyboardView.OnKeyboardActionListener inputService) {
+    public KeyboardUiFactory(KeyboardView.OnKeyboardActionListener inputService, KeyboardPreferences keyboardPreferences) { // Modify constructor
         this.inputService = inputService;
+        this.keyboardPreferences = keyboardPreferences; // Initialize keyboardPreferences
     }
 
     public KeyboardLayoutView createKeyboardView(Context context, Collection<Key> keys){
@@ -40,7 +43,7 @@ public class KeyboardUiFactory {
     }
 
     private KeyboardButtonView createKeyView(Context context, Key key, UiTheme uiTheme) {
-        KeyboardButtonView view =  new KeyboardButtonView(context, key, inputService, uiTheme);
+        KeyboardButtonView view =  new KeyboardButtonView(context, key, inputService, uiTheme, keyboardPreferences); // Pass keyboardPreferences to KeyboardButtonView constructor
         Box box = key.box;
         view.layout((int)box.getLeft(), (int)box.getTop(), (int)box.getRight(), (int)box.getBottom());
         return view;
