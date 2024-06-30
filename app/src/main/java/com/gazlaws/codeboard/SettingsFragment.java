@@ -248,6 +248,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
         keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        keyboardPreferences.buttonBodyStartColor = themeInfo.buttonBodyStartColor;
+        keyboardPreferences.buttonBodyEndColor = themeInfo.buttonBodyEndColor;
     }
 
     public void openColourPicker(final String key) {
@@ -274,6 +276,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             }
         });
     }
+    // Above function only
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
