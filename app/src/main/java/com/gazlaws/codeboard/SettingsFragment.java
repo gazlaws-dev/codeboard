@@ -248,6 +248,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
         keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        // Work by gpt below 2 lines
         keyboardPreferences.setGradientStartColor(themeInfo.buttonBodyStartColor);
         keyboardPreferences.setGradientEndColor(themeInfo.buttonBodyEndColor);
     }
