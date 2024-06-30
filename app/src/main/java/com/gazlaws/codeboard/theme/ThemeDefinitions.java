@@ -12,7 +12,6 @@ public class ThemeDefinitions {
     private static int lightPinkColor = 0xffffb6c1;
     private static int cyanColor = 0xff00ffff;
     
-
     private static int buttonBodyStartColor;
     private static int buttonBodyEndColor;
 
@@ -23,15 +22,15 @@ public class ThemeDefinitions {
     public static ThemeInfo MaterialDark(){
         return new ThemeInfo(
             whiteColor,
-            0xff263238,
+            0xff263238, // Dark grey background
             true,
             true,
-            14.0f,                  // Size
+            14.0f, // Size
             16.0f,
             18.0f,
             buttonBodyStartColor,
             buttonBodyEndColor
-            );
+        );
     }
 
     public static ThemeInfo MaterialWhite(){
@@ -53,11 +52,7 @@ public class ThemeDefinitions {
     }
 
     public static ThemeInfo White(){
-        ThemeInfo theme = MaterialWhite();
-        theme.backgroundColor = whiteColor;
-        theme.buttonBodyStartColor = whiteColor;
-        theme.buttonBodyEndColor = lightPinkColor;
-        return theme;
+        return MaterialWhite();
     }
 
     public static ThemeInfo Blue(){
@@ -71,10 +66,28 @@ public class ThemeDefinitions {
 
     public static ThemeInfo Purple(){
         ThemeInfo theme = MaterialDark();
-        theme.backgroundColor = 0xff4a148c;
+        theme.backgroundColor = 0xff4a148c; 
         theme.foregroundColor = whiteColor;
         theme.buttonBodyStartColor = lightPurpleColor;
-        theme.buttonBodyEndColor =  cyanColor;
+        theme.buttonBodyEndColor = cyanColor;
+        return theme;
+    }
+
+    public static ThemeInfo Red(){
+        ThemeInfo theme = MaterialDark();
+        theme.backgroundColor = 0xff8b0000;
+        theme.foregroundColor = whiteColor;
+        theme.buttonBodyStartColor = pinkColor;
+        theme.buttonBodyEndColor = lightPinkColor;
+        return theme;
+    }
+
+    public static ThemeInfo Green(){
+        ThemeInfo theme = MaterialDark();
+        theme.backgroundColor = 0xff008000;
+        theme.foregroundColor = whiteColor;
+        theme.buttonBodyStartColor = lightPinkColor;
+        theme.buttonBodyEndColor = lightBlueColor;
         return theme;
     }
 }
