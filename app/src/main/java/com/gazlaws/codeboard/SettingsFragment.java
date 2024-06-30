@@ -283,3 +283,4 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
     }
 }
+//Test
