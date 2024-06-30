@@ -248,9 +248,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
         keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
-        // I want to set button body start color and end color but these are not defined here so I will set them to the same as bg color
-        keyboardPreferences.setButtonBodyStartColor(String.valueOf(themeInfo.buttonBodyStartColor));
-        keyboardPreferences.setButtonBodyEndColor(String.valueOf(themeInfo.buttonBodyEndColor));
+        keyboardPreferences.setGradientStartColor(String.valueOf(themeInfo.buttonBodyStartColor));
+        keyboardPreferences.setGradientEndColor(String.valueOf(themeInfo.buttonBodyEndColor));
     }
 
     public void openColourPicker(final String key) {
