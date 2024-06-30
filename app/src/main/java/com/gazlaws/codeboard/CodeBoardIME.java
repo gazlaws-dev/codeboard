@@ -349,7 +349,7 @@ public class CodeBoardIME extends InputMethodService
                 mp.release();
             }
         });
-        keypressSoundPlayer.setVolume(0.5f, 0.5f);
+        keypressSoundPlayer.setVolume(0.3f, 0.3f);
         keypressSoundPlayer.start();
     }
 
