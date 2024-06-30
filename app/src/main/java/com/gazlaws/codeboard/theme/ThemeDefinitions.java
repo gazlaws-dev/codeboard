@@ -64,8 +64,8 @@ public class ThemeDefinitions {
         ThemeInfo theme = MaterialDark();
         theme.backgroundColor = 0xff0d47a1;
         theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0xff000000;
-        theme.buttonBodyEndColor = 0xff00ffff;
+        theme.buttonBodyStartColor = blueColor;
+        theme.buttonBodyEndColor = lightBlueColor;
         return theme;
     }
 
@@ -73,8 +73,8 @@ public class ThemeDefinitions {
         ThemeInfo theme = MaterialDark();
         theme.backgroundColor = 0xff4a148c;
         theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0xff000000; // Black
-        theme.buttonBodyEndColor = 0xff00ffff; // Cyan
+        theme.buttonBodyStartColor = lightPurpleColor;
+        theme.buttonBodyEndColor =  cyanColor;
         return theme;
     }
 }
