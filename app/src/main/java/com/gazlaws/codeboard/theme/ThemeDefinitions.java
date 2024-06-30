@@ -4,6 +4,14 @@ public class ThemeDefinitions {
 
     private static int whiteColor = 0xffffffff;
     private static int blackColor = 0xff000000;
+    private static int blueColor = 0xff0000ff;
+    private static int lightBlueColor = 0xffadd8e6;
+    private static int purpleColor = 0xff800080;
+    private static int lightPurpleColor = 0xffba55d3;
+    private static int pinkColor = 0xffffc0cb;
+    private static int lightPinkColor = 0xffffb6c1;
+    private static int cyanColor = 0xff00ffff;
+    
 
     private static int buttonBodyStartColor;
     private static int buttonBodyEndColor;
@@ -29,9 +37,9 @@ public class ThemeDefinitions {
     public static ThemeInfo MaterialWhite(){
         ThemeInfo theme = Default();
         theme.foregroundColor = blackColor;
-        theme.backgroundColor = 0xffeceff1;
-        theme.buttonBodyStartColor = 0xff000000;
-        theme.buttonBodyEndColor = 0xff00ffff;
+        theme.backgroundColor = lightBlueColor;
+        theme.buttonBodyStartColor = lightBlueColor;
+        theme.buttonBodyEndColor = lightPurpleColor;
         return theme;
     }
 
@@ -39,16 +47,16 @@ public class ThemeDefinitions {
         ThemeInfo theme = MaterialDark();
         theme.foregroundColor = whiteColor;
         theme.backgroundColor = blackColor;
-        theme.buttonBodyStartColor = 0xff000000; // Black
-        theme.buttonBodyEndColor = 0xff00ffff; // Color = Cyan
+        theme.buttonBodyStartColor = blackColor;
+        theme.buttonBodyEndColor = blueColor;
         return theme;
     }
 
     public static ThemeInfo White(){
         ThemeInfo theme = MaterialWhite();
         theme.backgroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0xff000000; // Black
-        theme.buttonBodyEndColor = 0xff00feff; // Color = Cyan
+        theme.buttonBodyStartColor = whiteColor;
+        theme.buttonBodyEndColor = lightPinkColor;
         return theme;
     }
 
