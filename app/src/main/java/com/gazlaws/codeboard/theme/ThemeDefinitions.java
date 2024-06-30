@@ -5,8 +5,8 @@ public class ThemeDefinitions {
     private static int whiteColor = 0xffffffff;
     private static int blackColor = 0xff000000;
 
-    private static int buttonBodyStartColor = 0xff000000;
-    private static int buttonBodyEndColor = 0xff00ffff;
+    private static int buttonBodyStartColor;
+    private static int buttonBodyEndColor;
 
     public static ThemeInfo Default(){
         return MaterialDark();
