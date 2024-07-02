@@ -19,6 +19,10 @@ public class UiTheme {
     public float portraitSize;
     public float landscapeSize;
 
+    // Add these fields for the gradient
+    public int buttonBodyStartColor;
+    public int buttonBodyEndColor;
+
     private UiTheme(){
         this.foregroundPaint = new Paint();
         this.buttonBodyPaint = new Paint();
@@ -39,6 +43,11 @@ public class UiTheme {
         }
         // button body
         theme.buttonBodyPaint.setColor(info.backgroundColor);
+
+        // Assign start and end colors for the gradient
+        theme.buttonBodyStartColor = info.buttonBodyStartColor;
+        theme.buttonBodyEndColor = info.buttonBodyEndColor;
+
         // foreground
         theme.foregroundPaint.setColor(info.foregroundColor);
         theme.fontHeight = info.fontSize;

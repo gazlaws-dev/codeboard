@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 
-/**
- * Created by Ruby on 02/06/2016.
+/** Created by Ruby on 02/06/2016.
  */
 public class MainActivity extends AppCompatActivity {
     @Override

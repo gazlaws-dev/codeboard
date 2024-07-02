@@ -1,4 +1,0 @@
-# Files built from source should not be in version control
-
-/build
-/release
