@@ -262,7 +262,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             color = keyboardPreferences.getBgColor();
         } else if (key.equals("fg_colour_picker")) {
             color = keyboardPreferences.getFgColor();
+        } else if (key.equals("gradient_start_color")) {
+            color = keyboardPreferences.getGradientStartColor();
+        } else if (key.equals("gradient_end_color")) {
+            color = keyboardPreferences.getGradientEndColor();
         }
+
         ColorPicker cp = new ColorPicker(getActivity(),
                 Color.red(color),
                 Color.green(color),
@@ -276,6 +281,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                     keyboardPreferences.setBgColor(String.valueOf(color));
                 } else if (key.equals("fg_colour_picker")) {
                     keyboardPreferences.setFgColor(String.valueOf(color));
+                } else if (key.equals("gradient_start_color")) {
+                    keyboardPreferences.setGradientStartColor(color);
+                } else if (key.equals("gradient_end_color")) {
+                    keyboardPreferences.setGradientEndColor(color);
                 }
             }
         });
