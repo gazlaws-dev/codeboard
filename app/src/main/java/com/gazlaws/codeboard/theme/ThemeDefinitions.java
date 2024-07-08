@@ -35,7 +35,7 @@ public class ThemeDefinitions {
 
     public static ThemeInfo MaterialWhite(){
         ThemeInfo theme = Default();
-        theme.foregroundColor = blackColor;
+        theme.foregroundColor = lightBlueColor;
         theme.backgroundColor = lightBlueColor;
         theme.buttonBodyStartColor = lightBlueColor;
         theme.buttonBodyEndColor = lightPurpleColor;
@@ -53,6 +53,10 @@ public class ThemeDefinitions {
 
     public static ThemeInfo White(){
         return MaterialWhite();
+        theme.foregroundColor = cyanColor;
+        theme.backgroundColor = whiteColor;
+        theme.buttonBodyStartColor = lightBlueColor;
+        theme.buttonBodyEndColor = lightPurpleColor;
     }
 
     public static ThemeInfo Blue(){
