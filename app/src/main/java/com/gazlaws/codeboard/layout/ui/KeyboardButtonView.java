@@ -1,46 +1,50 @@
 package com.gazlaws.codeboard.layout.ui;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.inputmethodservice.KeyboardView;
-import androidx.annotation.NonNull;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.inputmethodservice.KeyboardView;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewOutlineProvider;
+import androidx.annotation.NonNull;
 
+import com.gazlaws.codeboard.KeyboardPreferences;
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.theme.UiTheme;
-import com.gazlaws.codeboard.KeyboardPreferences;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class KeyboardButtonView extends View {
 
-    private static final String TAG = "KeyboardButtonView";
-
     private final Key key;
     private final KeyboardView.OnKeyboardActionListener inputService;
-    private final KeyboardPreferences keyboardPreferences; 
+    private final KeyboardPreferences keyboardPreferences;
     private final UiTheme uiTheme;
     private Timer timer;
     private String currentLabel = null;
     private boolean isPressed = false;
 
-    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme , KeyboardPreferences keyboardPreferences) {
+    public KeyboardButtonView(Context context, Key key, KeyboardView.OnKeyboardActionListener inputService, UiTheme uiTheme, KeyboardPreferences keyboardPreferences) {
         super(context);
         this.inputService = inputService;
         this.key = key;
         this.uiTheme = uiTheme;
         this.currentLabel = key.info.label;
-        this.keyboardPreferences = keyboardPreferences; 
+        this.keyboardPreferences = keyboardPreferences;
+
         // Enable shadow
         this.setOutlineProvider(ViewOutlineProvider.BOUNDS);
+        setLayerType(LAYER_TYPE_SOFTWARE, null); // Required for blur effect
     }
 
     @Override
@@ -191,6 +195,7 @@ public class KeyboardButtonView extends View {
         float bottom = this.getHeight() - uiTheme.buttonBodyPadding;
 
         Paint paint = new Paint();
+        paint.setAlpha((int) (255 * (1 - uiTheme.buttonTransparency))); // Set transparency
 
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
@@ -199,29 +204,15 @@ public class KeyboardButtonView extends View {
             paint.setShader(shader);
         } else {
             Shader shader = new LinearGradient(left, top, right, bottom, uiTheme.buttonBodyStartColor, uiTheme.buttonBodyEndColor, Shader.TileMode.CLAMP);
+            paint.setShader(shader);
         }
 
+        // Apply blur effect if enabled
+        if (uiTheme.enableBlur) {
+            paint.setMaskFilter(new BlurMaskFilter(uiTheme.blurRadius, BlurMaskFilter.Blur.NORMAL));
+        }
+
+        // Draw rounded rectangle button body
         canvas.drawRoundRect(left, top, right, bottom, uiTheme.buttonBodyBorderRadius, uiTheme.buttonBodyBorderRadius, paint);
-    }
-
-    public void applyShiftModifier(boolean shiftPressed) {
-        if (this.key.info.onShiftLabel != null) {
-            String nextLabel = shiftPressed ? this.key.info.onShiftLabel : this.key.info.label;
-            setCurrentLabel(nextLabel);
-        }
-    }
-
-    public void applyCtrlModifier(boolean ctrlPressed) {
-        if (this.key.info.onCtrlLabel != null) {
-            String nextLabel = ctrlPressed ? this.key.info.onCtrlLabel : this.key.info.label;
-            setCurrentLabel(nextLabel);
-        }
-    }
-
-    private void setCurrentLabel(String nextLabel) {
-        if (nextLabel != null && !nextLabel.equals(currentLabel)) {
-            currentLabel = nextLabel;
-            this.invalidate();
-        }
     }
 }

@@ -94,6 +94,22 @@ public class KeyboardPreferences {
         return Integer.parseInt(safeRead("size_portrait", String.valueOf(res.getInteger(R.integer.size_portrait))));
     }
 
+    public int getTransparencyLevel() {
+        return preferences.getInt("transparency_level", 100); // Default is fully opaque
+    }
+
+    public void setTransparencyLevel(int level) {
+        preferences.edit().putInt("transparency_level", level).apply();
+    }
+
+    public boolean isBlurEnabled() {
+        return preferences.getBoolean("blur_enabled", false);
+    }
+
+    public void setBlurEnabled(boolean enabled) {
+        preferences.edit().putBoolean("blur_enabled", enabled).apply();
+    }
+
     public int getLandscapeSize() {
         return Integer.parseInt(safeRead("size_landscape", String.valueOf(res.getInteger(R.integer.size_landscape))));
     }

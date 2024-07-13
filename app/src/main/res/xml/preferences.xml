@@ -54,6 +54,22 @@
             android:key="notification" />
     </PreferenceCategory>
 
+
+    <PreferenceCategory android:title="Appearance">
+        <SeekBarPreference
+            android:key="transparency_level"
+            android:title="Transparency Level"
+            android:defaultValue="100"
+            android:min="0"
+            android:max="100"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="blur_enabled"
+            android:title="Enable Blur"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Colour">
         <ListPreference
             android:defaultValue="@integer/theme"
@@ -106,13 +122,6 @@
             android:defaultValue="@bool/navbar_dark"
             android:key="navbar_dark"
             android:title="Navbar matches border color" />
-          <!-- Lets add transparency bar so that user can ik crease and drcrease transparency of button and background -->
-        <EditTextPreference
-            android:defaultValue="@integer/transparent"
-            android:imeOptions="flagNoExtractUi"
-            android:key="transparent_value"
-            android:title="@string/transparent_value"
-            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Layout">

@@ -19,42 +19,54 @@ public class UiTheme {
     public float portraitSize;
     public float landscapeSize;
 
-    // Add these fields for the gradient
+    // Gradient fields
     public int buttonBodyStartColor;
     public int buttonBodyEndColor;
 
-    private UiTheme(){
+    // New fields for transparency and blur
+    public float buttonTransparency;
+    public boolean enableBlur;
+    public float blurRadius;
+
+    private UiTheme() {
         this.foregroundPaint = new Paint();
         this.buttonBodyPaint = new Paint();
         backgroundColor = 0xff000000;
     }
 
-    public static UiTheme buildFromInfo(ThemeInfo info){
+    public static UiTheme buildFromInfo(ThemeInfo info) {
         UiTheme theme = new UiTheme();
         theme.portraitSize = info.size;
         theme.landscapeSize = info.sizeLandscape;
         theme.enablePreview = info.enablePreview;
         theme.enableBorder = info.enableBorder;
-        // background - darker border
-        if(info.enableBorder){
+
+        // Background - darker border
+        if (info.enableBorder) {
             theme.backgroundColor = ColorUtils.blendARGB(info.backgroundColor, Color.BLACK, 0.2f);
         } else {
             theme.backgroundColor = info.backgroundColor;
         }
-        // button body
+
+        // Button body
         theme.buttonBodyPaint.setColor(info.backgroundColor);
 
         // Assign start and end colors for the gradient
         theme.buttonBodyStartColor = info.buttonBodyStartColor;
         theme.buttonBodyEndColor = info.buttonBodyEndColor;
 
-        // foreground
+        // Foreground
         theme.foregroundPaint.setColor(info.foregroundColor);
         theme.fontHeight = info.fontSize;
         theme.foregroundPaint.setTextSize(theme.fontHeight);
         theme.foregroundPaint.setTextAlign(Paint.Align.CENTER);
         theme.foregroundPaint.setAntiAlias(true);
         theme.foregroundPaint.setTypeface(Typeface.DEFAULT);
+
+        // New transparency and blur properties
+        theme.buttonTransparency = info.buttonTransparency;
+        theme.enableBlur = info.enableBlur;
+        theme.blurRadius = info.blurRadius;
 
         return theme;
     }
