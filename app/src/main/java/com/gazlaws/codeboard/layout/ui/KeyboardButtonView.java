@@ -19,13 +19,12 @@ import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Key;
 import com.gazlaws.codeboard.theme.UiTheme;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class KeyboardButtonView extends View {
 
+    private static final String TAG = "KeyboardButtonView";
     private final Key key;
     private final KeyboardView.OnKeyboardActionListener inputService;
     private final KeyboardPreferences keyboardPreferences;
@@ -214,5 +213,26 @@ public class KeyboardButtonView extends View {
 
         // Draw rounded rectangle button body
         canvas.drawRoundRect(left, top, right, bottom, uiTheme.buttonBodyBorderRadius, uiTheme.buttonBodyBorderRadius, paint);
+    }
+
+    // Modifier methods
+
+    public void applyShiftModifier(boolean shiftPressed) {
+        if (key.info.label != null) {
+            String nextLabel = shiftPressed ? key.info.onShiftLabel : key.info.label;
+            setCurrentLabel(nextLabel);
+        }
+    }
+
+    public void applyCtrlModifier(boolean ctrlPressed) {
+        if (key.info.label != null) {
+            String nextLabel = ctrlPressed ? key.info.onCtrlLabel : key.info.label;
+            setCurrentLabel(nextLabel);
+        }
+    }
+
+    public void setCurrentLabel(String label) {
+        this.currentLabel = label;
+        invalidate();
     }
 }
