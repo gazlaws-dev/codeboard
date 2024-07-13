@@ -243,7 +243,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                 themeInfo = ThemeDefinitions.Purple();
                 break;
             case 7:
-                themeInfo = ThemeDefinitions.Green();
+                themeInfo = ThemeDefinitions.Transparent();
                 break;
             default:
                 themeInfo = ThemeDefinitions.Default();
@@ -298,4 +298,4 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             imePreference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
         }
     }
-}
+e

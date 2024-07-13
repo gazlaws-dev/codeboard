@@ -20,6 +20,7 @@
         <item>White</item>
         <item>Blue</item>
         <item>Purple</item>
+        <item>Transparent</item>
     </string-array>
     <string-array name="ThemeValue">
         <item>0</item>
@@ -29,5 +30,6 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
+        <item>7</item>
     </string-array>
 </resources>

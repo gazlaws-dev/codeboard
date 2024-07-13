@@ -86,12 +86,12 @@ public class ThemeDefinitions {
         return theme;
     }
 
-    public static ThemeInfo Green(){
+    public static ThemeInfo Transparent(){
         ThemeInfo theme = MaterialDark();
-        theme.backgroundColor = 0xff008000;
+        theme.backgroundColor = 0x00000000;
         theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = lightPinkColor;
-        theme.buttonBodyEndColor = lightBlueColor;
+        theme.buttonBodyStartColor = 0x00000000;
+        theme.buttonBodyEndColor = 0x00000000;
         return theme;
     }
 }
