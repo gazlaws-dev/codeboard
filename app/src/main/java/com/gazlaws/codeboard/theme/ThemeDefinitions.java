@@ -88,6 +88,7 @@ public class ThemeDefinitions {
     }
 
     public static ThemeInfo Transparent(){
+        ThemeInfo theme = MaterialDark();
         theme.backgroundColor = 0x00000000;
         theme.foregroundColor = whiteColor;
         theme.buttonBodyStartColor = 0x00000000;
