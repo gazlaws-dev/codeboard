@@ -26,7 +26,7 @@ public class UiTheme {
     private UiTheme(){
         this.foregroundPaint = new Paint();
         this.buttonBodyPaint = new Paint();
-        backgroundColor = 0xff000000;
+        backgroundColor = 0x00000000;
     }
 
     public static UiTheme buildFromInfo(ThemeInfo info){
