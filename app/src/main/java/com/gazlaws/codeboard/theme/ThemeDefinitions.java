@@ -88,11 +88,15 @@ public class ThemeDefinitions {
     }
 
     public static ThemeInfo Transparent(){
-        ThemeInfo theme = MaterialDark();
         theme.backgroundColor = 0x00000000;
         theme.foregroundColor = whiteColor;
         theme.buttonBodyStartColor = 0x00000000;
         theme.buttonBodyEndColor = 0x00000000;
+        theme.enablePreview = false;
+        theme.enableBorder = false;
+        theme.size = 14.0f;
+        theme.fontSize = 16.0f;
+        theme.sizeLandscape = 18.0f;
         return theme;
     }
 }
