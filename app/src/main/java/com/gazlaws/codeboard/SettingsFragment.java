@@ -26,9 +26,11 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.gazlaws.codeboard.intro.IntroActivity;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 import com.gazlaws.codeboard.ui.IOnFocusListenable;
+import com.gazlaws.codeboard.ui.KeyboardPreferences;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;

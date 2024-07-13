@@ -13,10 +13,15 @@ public class ThemeInfo {
     public int buttonBodyStartColor;
     public int buttonBodyEndColor;
 
+    // New fields for transparency and blur
+    public float buttonTransparency;
+    public boolean enableBlur;
+    public float blurRadius;
 
     // Constructor
-    public ThemeInfo(int foregroundColor, int backgroundColor, boolean enablePreview, boolean enableBorder, 
-                     float size, float fontSize, float sizeLandscape, int buttonBodyStartColor, int buttonBodyEndColor) {
+    public ThemeInfo(int foregroundColor, int backgroundColor, boolean enablePreview, boolean enableBorder,
+                     float size, float fontSize, float sizeLandscape, int buttonBodyStartColor, int buttonBodyEndColor,
+                     float buttonTransparency, boolean enableBlur, float blurRadius) {
         this.foregroundColor = foregroundColor;
         this.backgroundColor = backgroundColor;
         this.enablePreview = enablePreview;
@@ -26,5 +31,8 @@ public class ThemeInfo {
         this.sizeLandscape = sizeLandscape;
         this.buttonBodyStartColor = buttonBodyStartColor;
         this.buttonBodyEndColor = buttonBodyEndColor;
+        this.buttonTransparency = buttonTransparency;
+        this.enableBlur = enableBlur;
+        this.blurRadius = blurRadius;
     }
 }

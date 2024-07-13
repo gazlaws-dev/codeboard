@@ -29,7 +29,9 @@ public class ThemeDefinitions {
             16.0f,
             18.0f,
             buttonBodyStartColor,
-            buttonBodyEndColor
+            buttonBodyEndColor,
+            0.0f,
+            false
         );
     }
 
@@ -84,20 +86,6 @@ public class ThemeDefinitions {
         theme.foregroundColor = whiteColor;
         theme.buttonBodyStartColor = pinkColor;
         theme.buttonBodyEndColor = lightPinkColor;
-        return theme;
-    }
-
-    public static ThemeInfo Transparent(){
-        ThemeInfo theme = MaterialDark();
-        theme.backgroundColor = 0x00000000; // Fully transparent color
-        theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0x00000000; // Fully transparent color
-        theme.buttonBodyEndColor = 0x00000000; // Fully transparent color
-        theme.enablePreview = false;
-        theme.enableBorder = false;
-        theme.size = 14.0f;
-        theme.fontSize = 16.0f;
-        theme.sizeLandscape = 18.0f;
         return theme;
     }
 }
