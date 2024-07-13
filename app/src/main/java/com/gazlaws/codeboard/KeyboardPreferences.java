@@ -13,6 +13,8 @@ public class KeyboardPreferences {
     private SharedPreferences preferences;
     private Resources res;
 
+    private static final String KEY_BUTTON_TRANSPARENCY = "button_transparency";
+    private static final String KEY_BUTTON_BLUR_ENABLED = "button_blur_enabled";
     private static final String KEY_GRADIENT_ENABLED = "gradient_enabled";
     private static final String KEY_GRADIENT_START_COLOR = "gradient_start_color";
     private static final String KEY_GRADIENT_END_COLOR = "gradient_end_color";
@@ -90,25 +92,26 @@ public class KeyboardPreferences {
         preferences.edit().putInt(KEY_GRADIENT_END_COLOR, color).apply();
     }
 
+    public float getButtonTransparency() {
+        return preferences.getFloat(KEY_BUTTON_TRANSPARENCY, 1.0f); // Default value 1.0f (fully opaque)
+    }
+
+    public void setButtonTransparency(float transparency) {
+        preferences.edit().putFloat(KEY_BUTTON_TRANSPARENCY, transparency).apply();
+    }
+
+    public boolean isButtonBlurEffectEnabled() {
+        return preferences.getBoolean(KEY_BUTTON_BLUR_ENABLED, false); // Default value false (disabled)
+    }
+
+    public void setButtonBlurEffectEnabled(boolean enabled) {
+        preferences.edit().putBoolean(KEY_BUTTON_BLUR_ENABLED, enabled).apply();
+    }
+
     public int getPortraitSize() {
         return Integer.parseInt(safeRead("size_portrait", String.valueOf(res.getInteger(R.integer.size_portrait))));
     }
 
-    public int getTransparencyLevel() {
-        return preferences.getInt("transparency_level", 100); // Default is fully opaque
-    }
-
-    public void setTransparencyLevel(int level) {
-        preferences.edit().putInt("transparency_level", level).apply();
-    }
-
-    public boolean isBlurEnabled() {
-        return preferences.getBoolean("blur_enabled", false);
-    }
-
-    public void setBlurEnabled(boolean enabled) {
-        preferences.edit().putBoolean("blur_enabled", enabled).apply();
-    }
 
     public int getLandscapeSize() {
         return Integer.parseInt(safeRead("size_landscape", String.valueOf(res.getInteger(R.integer.size_landscape))));
