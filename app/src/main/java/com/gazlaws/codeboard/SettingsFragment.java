@@ -320,13 +320,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         colorPicker.show();
     }
   
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            onFocus();
-        }
-    }
-    
 
     @Override
     public void onFocus() {
