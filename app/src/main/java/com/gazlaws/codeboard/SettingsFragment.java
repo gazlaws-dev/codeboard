@@ -30,6 +30,7 @@ import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.layout.ui.KeyboardButtonView;
+import com.gazlaws.codeboard.layout.ui.KeyboardLayoutView;
 import com.gazlaws.codeboard.KeyboardPreferences;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
