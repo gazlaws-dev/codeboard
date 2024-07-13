@@ -12,7 +12,6 @@
         <service
             android:name=".CodeBoardIME"
             android:label="@string/codeboard_ime"
-            android:endless="true"
             android:permission="android.permission.BIND_INPUT_METHOD"
             android:exported="true">
             <meta-data
