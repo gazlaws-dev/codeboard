@@ -290,6 +290,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
         keyboardPreferences.setGradientStartColor(themeInfo.buttonBodyStartColor);
         keyboardPreferences.setGradientEndColor(themeInfo.buttonBodyEndColor);
+        //Worked
     }
 
     public void openColourPicker(final String key) {
