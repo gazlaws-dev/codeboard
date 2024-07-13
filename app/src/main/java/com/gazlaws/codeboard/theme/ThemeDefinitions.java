@@ -11,7 +11,7 @@ public class ThemeDefinitions {
     private static int pinkColor = 0xffffc0cb;
     private static int lightPinkColor = 0xffffb6c1;
     private static int cyanColor = 0xff00ffff;
-    
+
     private static int buttonBodyStartColor;
     private static int buttonBodyEndColor;
 
@@ -89,10 +89,10 @@ public class ThemeDefinitions {
 
     public static ThemeInfo Transparent(){
         ThemeInfo theme = MaterialDark();
-        theme.backgroundColor = 0x00000000;
+        theme.backgroundColor = 0x00000000; // Fully transparent color
         theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0x00000000;
-        theme.buttonBodyEndColor = 0x00000000;
+        theme.buttonBodyStartColor = 0x00000000; // Fully transparent color
+        theme.buttonBodyEndColor = 0x00000000; // Fully transparent color
         theme.enablePreview = false;
         theme.enableBorder = false;
         theme.size = 14.0f;
