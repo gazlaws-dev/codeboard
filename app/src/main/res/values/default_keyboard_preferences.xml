@@ -9,14 +9,14 @@
     <bool name="navbar">true</bool>
     <bool name="navbar_dark">false</bool>
     <bool name="top_row_actions">false</bool>
+    <bool name="button_blur_enabled">false</bool>
     <bool name="gradient_enabled">true</bool>
     <bool name="notification">false</bool>
-    <bool name="blur_enabled">false</bool>
     <integer name="theme">1</integer>
-    <integer name="transparency_level">100</integer>
     <integer name="vibrate_length">1</integer>
     <integer name="size_portrait">30</integer>
     <integer name="size_landscape">48</integer>
+    <integer name="button_transparency">100</integer>
     <integer name="bg_color">0xff263238</integer>
     <integer name="fg_color">0xffffffff</integer>
     <integer name="gradient_start_color">0xaa313131</integer>
