@@ -680,9 +680,6 @@ public class CodeBoardIME extends InputMethodService
             case 6:
                 themeInfo = ThemeDefinitions.Purple();
                 break;
-            case 7:
-                themeInfo = ThemeDefinitions.Transparent();
-                break;
             default:
                 themeInfo = ThemeDefinitions.Default();
                 break;
