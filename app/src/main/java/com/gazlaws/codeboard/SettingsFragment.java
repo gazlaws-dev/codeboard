@@ -324,7 +324,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
   
 
     @Override
-    public void onFocus() {
-      
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            getPreferenceManager().findPreference("change_keyboard").setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
+        }
+    
     }
 }
