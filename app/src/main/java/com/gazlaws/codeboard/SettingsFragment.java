@@ -298,4 +298,4 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             imePreference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
         }
     }
-e
+}
