@@ -52,11 +52,12 @@ public class ThemeDefinitions {
     }
 
     public static ThemeInfo White(){
-        return MaterialWhite();
+        ThemeInfo theme = MaterialWhite();
         theme.foregroundColor = cyanColor;
         theme.backgroundColor = whiteColor;
         theme.buttonBodyStartColor = lightBlueColor;
         theme.buttonBodyEndColor = lightPurpleColor;
+        return theme;
     }
 
     public static ThemeInfo Blue(){
