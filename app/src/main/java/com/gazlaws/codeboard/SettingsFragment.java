@@ -310,9 +310,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             @Override
             public void onColorChosen(int color) {
                 if (key.equals("bg_colour_picker")) {
-                    keyboardPreferences.setBgColor(color);
+                    keyboardPreferences.setBgColor(String.format("#%06X", (0xFFFFFF & color)));
                 } else if (key.equals("fg_colour_picker")) {
-                    keyboardPreferences.setFgColor(color);
+                    keyboardPreferences.setFgColor(String.format("#%06X", (0xFFFFFF & color)));
                 } else if (key.equals("gradient_start_color")) {
                     keyboardPreferences.setGradientStartColor(color);
                 } else if (key.equals("gradient_end_color")) {
