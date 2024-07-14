@@ -196,7 +196,7 @@ public class KeyboardButtonView extends View {
         Paint paint = new Paint();
 
         // Calculate alpha based on button transparency
-        int alpha = (int) (255 * (1 - uiTheme.buttonTransparency));
+        int alpha = (int) (255 * uiTheme.buttonTransparency);
         paint.setAlpha(alpha);
 
         if (keyboardPreferences.isGradientEnabled()) {
