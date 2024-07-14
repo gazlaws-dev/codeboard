@@ -134,30 +134,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         // Add transparency preference for button
         EditTextPreference transparencyPreference = findPreference("button_transparency");
         if (transparencyPreference != null) {
-            transparencyPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    float transparency = Float.parseFloat((String) newValue);
-                    keyboardPreferences.setButtonTransparency(transparency);
-                    preference.setSummary(String.valueOf(transparency));
-                    return true;
-                }
+            transparencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                float transparency = Float.parseFloat((String) newValue);
+                keyboardPreferences.setButtonTransparency(transparency);
+                preference.setSummary(String.valueOf(transparency));
+                return true;
             });
             float currentTransparency = keyboardPreferences.getButtonTransparency();
-            transparencyPreference.setText(String.valueOf(currentTransparency));
             transparencyPreference.setSummary(String.valueOf(currentTransparency));
         }
 
         // Add blur effect preference for button
         SwitchPreferenceCompat blurEffectPref = findPreference("button_blur_effect");
         if (blurEffectPref != null) {
-            blurEffectPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    boolean blurEnabled = (boolean) newValue;
-                    keyboardPreferences.setButtonBlurEffectEnabled(blurEnabled);
-                    return true;
-                }
+            blurEffectPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean blurEnabled = (boolean) newValue;
+                keyboardPreferences.setButtonBlurEffectEnabled(blurEnabled);
+                return true;
             });
             boolean blurEnabled = keyboardPreferences.isButtonBlurEffectEnabled();
             blurEffectPref.setChecked(blurEnabled);
