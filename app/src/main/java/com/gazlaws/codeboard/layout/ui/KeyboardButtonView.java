@@ -194,7 +194,10 @@ public class KeyboardButtonView extends View {
         float bottom = this.getHeight() - uiTheme.buttonBodyPadding;
 
         Paint paint = new Paint();
-        paint.setAlpha((int) (255 * (1 - uiTheme.buttonTransparency))); // Set transparency
+
+        // Calculate alpha based on button transparency
+        int alpha = (int) (255 * (1 - uiTheme.buttonTransparency));
+        paint.setAlpha(alpha);
 
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
