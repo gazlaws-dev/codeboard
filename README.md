@@ -9,7 +9,5 @@
 - ; / \ ! | &$ etc
 - No ads or IAP, made for students!
 
-**<p align="center">If you are using Codeboard and would like to thank me:</p>**
-
 ## I have updated version and added sounds also gradients option
 download from releases
