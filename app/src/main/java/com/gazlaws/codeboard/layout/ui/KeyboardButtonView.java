@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import androidx.annotation.NonNull;
+import android.widget.Toast;
 
 import com.gazlaws.codeboard.KeyboardPreferences;
 import com.gazlaws.codeboard.layout.Box;
