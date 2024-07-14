@@ -194,15 +194,13 @@ public class KeyboardButtonView extends View {
         float right = this.getWidth() - uiTheme.buttonBodyPadding;
         float bottom = this.getHeight() - uiTheme.buttonBodyPadding;
 
-        Paint paint = new Paint();
+        Paint paint = uiTheme.buttonBodyPaint; // Reuse the Paint object from UiTheme
 
         // Calculate alpha based on button transparency
         int alpha = (int) (255 * uiTheme.buttonTransparency);
         paint.setAlpha(alpha);
 
-        // Display transparency and alpha value using Toast
-        Toast.makeText(getContext(), "Button Transparency: " + uiTheme.buttonTransparency + ", Alpha Value: " + alpha, Toast.LENGTH_SHORT).show();
-
+        // Use gradient colors based on preferences
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
             int endColor = keyboardPreferences.getGradientEndColor();
@@ -216,6 +214,8 @@ public class KeyboardButtonView extends View {
         // Apply blur effect if enabled
         if (uiTheme.enableBlur) {
             paint.setMaskFilter(new BlurMaskFilter(uiTheme.blurRadius, BlurMaskFilter.Blur.NORMAL));
+        } else {
+            paint.setMaskFilter(null); // Clear any previous mask filter
         }
 
         // Draw rounded rectangle button body
