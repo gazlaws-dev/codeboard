@@ -89,21 +89,4 @@ public class ThemeDefinitions {
         theme.buttonBodyEndColor = lightPinkColor;
         return theme;
     }
-
-    public static ThemeInfo Transparent(){
-        ThemeInfo theme = MaterialDark();
-        theme.backgroundColor = 0x00000000; // Fully transparent color
-        theme.foregroundColor = whiteColor;
-        theme.buttonBodyStartColor = 0x00000000; // Fully transparent color
-        theme.buttonBodyEndColor = 0x00000000; // Fully transparent color
-        theme.enablePreview = false;
-        theme.enableBorder = false;
-        theme.size = 14.0f;
-        theme.fontSize = 16.0f;
-        theme.sizeLandscape = 18.0f;
-        theme.buttonTransparency = 0.5f; // Example: 50% transparency
-        theme.enableBlur = true; // Example: blur enabled
-        theme.blurRadius = 10.0f; // Example: blur radius of 10
-        return theme;
-    }
 }
