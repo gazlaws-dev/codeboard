@@ -11,5 +11,5 @@
 
 **<p align="center">If you are using Codeboard and would like to thank me:</p>**
 
-## I have updated version and added sounds also gradients option(__Still in Development__)
+## I have updated version and added sounds also gradients option
 download from releases
