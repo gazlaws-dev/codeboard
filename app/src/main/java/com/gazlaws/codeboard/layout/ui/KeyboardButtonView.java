@@ -199,6 +199,9 @@ public class KeyboardButtonView extends View {
         int alpha = (int) (255 * uiTheme.buttonTransparency);
         paint.setAlpha(alpha);
 
+        // Display transparency and alpha value using Toast
+        Toast.makeText(getContext(), "Button Transparency: " + uiTheme.buttonTransparency + ", Alpha Value: " + alpha, Toast.LENGTH_SHORT).show();
+
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
             int endColor = keyboardPreferences.getGradientEndColor();
