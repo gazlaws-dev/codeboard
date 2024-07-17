@@ -133,15 +133,16 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
 
         // Add transparency preference for button
-        EditTextPreference transparencyPreference = findPreference("button_transparency");
+        SeekBarPreference transparencyPreference = findPreference("button_transparency");
         if (transparencyPreference != null) {
             transparencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                float transparency = Float.parseFloat((String) newValue);
+                float transparency = (float) (int) newValue / 100.0f;  // Assuming SeekBarPreference returns integer
                 keyboardPreferences.setButtonTransparency(transparency);
                 preference.setSummary(String.valueOf(transparency));
                 return true;
             });
             float currentTransparency = keyboardPreferences.getButtonTransparency();
+            transparencyPreference.setValue((int) (currentTransparency * 100));
             transparencyPreference.setSummary(String.valueOf(currentTransparency));
         }
 

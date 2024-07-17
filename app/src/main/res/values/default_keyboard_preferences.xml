@@ -9,7 +9,7 @@
     <bool name="navbar">true</bool>
     <bool name="navbar_dark">false</bool>
     <bool name="top_row_actions">false</bool>
-    <bool name="button_blur_enabled">false</bool>
+    <bool name="button_blur_effect">false</bool>
     <bool name="gradient_enabled">true</bool>
     <bool name="notification">false</bool>
     <integer name="theme">1</integer>
