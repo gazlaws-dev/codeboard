@@ -225,8 +225,10 @@ public class KeyboardButtonView extends View {
     // Modifier methods
 
     public void applyShiftModifier(boolean shiftPressed) {
-        if (key.info.label != null) {
-            String nextLabel = shiftPressed ? key.info.onShiftLabel : key.info.label;
+        if (this.key.info.onShiftLabel != null){
+            String nextLabel = shiftPressed
+                    ? this.key.info.onShiftLabel
+                    : this.key.info.label;
             setCurrentLabel(nextLabel);
         }
     }
