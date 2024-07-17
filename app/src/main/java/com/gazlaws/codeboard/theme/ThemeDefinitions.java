@@ -29,7 +29,7 @@ public class ThemeDefinitions {
             16.0f,
             18.0f,
             buttonBodyStartColor,
-            buttonBodyEndColor,
+            buttonBodyEndColor 
         );
     }
 
