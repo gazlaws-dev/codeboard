@@ -20,8 +20,7 @@ public class ThemeInfo {
 
     // Constructor
     public ThemeInfo(int foregroundColor, int backgroundColor, boolean enablePreview, boolean enableBorder,
-                     float size, float fontSize, float sizeLandscape, int buttonBodyStartColor, int buttonBodyEndColor,
-                     float buttonTransparency, boolean enableBlur, float blurRadius) {
+                     float size, float fontSize, float sizeLandscape, int buttonBodyStartColor, int buttonBodyEndColor) {
         this.foregroundColor = foregroundColor;
         this.backgroundColor = backgroundColor;
         this.enablePreview = enablePreview;
