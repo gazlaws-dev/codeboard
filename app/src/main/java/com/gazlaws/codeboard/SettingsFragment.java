@@ -281,8 +281,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                 themeInfo = ThemeDefinitions.Default();
                 break;
         }
-        keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
-        keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        // keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
+        keyboardPreferences.setBgColor(themeInfo.backgroundColor);
+        // keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
+        keyboardPreferences.setFgColor(themeInfo.foregroundColor);
         keyboardPreferences.setGradientStartColor(themeInfo.buttonBodyStartColor);
         keyboardPreferences.setGradientEndColor(themeInfo.buttonBodyEndColor);
         //Worked

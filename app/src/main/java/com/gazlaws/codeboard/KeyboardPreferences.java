@@ -52,20 +52,36 @@ public class KeyboardPreferences {
         write("vibrate_ms", String.valueOf(length));
     }
 
-    public int getBgColor() {
-        return Integer.parseInt(safeRead("bg_colour_picker", String.valueOf(res.getInteger(R.integer.bg_color))));
+    // public int getBgColor() {
+    //     return Integer.parseInt(safeRead("bg_colour_picker", String.valueOf(res.getInteger(R.integer.bg_color))));
+    // }
+    //
+    // public void setBgColor(String color) {
+    //     write("bg_colour_picker", color);
+    // }
+    //
+    // public int getFgColor() {
+    //     return Integer.parseInt(safeRead("fg_colour_picker", String.valueOf(res.getInteger(R.integer.fg_color))));
+    // }
+    //
+    // public void setFgColor(String color) {
+    //     write("fg_colour_picker", color);
+    // }
+  
+    public void setBgColor(int color) {
+        sharedPreferences.edit().putInt("bgColor", color).apply();
     }
 
-    public void setBgColor(String color) {
-        write("bg_colour_picker", color);
+    public int getBgColor() {
+        return sharedPreferences.getInt("bgColor", Color.WHITE);
+    }
+
+    public void setFgColor(int color) {
+        sharedPreferences.edit().putInt("fgColor", color).apply();
     }
 
     public int getFgColor() {
-        return Integer.parseInt(safeRead("fg_colour_picker", String.valueOf(res.getInteger(R.integer.fg_color))));
-    }
-
-    public void setFgColor(String color) {
-        write("fg_colour_picker", color);
+        return sharedPreferences.getInt("fgColor", Color.BLACK);
     }
 
     public boolean isGradientEnabled() {
