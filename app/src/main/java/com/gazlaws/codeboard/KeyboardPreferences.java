@@ -102,8 +102,12 @@ public class KeyboardPreferences {
         preferences.edit().putInt(KEY_BUTTON_TRANSPARENCY, transparencyInt).apply();
     }
 
-    public void isButtonBlurEffectEnabled(boolean enabled) {
+    public void setButtonBlurEffectEnabled(boolean enabled) {
         preferences.edit().putBoolean(KEY_BUTTON_BLUR_ENABLED, enabled).apply();
+    }
+
+    public boolean isButtonBlurEffectEnabled() {
+        return preferences.getBoolean(KEY_BUTTON_BLUR_ENABLED, false);
     }
 
     public int getPortraitSize() {
