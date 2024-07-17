@@ -31,8 +31,5 @@ public class ThemeInfo {
         this.sizeLandscape = sizeLandscape;
         this.buttonBodyStartColor = buttonBodyStartColor;
         this.buttonBodyEndColor = buttonBodyEndColor;
-        this.buttonTransparency = buttonTransparency;
-        this.enableBlur = enableBlur;
-        this.blurRadius = blurRadius;
     }
 }

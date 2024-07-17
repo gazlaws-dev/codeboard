@@ -23,10 +23,6 @@ public class UiTheme {
     public int buttonBodyStartColor;
     public int buttonBodyEndColor;
 
-    // New fields for transparency and blur
-    public float buttonTransparency;
-    public boolean enableBlur;
-    public float blurRadius;
 
     private UiTheme() {
         this.foregroundPaint = new Paint();
@@ -63,10 +59,6 @@ public class UiTheme {
         theme.foregroundPaint.setAntiAlias(true);
         theme.foregroundPaint.setTypeface(Typeface.DEFAULT);
 
-        // New transparency and blur properties
-        theme.buttonTransparency = info.buttonTransparency;
-        theme.enableBlur = info.enableBlur;
-        theme.blurRadius = info.blurRadius;
 
         return theme;
     }

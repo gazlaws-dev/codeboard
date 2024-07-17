@@ -196,11 +196,11 @@ public class KeyboardButtonView extends View {
 
         Paint paint = uiTheme.buttonBodyPaint; // Reuse the Paint object from UiTheme
 
-        // Calculate alpha based on button transparency
+        // Calculate alpha based on button transparency from preferences
         int alpha = (int) (255 * keyboardPreferences.getButtonTransparency());
         paint.setAlpha(alpha);
 
-        // Use gradient colors based on preferences
+        // Use gradient colors based on preferences (example implementation)
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
             int endColor = keyboardPreferences.getGradientEndColor();
@@ -212,8 +212,9 @@ public class KeyboardButtonView extends View {
         }
 
         // Apply blur effect if enabled
-        if (keyboardPreferences.isButtonBlurEffectEnabled()) {
-            paint.setMaskFilter(new BlurMaskFilter(uiTheme.blurRadius, BlurMaskFilter.Blur.NORMAL));
+        if (keyboardPreferences.isButtonBlurEnabled()) {
+            int blurRadius = keyboardPreferences.getBlurRadius();
+            paint.setMaskFilter(new BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.NORMAL));
         } else {
             paint.setMaskFilter(null); // Clear any previous mask filter
         }

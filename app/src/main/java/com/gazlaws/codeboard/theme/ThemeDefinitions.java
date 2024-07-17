@@ -30,9 +30,6 @@ public class ThemeDefinitions {
             18.0f,
             buttonBodyStartColor,
             buttonBodyEndColor,
-            1.0f, // Default button transparency
-            false, // Default blur disabled
-            0.0f // Default blur radius
         );
     }
 
