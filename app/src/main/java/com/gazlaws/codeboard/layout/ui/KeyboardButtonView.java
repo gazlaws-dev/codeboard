@@ -234,8 +234,10 @@ public class KeyboardButtonView extends View {
     }
 
     public void applyCtrlModifier(boolean ctrlPressed) {
-        if (key.info.label != null) {
-            String nextLabel = ctrlPressed ? key.info.onCtrlLabel : key.info.label;
+        if (this.key.info.onCtrlLabel != null){
+            String nextLabel = ctrlPressed
+                    ? this.key.info.onCtrlLabel
+                    : this.key.info.label;
             setCurrentLabel(nextLabel);
         }
     }
