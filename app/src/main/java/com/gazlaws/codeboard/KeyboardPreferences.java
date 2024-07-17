@@ -109,7 +109,6 @@ public class KeyboardPreferences {
     public boolean isButtonBlurEffectEnabled() {
         return preferences.getBoolean(KEY_BUTTON_BLUR_ENABLED, false);
     }
-  //Worked
 
     public int getPortraitSize() {
         return Integer.parseInt(safeRead("size_portrait", String.valueOf(res.getInteger(R.integer.size_portrait))));
