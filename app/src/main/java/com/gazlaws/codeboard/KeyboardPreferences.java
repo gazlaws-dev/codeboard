@@ -81,7 +81,7 @@ public class KeyboardPreferences {
     }
 
     public int getFgColor() {
-        return preferences.getInt("fgColor");
+        return preferences.getInt("fgColor", Color.BLACK);
     }
 
     public boolean isGradientEnabled() {
