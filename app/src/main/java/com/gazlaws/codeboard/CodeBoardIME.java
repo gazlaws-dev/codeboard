@@ -684,9 +684,7 @@ public class CodeBoardIME extends InputMethodService
                 themeInfo = ThemeDefinitions.Default();
                 break;
         }
-        // keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(themeInfo.foregroundColor);
-        // keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
         keyboardPreferences.setBgColor(themeInfo.backgroundColor);
         return themeInfo;
     }
