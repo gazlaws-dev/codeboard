@@ -12,8 +12,6 @@
     <string name="vibrate_on_keypress">Vibrate on keypress</string>
     <string name="keyboard_size">Keyboard Size</string>
     <string name="keyboard_size_landscape">Keyboard Size (Landscape Mode)</string>
-    <string name="gradient_enable">Gradient</string>
-    <string name="transparent_value">Transparent Value</string>
     <string name="key_borders">Key Borders</string>
     <string name="my_default_tile_label">Open Keyboard</string>
     <string name="notification_channel_name">CodeboardNotification</string>

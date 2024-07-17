@@ -57,15 +57,15 @@
 
     <PreferenceCategory android:title="Appearance">
         <SeekBarPreference
-            android:key="transparency_level"
-            android:title="Transparency Level"
+            android:key="button_transparency"
+            android:title="Button Transparency"
             android:defaultValue="100"
             android:min="0"
             android:max="100"
             app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
-            android:key="blur_enabled"
+            android:key="button_blur_enabled"
             android:title="Enable Blur"
             android:defaultValue="false" />
     </PreferenceCategory>
