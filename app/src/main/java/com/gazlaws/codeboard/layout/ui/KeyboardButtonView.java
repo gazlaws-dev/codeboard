@@ -228,7 +228,7 @@ public class KeyboardButtonView extends View {
         int alpha = (int) (255 * keyboardPreferences.getButtonTransparency());
         paint.setAlpha(alpha);
 
-        // Use gradient colors based on preferences (example implementation)
+        // Use gradient colors based on preferences (example implementation) 
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
             int endColor = keyboardPreferences.getGradientEndColor();
