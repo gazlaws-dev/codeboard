@@ -212,7 +212,7 @@ public class KeyboardButtonView extends View {
         }
 
         // Apply blur effect if enabled (default blur radius used)
-        if (keyboardPreferences.isButtonBlurEnabled()) {
+        if (keyboardPreferences.isButtonBlurEffectEnabled()) {
             paint.setMaskFilter(new BlurMaskFilter(uiTheme.defaultBlurRadius, BlurMaskFilter.Blur.NORMAL));
         } else {
             paint.setMaskFilter(null); // Clear any previous mask filter
