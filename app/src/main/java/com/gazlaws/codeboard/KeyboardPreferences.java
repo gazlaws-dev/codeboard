@@ -93,15 +93,13 @@ public class KeyboardPreferences {
     }
 
     public float getButtonTransparency() {
-        return preferences.getFloat(KEY_BUTTON_TRANSPARENCY, 1.0f); // Default value 1.0f (fully opaque)
+        int transparencyInt = preferences.getInt(KEY_BUTTON_TRANSPARENCY, 100); // Default value 100 (fully opaque)
+        return transparencyInt / 100f;
     }
 
     public void setButtonTransparency(float transparency) {
-        preferences.edit().putFloat(KEY_BUTTON_TRANSPARENCY, transparency).apply();
-    }
-
-    public boolean isButtonBlurEffectEnabled() {
-        return preferences.getBoolean(KEY_BUTTON_BLUR_ENABLED, false); // Default value false (disabled)
+        int transparencyInt = (int) (transparency * 100);
+        preferences.edit().putInt(KEY_BUTTON_TRANSPARENCY, transparencyInt).apply();
     }
 
     public void setButtonBlurEffectEnabled(boolean enabled) {

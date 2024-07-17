@@ -136,14 +136,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         SeekBarPreference transparencyPreference = findPreference("button_transparency");
         if (transparencyPreference != null) {
             transparencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                float transparency = (float) (int) newValue / 100.0f;  // Assuming SeekBarPreference returns integer
+                int transparencyInt = (int) newValue;
+                float transparency = transparencyInt / 100f;
                 keyboardPreferences.setButtonTransparency(transparency);
-                preference.setSummary(String.valueOf(transparency));
+                preference.setSummary(String.valueOf(transparencyInt));
                 return true;
             });
             float currentTransparency = keyboardPreferences.getButtonTransparency();
-            transparencyPreference.setValue((int) (currentTransparency * 100));
-            transparencyPreference.setSummary(String.valueOf(currentTransparency));
+            transparencyPreference.setSummary(String.valueOf((int) (currentTransparency * 100)));
         }
 
         // Add blur effect preference for button
