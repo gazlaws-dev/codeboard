@@ -9,5 +9,3 @@
 - ; / \ ! | &$ etc
 - No ads or IAP, made for students!
 
-## I have updated version and added sounds also gradients option
-download from releases
