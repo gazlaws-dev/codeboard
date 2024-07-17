@@ -11,6 +11,7 @@ import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import androidx.annotation.NonNull;
 import android.widget.Toast;
@@ -55,7 +56,8 @@ public class KeyboardButtonView extends View {
                 onPress();
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_CANCEL: 
+      // ACTION_CANCEL is used to handle the case where the user moves their finger off the button
                 onRelease();
                 break;
             default:
@@ -135,16 +137,19 @@ public class KeyboardButtonView extends View {
             startRepeating();
         }
         submitKeyEvent();
+        animatePress();
     }
 
     private void onRelease() {
         isPressed = false;
+//      NOTE: If the arrow keys move out of the input view, the onRelease is never called
         if (key.info.code != 0) {
             inputService.onRelease(key.info.code);
         }
         if (key.info.isRepeatable) {
             stopRepeating();
         }
+        animateRelease();
     }
 
     private void submitKeyEvent() {
@@ -163,6 +168,7 @@ public class KeyboardButtonView extends View {
     }
 
     private void stopRepeating() {
+    //  NOTE: This method is synchronized means that only one thread can access it at a time
         synchronized (this) {
             if (timer == null) {
                 return;
@@ -185,6 +191,28 @@ public class KeyboardButtonView extends View {
                     submitKeyEvent();
                 }
             }, 200, 70);
+        }
+    }
+
+    private void animatePress(){
+        if (uiTheme.enablePreview){
+            this.setTranslationY(-200.0f);
+            this.setScaleX(1.2f);
+            this.setScaleY(1.2f);
+            this.setElevation(21.0f);
+        } else {
+            this.setAlpha(.1f);
+        }
+    }
+
+    private void animateRelease() {
+        if (uiTheme.enablePreview){
+            this.setTranslationY(0.0f);
+            this.setScaleX(1.0f);
+            this.setScaleY(1.0f);
+            this.setElevation(0.0f);
+        } else {
+            this.animate().alpha(1.0f).setDuration(400);
         }
     }
 
