@@ -102,7 +102,7 @@ public class KeyboardPreferences {
         preferences.edit().putInt(KEY_BUTTON_TRANSPARENCY, transparencyInt).apply();
     }
 
-    public void setButtonBlurEffectEnabled(boolean enabled) {
+    public void isButtonBlurEffectEnabled(boolean enabled) {
         preferences.edit().putBoolean(KEY_BUTTON_BLUR_ENABLED, enabled).apply();
     }
 
