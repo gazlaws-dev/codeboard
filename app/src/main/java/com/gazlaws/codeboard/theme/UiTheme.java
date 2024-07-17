@@ -14,6 +14,7 @@ public class UiTheme {
     public float buttonBodyPadding = 5.0f;
     public Paint buttonBodyPaint;
     public float buttonBodyBorderRadius = 8.0f;
+    public float defaultBlurRadius = 5.0f;
     public boolean enablePreview = false;
     public boolean enableBorder;
     public float portraitSize;
