@@ -69,19 +69,19 @@ public class KeyboardPreferences {
     // }
   
     public void setBgColor(int color) {
-        sharedPreferences.edit().putInt("bgColor", color).apply();
+        preferences.edit().putInt("bgColor", color).apply();
     }
 
     public int getBgColor() {
-        return sharedPreferences.getInt("bgColor", Color.WHITE);
+        return preferences.getInt("bgColor", Color.WHITE);
     }
 
     public void setFgColor(int color) {
-        sharedPreferences.edit().putInt("fgColor", color).apply();
+        preferences.edit().putInt("fgColor", color).apply();
     }
 
     public int getFgColor() {
-        return sharedPreferences.getInt("fgColor", Color.BLACK);
+        return preferences.getInt("fgColor");
     }
 
     public boolean isGradientEnabled() {
