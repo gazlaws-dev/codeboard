@@ -68,7 +68,20 @@
 
         <SwitchPreferenceCompat
             android:key="button_blur_effect"
-            android:title="Enable Blur"
+            android:title="Enable Button Blur"
+            android:defaultValue="false" />
+
+        <SeekBarPreference
+            android:key="bg_transparency"
+            android:title="Background Transparency"
+            android:defaultValue="100"
+            android:min="0"
+            android:max="100"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="bg_blur_effect"
+            android:title="Enable Background Blur"
             android:defaultValue="false" />
 
     </PreferenceCategory>

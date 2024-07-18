@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import androidx.core.graphics.ColorUtils;
+import android.graphics.BlurMaskFilter;
 
 public class UiTheme {
 
@@ -15,6 +16,7 @@ public class UiTheme {
     public Paint buttonBodyPaint;
     public float buttonBodyBorderRadius = 8.0f;
     public float defaultBlurRadius = 5.0f;
+    public float defaultBgBlurRadius = 5.0f;
     public boolean enablePreview = false;
     public boolean enableBorder;
     public float portraitSize;
@@ -24,6 +26,9 @@ public class UiTheme {
     public int buttonBodyStartColor;
     public int buttonBodyEndColor;
 
+    // New fields for transparency and blur
+    public float bgTransparency;
+    public boolean bgBlurEffectEnabled;
 
     private UiTheme() {
         this.foregroundPaint = new Paint();
@@ -31,18 +36,30 @@ public class UiTheme {
         backgroundColor = 0xff000000;
     }
 
-    public static UiTheme buildFromInfo(ThemeInfo info) {
+    public static UiTheme buildFromInfo(ThemeInfo info, float transparency, boolean blurEnabled) {
         UiTheme theme = new UiTheme();
         theme.portraitSize = info.size;
         theme.landscapeSize = info.sizeLandscape;
         theme.enablePreview = info.enablePreview;
         theme.enableBorder = info.enableBorder;
 
+        theme.bgTransparency = transparency;
+        theme.bgBlurEffectEnabled = blurEnabled;
+
+        // Apply transparency
+        int alpha = (int) (255 * transparency);
+        theme.backgroundColor = ColorUtils.setAlphaComponent(info.backgroundColor, alpha);
+
+        // Apply blur effect if enabled
+        if (blurEnabled) {
+            theme.buttonBodyPaint.setMaskFilter(new BlurMaskFilter(theme.defaultBgBlurRadius, BlurMaskFilter.Blur.NORMAL));
+        }
+
         // Background - darker border
         if (info.enableBorder) {
-            theme.backgroundColor = ColorUtils.blendARGB(info.backgroundColor, Color.BLACK, 0.2f);
+            theme.backgroundColor = ColorUtils.blendARGB(theme.backgroundColor, Color.BLACK, 0.2f);
         } else {
-            theme.backgroundColor = info.backgroundColor;
+            theme.backgroundColor = theme.backgroundColor;
         }
 
         // Button body
@@ -59,7 +76,6 @@ public class UiTheme {
         theme.foregroundPaint.setTextAlign(Paint.Align.CENTER);
         theme.foregroundPaint.setAntiAlias(true);
         theme.foregroundPaint.setTypeface(Typeface.DEFAULT);
-
 
         return theme;
     }

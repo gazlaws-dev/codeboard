@@ -146,16 +146,42 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             transparencyPreference.setSummary(String.valueOf((int) (currentTransparency * 100)));
         }
 
+        // Add transparency preference for background
+        SeekBarPreference bgTransparencyPreference = findPreference("bg_transparency");
+        if (bgTransparencyPreference != null) {
+            bgTransparencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                int bgTransparencyInt = (int) newValue;
+                float bgTransparency = bgTransparencyInt / 100f;
+                keyboardPreferences.setBgTransparency(bgTransparency);
+                preference.setSummary(String.valueOf(bgTransparencyInt));
+                return true;
+            });
+            float currentBgTransparency = keyboardPreferences.getBgTransparency();
+            bgTransparencyPreference.setSummary(String.valueOf((int) (currentBgTransparency * 100)));
+        }
+
         // Add blur effect preference for button
-        SwitchPreferenceCompat blurEffectPref = findPreference("button_blur_effect");
-        if (blurEffectPref != null) {
-            blurEffectPref.setOnPreferenceChangeListener((preference, newValue) -> {
+        SwitchPreferenceCompat buttonBlurEffectPref = findPreference("button_blur_effect");
+        if (buttonBlurEffectPref != null) {
+            buttonBlurEffectPref.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean blurEnabled = (boolean) newValue;
                 keyboardPreferences.setButtonBlurEffectEnabled(blurEnabled);
                 return true;
             });
             boolean blurEnabled = keyboardPreferences.isButtonBlurEffectEnabled();
-            blurEffectPref.setChecked(blurEnabled);
+            buttonBlurEffectPref.setChecked(blurEnabled);
+        }
+
+        // Add blur effect preference for background
+        SwitchPreferenceCompat bgBlurEffectPref = findPreference("bg_blur_effect");
+        if (bgBlurEffectPref != null) {
+            bgBlurEffectPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean bgBlurEnabled = (boolean) newValue;
+                keyboardPreferences.setBgBlurEffectEnabled(bgBlurEnabled);
+                return true;
+            });
+            boolean bgBlurEnabled = keyboardPreferences.isBgBlurEffectEnabled();
+            bgBlurEffectPref.setChecked(bgBlurEnabled);
         }
     }
 
