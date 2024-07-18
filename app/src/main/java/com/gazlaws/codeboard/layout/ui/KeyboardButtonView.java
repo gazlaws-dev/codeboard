@@ -236,9 +236,9 @@ public class KeyboardButtonView extends View {
             paint.setShader(shader);
         } else {
             // Shader shader = new LinearGradient(left, top, right, bottom, uiTheme.buttonBodyStartColor, uiTheme.buttonBodyEndColor, Shader.TileMode.CLAMP);
-      // We dont want to add grafients so we will use the default color not buttonbodystartcolor and buttonbodyendcolor
             // paint.setShader(shader);
-            paint.setColor(uiTheme.buttonBodyColor);
+            // Use buttonBodyPaint color
+            paint.setShader(null); // Clear any previous shader
         }
 
         // Apply blur effect if enabled (default blur radius used)
