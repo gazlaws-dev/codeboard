@@ -36,7 +36,7 @@ public class UiTheme {
         backgroundColor = 0xff000000;
     }
 
-    public static UiTheme buildFromInfo(ThemeInfo info, float transparency, boolean blurEnabled) {
+    public static UiTheme buildFromInfo(ThemeInfo info) {
         UiTheme theme = new UiTheme();
         theme.portraitSize = info.size;
         theme.landscapeSize = info.sizeLandscape;
