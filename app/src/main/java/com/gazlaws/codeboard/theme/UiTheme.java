@@ -16,8 +16,8 @@ public class UiTheme {
     public float buttonBodyPadding = 5.0f;
     public Paint buttonBodyPaint;
     public float buttonBodyBorderRadius = 8.0f;
-    public float defaultBlurRadius = 5.0f;
-    public float defaultBgBlurRadius = 5.0f;
+    public float defaultBlurRadius = 5.0f; // Used for button body blur
+    public float defaultBgBlurRadius = 5.0f; // Could be used for background blur if needed
     public boolean enablePreview = false;
     public boolean enableBorder;
     public float portraitSize;
@@ -35,6 +35,10 @@ public class UiTheme {
         this.foregroundPaint = new Paint();
         this.buttonBodyPaint = new Paint();
         backgroundColor = 0xff000000;
+
+        // Initialize new fields
+        bgTransparency = 1.0f; // Default fully opaque
+        bgBlurEffectEnabled = false; // Default disabled
     }
 
     public static UiTheme buildFromInfo(ThemeInfo info, KeyboardPreferences preferences) {
@@ -78,6 +82,10 @@ public class UiTheme {
         theme.foregroundPaint.setTextAlign(Paint.Align.CENTER);
         theme.foregroundPaint.setAntiAlias(true);
         theme.foregroundPaint.setTypeface(Typeface.DEFAULT);
+
+        // Set transparency and blur effect fields
+        theme.bgTransparency = transparency;
+        theme.bgBlurEffectEnabled = blurEnabled;
 
         return theme;
     }
