@@ -3,7 +3,7 @@ package com.gazlaws.codeboard.layout.ui;
 import android.content.Context;
 import android.inputmethodservice.KeyboardView;
 import android.view.View;
-import android.widget.ViewGroup;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.gazlaws.codeboard.layout.Box;
