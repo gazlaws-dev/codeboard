@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import androidx.core.graphics.ColorUtils;
+import com.gazlaws.codeboard.KeyboardPreferences;
 import android.graphics.BlurMaskFilter;
 
 public class UiTheme {
@@ -36,30 +37,31 @@ public class UiTheme {
         backgroundColor = 0xff000000;
     }
 
-    public static UiTheme buildFromInfo(ThemeInfo info) {
+    public static UiTheme buildFromInfo(ThemeInfo info, KeyboardPreferences preferences) {
         UiTheme theme = new UiTheme();
         theme.portraitSize = info.size;
         theme.landscapeSize = info.sizeLandscape;
         theme.enablePreview = info.enablePreview;
         theme.enableBorder = info.enableBorder;
 
-        theme.bgTransparency = transparency;
-        theme.bgBlurEffectEnabled = blurEnabled;
+        // Get background transparency from preferences
+        float transparency = preferences.getBgTransparency();
 
-        // Apply transparency
+        // Apply transparency to background color
         int alpha = (int) (255 * transparency);
         theme.backgroundColor = ColorUtils.setAlphaComponent(info.backgroundColor, alpha);
 
+        // Get blur effect enabled status from preferences
+        boolean blurEnabled = preferences.isBgBlurEffectEnabled();
+
         // Apply blur effect if enabled
         if (blurEnabled) {
-            theme.buttonBodyPaint.setMaskFilter(new BlurMaskFilter(theme.defaultBgBlurRadius, BlurMaskFilter.Blur.NORMAL));
+            theme.buttonBodyPaint.setMaskFilter(new BlurMaskFilter(theme.defaultBlurRadius, BlurMaskFilter.Blur.NORMAL));
         }
 
         // Background - darker border
         if (info.enableBorder) {
             theme.backgroundColor = ColorUtils.blendARGB(theme.backgroundColor, Color.BLACK, 0.2f);
-        } else {
-            theme.backgroundColor = theme.backgroundColor;
         }
 
         // Button body
