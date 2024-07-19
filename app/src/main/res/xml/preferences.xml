@@ -128,11 +128,11 @@
             android:title="Gradient End Color" />
         <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="custom_button_color"
+            android:key="custom_button_color_enabled"
             android:title="Set Custom Button Color" />
         <Preference
+            android:dependency="custom_button_color_enabled"
             android:defaultValue="@integer/custom_button_color"
-            android:dependency="custom_button_color"
             android:key="button_color_picker"
             android:title="Button Color" />
         <SwitchPreferenceCompat

@@ -12,6 +12,7 @@
     <bool name="button_blur_effect">false</bool>
     <bool name="bg_blur_effect">false</bool>
     <bool name="gradient_enabled">true</bool>
+    <bool name="custom_button_color_enabled">false</bool>
     <bool name="notification">false</bool>
     <integer name="theme">1</integer>
     <integer name="vibrate_length">1</integer>
@@ -21,7 +22,7 @@
     <integer name="bg_transparency">100</integer>
     <integer name="bg_color">0xff263238</integer>
     <integer name="fg_color">0xffffffff</integer>
-    <integer name="custom_button_color">0xffffffff</integer>
+    <integer name="custom_button_color">0xff263238</integer>
     <integer name="gradient_start_color">0xaa313131</integer>
     <integer name="gradient_end_color">0xff22262b</integer>
     <integer name="font_size">16</integer>

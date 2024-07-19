@@ -185,7 +185,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         }
 
         // Add button color preferences
-        SwitchPreferenceCompat customButtonColorPref = findPreference("custom_button_color");
+        SwitchPreferenceCompat customButtonColorEnabledPref = findPreference("custom_button_color_enabled");
         Preference buttonColorPickerPref = findPreference("button_color_picker");
 
         if (buttonColorPickerPref != null) {
@@ -195,18 +195,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             });
         }
 
-        if (customButtonColorPref != null) {
-            customButtonColorPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        if (customButtonColorEnabledPref != null) {
+            customButtonColorEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean enabled = (boolean) newValue;
-                    buttonColorPickerPref.setEnabled(enabled);
+                    if (buttonColorPickerPref != null) {
+                        buttonColorPickerPref.setEnabled(enabled);
+                    }
                     return true;
                 }
             });
 
-            boolean customButtonColorEnabled = customButtonColorPref.isChecked();
-            if (buttonColorPickerPref != null) buttonColorPickerPref.setEnabled(customButtonColorEnabled);
+            boolean customButtonColorEnabled = customButtonColorEnabledPref.isChecked();
+            if (buttonColorPickerPref != null) {
+                buttonColorPickerPref.setEnabled(customButtonColorEnabled);
+            }
         }
     }
 
@@ -349,7 +353,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             color = keyboardPreferences.getGradientStartColor();
         } else if (key.equals("gradient_end_color")) {
             color = keyboardPreferences.getGradientEndColor();
-        } else if (key.equals("button_color_picker")) { 
+        } else if (key.equals("button_color_picker")) {
             color = keyboardPreferences.getCustomButtonColor(); 
         }
 
