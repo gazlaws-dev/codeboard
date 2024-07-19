@@ -222,27 +222,33 @@ public class KeyboardButtonView extends View {
         float right = this.getWidth() - uiTheme.buttonBodyPadding;
         float bottom = this.getHeight() - uiTheme.buttonBodyPadding;
 
-        Paint paint = uiTheme.buttonBodyPaint; // Reuse the Paint object from UiTheme
+        Paint paint = uiTheme.buttonBodyPaint;
 
         // Calculate alpha based on button transparency from preferences
         int alpha = (int) (255 * keyboardPreferences.getButtonTransparency());
         paint.setAlpha(alpha);
 
-        if (keyboardPreferences.isGradientEnabled()) {
-            int startColor = keyboardPreferences.getGradientStartColor();
-            int endColor = keyboardPreferences.getGradientEndColor();
-            Shader shader = new LinearGradient(left, top, right, bottom, startColor, endColor, Shader.TileMode.CLAMP);
-            paint.setShader(shader);
-        } else {
-            // Shader shader = new LinearGradient(left, top, right, bottom, uiTheme.buttonBodyStartColor, uiTheme.buttonBodyEndColor, Shader.TileMode.CLAMP);
-            // Use buttonBodyPaint color
+        // Check if custom button color is enabled
+        if (keyboardPreferences.isCustomButtonColorEnabled()) {
+            int customColor = keyboardPreferences.getCustomButtonColor();
+            paint.setColor(customColor);
             paint.setShader(null); // Clear any previous shader
+        } else {
+            if (keyboardPreferences.isGradientEnabled()) {
+                int startColor = keyboardPreferences.getGradientStartColor();
+                int endColor = keyboardPreferences.getGradientEndColor();
+                Shader shader = new LinearGradient(left, top, right, bottom, startColor, endColor, Shader.TileMode.CLAMP);
+                paint.setShader(shader);
+            } else {
+                paint.setShader(null); // Clear any previous shader
+                paint.setColor(uiTheme.buttonBodyColor); // Default color if no gradient
+            }
         }
 
         if (keyboardPreferences.isButtonBlurEffectEnabled()) {
             paint.setMaskFilter(new BlurMaskFilter(uiTheme.defaultBlurRadius, BlurMaskFilter.Blur.NORMAL));
         } else {
-            paint.setMaskFilter(null); // Clear any previous mask filter
+            paint.setMaskFilter(null);
         }
 
         // Draw rounded rectangle button body
