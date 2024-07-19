@@ -299,7 +299,7 @@ public class Definitions {
         }
         keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(3f);
         // Lets add AlT key
-        keyboard.addKey("Alt", CODE_ALT).asModifier().onCtrlShow("ALT");
+        keyboard.addKey("Alt", CODE_ALT).asModifier();
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
