@@ -18,12 +18,12 @@ import java.util.Collection;
 public class KeyboardUiFactory {
 
     private final KeyboardView.OnKeyboardActionListener inputService;
-    private final KeyboardPreferences keyboardPreferences; // Add this line
+    private final KeyboardPreferences keyboardPreferences;
     public ThemeInfo theme = ThemeDefinitions.Default();
 
     public KeyboardUiFactory(KeyboardView.OnKeyboardActionListener inputService, KeyboardPreferences keyboardPreferences) { // Modify constructor
         this.inputService = inputService;
-        this.keyboardPreferences = keyboardPreferences; // Initialize keyboardPreferences
+        this.keyboardPreferences = keyboardPreferences; 
     }
 
     public KeyboardLayoutView createKeyboardView(Context context, Collection<Key> keys){

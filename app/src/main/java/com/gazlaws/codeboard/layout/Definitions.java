@@ -21,6 +21,7 @@ public class Definitions {
         int CODE_ARROW_RIGHT = 5003;
         keyboard.newRow()
                 .addKey("Esc", CODE_ESCAPE)
+                .addKey("Alt", 18)
                 .addTabKey()
                 .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_left_24dp), CODE_ARROW_LEFT).asRepeatable()
                 .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_down_24dp), CODE_ARROW_DOWN).asRepeatable()
@@ -243,7 +244,7 @@ public class Definitions {
         for (int i = 0; i < (chars.length + 1) / 2 && chars.length > 0; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f);
+        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(4f);
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
