@@ -228,7 +228,6 @@ public class KeyboardButtonView extends View {
         int alpha = (int) (255 * keyboardPreferences.getButtonTransparency());
         paint.setAlpha(alpha);
 
-        // Use gradient colors based on preferences (example implementation) 
         if (keyboardPreferences.isGradientEnabled()) {
             int startColor = keyboardPreferences.getGradientStartColor();
             int endColor = keyboardPreferences.getGradientEndColor();
@@ -240,7 +239,6 @@ public class KeyboardButtonView extends View {
             paint.setShader(null); // Clear any previous shader
         }
 
-        // Apply blur effect if enabled (default blur radius used)
         if (keyboardPreferences.isButtonBlurEffectEnabled()) {
             paint.setMaskFilter(new BlurMaskFilter(uiTheme.defaultBlurRadius, BlurMaskFilter.Blur.NORMAL));
         } else {

@@ -14,9 +14,9 @@ public class ThemeInfo {
     public int buttonBodyEndColor;
 
     // Add new fields
-    public float buttonTransparency;
-    public boolean enableBlur;
-    public float blurRadius;
+    // public float buttonTransparency;
+    // public boolean enableBlur;
+    // public float blurRadius;
 
     // Constructor
     public ThemeInfo(int foregroundColor, int backgroundColor, boolean enablePreview, boolean enableBorder,

@@ -6,6 +6,7 @@
     <bool name="borders">true</bool>
     <bool name="gradient">false</bool>
     <bool name="custom_theme">false</bool>
+    <bool name="custom_button_color">false</bool>
     <bool name="navbar">true</bool>
     <bool name="navbar_dark">false</bool>
     <bool name="top_row_actions">false</bool>

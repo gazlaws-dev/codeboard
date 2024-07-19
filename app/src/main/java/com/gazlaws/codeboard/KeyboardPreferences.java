@@ -17,6 +17,7 @@ public class KeyboardPreferences {
     private static final String KEY_BG_TRANSPARENCY = "bg_transparency";
     private static final String KEY_BUTTON_BLUR_ENABLED = "button_blur_effect";
     private static final String KEY_BG_BLUR_ENABLED = "bg_blur_effect";
+    private static final String KEY_CUSTOM_BUTTON_COLOR = "custom_button_color";
     private static final String KEY_GRADIENT_ENABLED = "gradient_enabled";
     private static final String KEY_GRADIENT_START_COLOR = "gradient_start_color";
     private static final String KEY_GRADIENT_END_COLOR = "gradient_end_color";
@@ -110,13 +111,21 @@ public class KeyboardPreferences {
         preferences.edit().putInt(KEY_GRADIENT_END_COLOR, color).apply();
     }
 
+    public void setCustomButtonColor(int color) {
+        preferences.edit().putInt(KEY_CUSTOM_BUTTON_COLOR, color).apply();
+    }
+
+    public int getCustomButtonColor() {
+        return preferences.getInt(KEY_CUSTOM_BUTTON_COLOR, Color.BLACK);
+    }
+
     public float getButtonTransparency() {
         int transparencyInt = preferences.getInt(KEY_BUTTON_TRANSPARENCY, 100); // Default value 100 (fully opaque)
         return transparencyInt / 100f;
     }
 
     public float getBgTransparency() {
-        int transparencyInt = preferences.getInt(KEY_BG_TRANSPARENCY, 100); // Default value 100 (fully opaque)
+        int transparencyInt = preferences.getInt(KEY_BG_TRANSPARENCY, 100);
         return transparencyInt / 100f;
     }
 

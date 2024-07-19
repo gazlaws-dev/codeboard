@@ -183,6 +183,31 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             boolean bgBlurEnabled = keyboardPreferences.isBgBlurEffectEnabled();
             bgBlurEffectPref.setChecked(bgBlurEnabled);
         }
+
+        // Add button color preferences
+        SwitchPreferenceCompat customButtonColorPref = findPreference("custom_button_color");
+        Preference buttonColorPickerPref = findPreference("button_color_picker");
+
+        if (buttonColorPickerPref != null) {
+            buttonColorPickerPref.setOnPreferenceClickListener(preference -> {
+                openColourPicker("button_color_picker");
+                return true;
+            });
+        }
+
+        if (customButtonColorPref != null) {
+            customButtonColorPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean enabled = (boolean) newValue;
+                    buttonColorPickerPref.setEnabled(enabled);
+                    return true;
+                }
+            });
+
+            boolean customButtonColorEnabled = customButtonColorPref.isChecked();
+            if (buttonColorPickerPref != null) buttonColorPickerPref.setEnabled(customButtonColorEnabled);
+        }
     }
 
     public static CharSequence getCurrentImeLabel(Context context) {
@@ -218,6 +243,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                 break;
             case "bg_colour_picker":
             case "fg_colour_picker":
+            case "button_color_picker": 
                 openColourPicker(preference.getKey());
                 getPreferenceManager().findPreference("theme").setSummary("Custom Theme is set");
                 break;
@@ -311,7 +337,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         keyboardPreferences.setFgColor(themeInfo.foregroundColor);
         keyboardPreferences.setGradientStartColor(themeInfo.buttonBodyStartColor);
         keyboardPreferences.setGradientEndColor(themeInfo.buttonBodyEndColor);
-        //Worked
     }
 
     public void openColourPicker(final String key) {
@@ -324,6 +349,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             color = keyboardPreferences.getGradientStartColor();
         } else if (key.equals("gradient_end_color")) {
             color = keyboardPreferences.getGradientEndColor();
+        } else if (key.equals("button_color_picker")) { 
+            color = keyboardPreferences.getCustomButtonColor(); 
         }
 
         ColorPicker colorPicker = new ColorPicker(getActivity(), Color.red(color), Color.green(color), Color.blue(color));
@@ -339,18 +366,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                     keyboardPreferences.setGradientStartColor(color);
                 } else if (key.equals("gradient_end_color")) {
                     keyboardPreferences.setGradientEndColor(color);
-                }
+                } else if (key.equals("button_color_picker")) {
+                    keyboardPreferences.setCustomButtonColor(color);                }
             }
         });
         colorPicker.show();
     }
-  
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             getPreferenceManager().findPreference("change_keyboard").setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
         }
-    
     }
 }
