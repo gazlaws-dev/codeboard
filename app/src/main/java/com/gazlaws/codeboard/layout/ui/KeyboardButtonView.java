@@ -228,21 +228,18 @@ public class KeyboardButtonView extends View {
         int alpha = (int) (255 * keyboardPreferences.getButtonTransparency());
         paint.setAlpha(alpha);
 
-        // Check if custom button color is enabled
-        if (keyboardPreferences.isCustomButtonColorEnabled()) {
-            int customColor = keyboardPreferences.getCustomButtonColor();
-            paint.setColor(customColor);
-            paint.setShader(null); // Clear any previous shader
+        if (keyboardPreferences.isGradientEnabled()) {
+            int startColor = keyboardPreferences.getGradientStartColor();
+            int endColor = keyboardPreferences.getGradientEndColor();
+            Shader shader = new LinearGradient(left, top, right, bottom, startColor, endColor, Shader.TileMode.CLAMP);
+            paint.setShader(shader);
         } else {
-            if (keyboardPreferences.isGradientEnabled()) {
-                int startColor = keyboardPreferences.getGradientStartColor();
-                int endColor = keyboardPreferences.getGradientEndColor();
-                Shader shader = new LinearGradient(left, top, right, bottom, startColor, endColor, Shader.TileMode.CLAMP);
-                paint.setShader(shader);
+            if (keyboardPreferences.isCustomButtonColorEnabled()) {
+                paint.setColor(keyboardPreferences.getCustomButtonColor());
             } else {
-                paint.setShader(null); // Clear any previous shader
-                paint.setColor(uiTheme.buttonBodyColor); // Default color if no gradient
+                paint.setColor(uiTheme.backgroundColor);
             }
+            paint.setShader(null); // Clear any previous shader
         }
 
         if (keyboardPreferences.isButtonBlurEffectEnabled()) {
