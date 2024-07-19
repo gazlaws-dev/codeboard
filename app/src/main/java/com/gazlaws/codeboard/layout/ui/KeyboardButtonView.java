@@ -238,6 +238,7 @@ public class KeyboardButtonView extends View {
                 paint.setColor(keyboardPreferences.getCustomButtonColor());
             } else {
                 paint = uiTheme.buttonBodyPaint;
+                paint.setAlpha(alpha);
             }
             paint.setShader(null); // Clear any previous shader
         }
