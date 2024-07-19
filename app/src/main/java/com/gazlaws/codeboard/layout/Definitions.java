@@ -9,7 +9,7 @@ public class Definitions {
     private Context context;
     private static final int CODE_ESCAPE = -2;
     private static final int CODE_SYMBOLS = -1;
-    private static final int CODE_ALT = -18;
+    private static final int CODE_ALT = 46;
 
     public Definitions(Context current) {
         this.context = current;

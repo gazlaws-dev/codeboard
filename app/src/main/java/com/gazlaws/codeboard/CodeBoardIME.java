@@ -224,7 +224,7 @@ public class CodeBoardIME extends InputMethodService
                     case -2:
                         ke = KeyEvent.KEYCODE_ESCAPE;
                         break;
-                    case -18:
+                    case 46:
                         // AlT Key
                         ke = KeyEvent.KEYCODE_ALT_LEFT;
                         break;
