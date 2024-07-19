@@ -9,7 +9,6 @@ public class Definitions {
     private Context context;
     private static final int CODE_ESCAPE = -2;
     private static final int CODE_SYMBOLS = -1;
-    private static final int CODE_ALT = 46;
 
     public Definitions(Context current) {
         this.context = current;
@@ -297,9 +296,7 @@ public class Definitions {
         for (int i = 0; i < (chars.length + 1) / 2 && chars.length > 0; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(3f);
-        // Lets add AlT key
-        keyboard.addKey("Alt", CODE_ALT).asModifier();
+        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f);
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }

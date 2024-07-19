@@ -224,10 +224,6 @@ public class CodeBoardIME extends InputMethodService
                     case -2:
                         ke = KeyEvent.KEYCODE_ESCAPE;
                         break;
-                    case 46:
-                        // AlT Key
-                        ke = KeyEvent.KEYCODE_ALT_LEFT;
-                        break;
                     case 32:
                         ke = KeyEvent.KEYCODE_SPACE;
                         break;
@@ -587,7 +583,7 @@ public class CodeBoardIME extends InputMethodService
                     case 3:
                         Definitions.addQwertzRows(builder);
                         break;
-                    case 5:
+                    case 4:
                         Definitions.addUrduRows(builder);
                         break;
                 }
