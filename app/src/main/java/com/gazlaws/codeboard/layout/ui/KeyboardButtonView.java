@@ -239,6 +239,7 @@ public class KeyboardButtonView extends View {
             } else {
                 paint = uiTheme.buttonBodyPaint;
                 paint.setAlpha(alpha);
+        //May be it can be replaced with the more efficient code;but it is woking fine
             }
             paint.setShader(null); // Clear any previous shader
         }
