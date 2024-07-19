@@ -247,6 +247,7 @@ public class Definitions {
                 .addKey('ڑ').onShiftUppercase()
                 .addKey('ں').onShiftUppercase()
                 .addBackspaceKey()
+        ;
     }
 
     public void addSymbolRows(KeyboardLayoutBuilder keyboard) {
