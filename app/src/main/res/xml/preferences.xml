@@ -131,7 +131,7 @@
             android:key="custom_button_color"
             android:title="Set Custom Button Color" />
         <Preference
-            android:defaultValue="@integer/button_color"
+            android:defaultValue="@integer/custom_button_color"
             android:dependency="custom_button_color"
             android:key="button_color_picker"
             android:title="Button Color" />
