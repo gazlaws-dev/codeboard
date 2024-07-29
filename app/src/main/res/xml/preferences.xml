@@ -149,12 +149,6 @@
             android:title="Navbar matches border color" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Advanced">
-        <Preference
-            android:key="custom_prefs"
-            android:title="Custom Preferences" />
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="Layout">
         <ListPreference
             android:defaultValue="0"
