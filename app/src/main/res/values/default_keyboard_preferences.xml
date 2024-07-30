@@ -20,6 +20,7 @@
     <integer name="size_landscape">48</integer>
     <integer name="button_transparency">100</integer>
     <integer name="bg_transparency">100</integer>
+    <integer name="spacebar_size">40</integer>
     <integer name="bg_color">0xff263238</integer>
     <integer name="fg_color">0xffffffff</integer>
     <integer name="custom_button_color">0xff263238</integer>

@@ -42,7 +42,7 @@ public class KeyboardUiFactory {
     }
 
     private KeyboardButtonView createKeyView(Context context, Key key, UiTheme uiTheme) {
-        KeyboardButtonView view = new KeyboardButtonView(context, key, inputService, uiTheme, keyboardPreferences); // Pass keyboardPreferences to KeyboardButtonView constructor
+        KeyboardButtonView view = new KeyboardButtonView(context, key, inputService, uiTheme, keyboardPreferences);
         Box box = key.box;
         view.layout((int) box.getLeft(), (int) box.getTop(), (int) box.getRight(), (int) box.getBottom());
         return view;

@@ -291,7 +291,7 @@ public class Definitions {
         ;
     }
 
-    public void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols) {
+    public void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols, int spaceBarSize) {
         char[] chars = symbols.toCharArray();
 
         keyboard.newRow().addKey("Ctrl", 17).asModifier().onCtrlShow("CTRL");
@@ -299,7 +299,10 @@ public class Definitions {
         for (int i = 0; i < (chars.length + 1) / 2 && chars.length > 0; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f);
+        //Lets divide int space bar size with 20 and get float values and apply to space bar
+        float size = (float) spaceBarSize / 20;  // spaceBarSize is the int value passed from the caller
+
+        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(size);
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }

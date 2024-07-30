@@ -22,6 +22,7 @@ public class KeyboardPreferences {
     private static final String KEY_GRADIENT_ENABLED = "gradient_enabled";
     private static final String KEY_GRADIENT_START_COLOR = "gradient_start_color";
     private static final String KEY_GRADIENT_END_COLOR = "gradient_end_color";
+    private static final String KEY_SPACEBAR_SIZE = "spacebar_size";
 
     public KeyboardPreferences(ContextWrapper contextWrapper) {
         res = contextWrapper.getResources();
@@ -167,6 +168,14 @@ public class KeyboardPreferences {
 
     public int getLandscapeSize() {
         return Integer.parseInt(safeRead("size_landscape", String.valueOf(res.getInteger(R.integer.size_landscape))));
+    }
+
+    public int getSpaceBarSize() {
+      return preferences.getInt(KEY_SPACEBAR_SIZE, 40);
+    }
+
+    public void setSpaceBarSize(int size) {
+      preferences.edit().putInt(KEY_SPACEBAR_SIZE, size).apply();
     }
 
     public float getFontSizeAsSp() {

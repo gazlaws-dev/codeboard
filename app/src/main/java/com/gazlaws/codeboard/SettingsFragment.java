@@ -160,6 +160,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             bgTransparencyPreference.setSummary(String.valueOf((int) (currentBgTransparency * 100)));
         }
 
+        SeekBarPreference spaceBarSizePreference = findPreference("spacebar_size");
+        if (spaceBarSizePreference != null) {
+            spaceBarSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                int spaceBarSize = (int) newValue;
+                keyboardPreferences.setSpaceBarSize(spaceBarSize);
+                preference.setSummary(String.valueOf(spaceBarSize));
+                return true;
+            });
+            int currentSpaceBarSize = keyboardPreferences.getSpaceBarSize();
+            spaceBarSizePreference.setSummary(String.valueOf(currentSpaceBarSize));
+        }
+
         // Add blur effect preference for button
         SwitchPreferenceCompat buttonBlurEffectPref = findPreference("button_blur_effect");
         if (buttonBlurEffectPref != null) {

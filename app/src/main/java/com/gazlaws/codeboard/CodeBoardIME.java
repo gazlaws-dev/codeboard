@@ -510,6 +510,7 @@ public class CodeBoardIME extends InputMethodService
         mKeyboardUiFactory.theme.fontSize = sharedPreferences.getFontSizeAsSp();
         int mSize = sharedPreferences.getPortraitSize();
         int sizeLandscape = sharedPreferences.getLandscapeSize();
+        int spaceBarSize = sharedPreferences.getSpaceBarSize();
         mKeyboardUiFactory.theme.size = mSize / 100.0f;
         mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
         if (sharedPreferences.getNavBarDark()) {
@@ -560,7 +561,7 @@ public class CodeBoardIME extends InputMethodService
                 if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
                     definitions.addSymbolRows(builder);
                 } else {
-                    definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
+                    definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
                 }
             } else if (mKeyboardState == R.integer.keyboard_normal) {
                 if (!mCustomSymbolsMain.isEmpty()) {
@@ -587,7 +588,7 @@ public class CodeBoardIME extends InputMethodService
                         Definitions.addUrduRows(builder);
                         break;
                 }
-                definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom);
+                definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
             } else if (mKeyboardState == R.integer.keyboard_clipboard) {
                 definitions.addClipboardActions(builder);
 

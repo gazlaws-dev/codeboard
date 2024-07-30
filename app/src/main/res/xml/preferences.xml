@@ -61,7 +61,7 @@
         <SeekBarPreference
             android:key="button_transparency"
             android:title="Button Transparency"
-            android:defaultValue="100"
+            android:defaultValue="@integer/button_transparency"
             android:min="0"
             android:max="100"
             app:useSimpleSummaryProvider="true" />
@@ -74,10 +74,19 @@
         <SeekBarPreference
             android:key="bg_transparency"
             android:title="Background Transparency"
-            android:defaultValue="100"
+            android:defaultValue="@integer/bg_transparency"
             android:min="0"
             android:max="100"
             app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+          android:key="spacebar_size"
+          android:title="Spacebar Size"
+          android:summary="Adjust the spacebar size"
+          android:defaultValue="@integer/spacebar_size"
+          android:min="0"
+          android:max="100"
+          app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
             android:key="bg_blur_effect"
