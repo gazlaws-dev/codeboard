@@ -36,6 +36,7 @@ android {
 
 repositories {
     google()
+    jcenter()
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
@@ -52,7 +53,8 @@ dependencies {
     implementation 'com.github.AppIntro:AppIntro:6.3.1'
 
     //Colour picker
-    implementation 'com.pes.materialcolorpicker:library:1.2.5'
+    // implementation 'com.pes.materialcolorpicker:library:1.2.5'
+    compile 'com.pes.materialcolorpicker:library:1.2.5'
 
     // Required for local unit tests (JUnit 4 framework)
     testImplementation 'junit:junit:4.12'
