@@ -34,8 +34,11 @@ import com.gazlaws.codeboard.layout.ui.KeyboardButtonView;
 import com.gazlaws.codeboard.layout.ui.KeyboardLayoutView;
 import com.gazlaws.codeboard.KeyboardPreferences;
 
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
-import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
+// Depracated
+// import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+// import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPicker;
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
