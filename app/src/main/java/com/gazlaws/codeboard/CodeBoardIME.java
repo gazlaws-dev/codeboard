@@ -349,7 +349,7 @@ public class CodeBoardIME extends InputMethodService
                 mp.release();
             }
         });
-        keypressSoundPlayer.setVolume(0.3f, 0.3f);
+        // keypressSoundPlayer.setVolume(0.3f, 0.3f); //This line decreases the volume
         keypressSoundPlayer.start();
     }
 

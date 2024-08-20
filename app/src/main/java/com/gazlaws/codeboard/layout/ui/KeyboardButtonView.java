@@ -137,7 +137,7 @@ public class KeyboardButtonView extends View {
             startRepeating();
         }
         submitKeyEvent();
-        animatePress();
+        // animatePress();
     }
 
     private void onRelease() {
@@ -149,7 +149,7 @@ public class KeyboardButtonView extends View {
         if (key.info.isRepeatable) {
             stopRepeating();
         }
-        animateRelease();
+        // animateRelease();
     }
 
     private void submitKeyEvent() {
