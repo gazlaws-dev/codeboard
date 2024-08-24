@@ -27,6 +27,13 @@
             android:title="Vibration Length (ms)"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            android:defaultValue="@integer/sound_volume"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="sound_volume"
+            android:title="Sound Volume"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
             android:defaultValue="@integer/font_size"
             android:imeOptions="flagNoExtractUi"
             android:key="font_size"

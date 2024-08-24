@@ -57,6 +57,14 @@ public class KeyboardPreferences {
         write("vibrate_ms", String.valueOf(length));
     }
 
+    public int getSoundVolume() {
+        return Integer.parseInt(safeRead("sound_volume", String.valueOf(res.getInteger(R.integer.sound_volume))));
+    }
+
+    public void setSoundVolume(int volume) {
+        write("sound_volume", String.valueOf(volume));
+    }
+
     // public int getBgColor() {
     //     return Integer.parseInt(safeRead("bg_colour_picker", String.valueOf(res.getInteger(R.integer.bg_color))));
     // }

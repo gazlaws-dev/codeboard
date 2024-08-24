@@ -64,6 +64,7 @@ implements KeyboardView.OnKeyboardActionListener {
   EditorInfo sEditorInfo;
   private boolean vibratorOn;
   private int vibrateLength;
+  private int soundVolume;
   private int[] soundResources;
   private boolean soundOn;
   private boolean shiftLock = false;
@@ -321,6 +322,8 @@ implements KeyboardView.OnKeyboardActionListener {
         }
       });
 
+      float volume = (float) soundVolume / 100; // 0.0f to 1.0f If the value is outside this range, the system will clamp it if it will be high the system will clamp it to 1.0f if it will be low the system will clamp it to 0.0f
+      mp.setVolume(volume, volume);
       mp.start();
     }
   }
@@ -498,6 +501,7 @@ implements KeyboardView.OnKeyboardActionListener {
     }
     // Keyboard Features
     vibrateLength = sharedPreferences.getVibrateLength();
+    soundVolume = sharedPreferences.getSoundVolume();
     vibratorOn = sharedPreferences.isVibrateEnabled();
     soundOn = sharedPreferences.isSoundEnabled();
     mKeyboardUiFactory.theme.enablePreview = sharedPreferences.isPreviewEnabled();
