@@ -9,3 +9,6 @@
 - ; / \ ! | &$ etc
 - No ads or IAP, made for students!
 
+
+No more maintained!
+See [UnExpected Keyboard](https://github.com/Julow/Unexpected-Keyboard) for more powerful and maintained Keyboard.
