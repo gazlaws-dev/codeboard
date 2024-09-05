@@ -65,6 +65,22 @@ public class KeyboardPreferences {
         write("sound_volume", String.valueOf(volume));
     }
 
+    public int getRepeatInterval() {
+        return Integer.parseInt(safeRead("repeat_interval", String.valueOf(res.getInteger(R.integer.repeat_interval))));
+    }
+    
+    public void setRepeatInterval(int interval) {
+        write("repeat_interval", String.valueOf(interval));
+    }
+
+    public int getInitialRepeatDelay() {
+        return Integer.parseInt(safeRead("initial_repeat_delay", String.valueOf(res.getInteger(R.integer.initial_repeat_delay))));
+    }
+
+    public void setInitialRepeatDelay(int delay) {
+        write("initial_repeat_delay", String.valueOf(delay));
+    }
+
     // public int getBgColor() {
     //     return Integer.parseInt(safeRead("bg_colour_picker", String.valueOf(res.getInteger(R.integer.bg_color))));
     // }

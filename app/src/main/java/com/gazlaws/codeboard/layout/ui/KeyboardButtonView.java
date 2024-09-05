@@ -185,12 +185,13 @@ public class KeyboardButtonView extends View {
                 return;
             }
             timer = new Timer();
+            // Get values from KeyboardPreferences
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     submitKeyEvent();
                 }
-            }, 200, 70);
+            }, keyboardPreferences.getInitialRepeatDelay(), keyboardPreferences.getRepeatInterval());
         }
     }
 

@@ -27,6 +27,21 @@
             android:title="Vibration Length (ms)"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            android:defaultValue="@integer/repeat_interval"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="repeat_interval"
+            android:title="Repeat Interval"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="@integer/initial_repeat_delay"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="initial_repeat_delay"
+            android:title="Initial Repeat Delay"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
             android:defaultValue="@integer/sound_volume"
             android:dependency="sound"
             android:imeOptions="flagNoExtractUi"

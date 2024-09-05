@@ -65,7 +65,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         t.start();
 
         // Only allow numbers
-        String[] numberOnlyPreferences = {"vibrate_ms", "font_size", "size_portrait", "size_landscape", "sound_volume" };
+        String[] numberOnlyPreferences = {"vibrate_ms", "font_size", "size_portrait", "size_landscape", "sound_volume", "repeat_interval", "initial_repeat_delay"};
         for (String key : numberOnlyPreferences) {
             EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
             if (editTextPreference != null) {
