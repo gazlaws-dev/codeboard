@@ -417,8 +417,6 @@ implements KeyboardView.OnKeyboardActionListener {
   }
 
 
-// Handle long-press events for keys
-@Override
 public void onKeyLongPress(int keyCode) {
     InputConnection ic = getCurrentInputConnection();
 
