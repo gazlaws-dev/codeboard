@@ -77,6 +77,11 @@ implements KeyboardView.OnKeyboardActionListener {
   private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
   private boolean longPressedSpaceButton = false;
 
+
+private static final int LAYOUT_QWERTY = 0;
+private static final int LAYOUT_URDU = 4; // Assuming Urdu layout index is 4
+private int currentLayout = LAYOUT_QWERTY; // Default layout
+
   @Override
   public void onKey(int primaryCode, int[] KeyCodes) {
     //NOTE: Long press goes second, this is onDown
@@ -413,50 +418,52 @@ implements KeyboardView.OnKeyboardActionListener {
     clearLongPressTimer();
   }
 
-  public void onKeyLongPress(int keyCode) {
-    // Process long-click here
-    // This is following an onKey()
+public void onKeyLongPress(int keyCode) {
     InputConnection ic = getCurrentInputConnection();
+
+    if (keyCode == 32) { // Space button long press
+        // Toggle between QWERTY and Urdu layouts
+        if (currentLayout == LAYOUT_QWERTY) {
+            currentLayout = LAYOUT_URDU;
+        } else {
+            currentLayout = LAYOUT_QWERTY;
+        }
+
+        // Recreate the input view with the new layout
+        onCreateInputView();
+
+        if (vibratorOn) {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null)
+                vibrator.vibrate(vibrateLength);
+        }
+    }
+
+    // Existing functionality for shift and ctrl
     if (keyCode == 16) {
-      shiftLock = !shiftLock;
-      if (shiftLock) {
-        shift = true;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
-      } else {
-        shift = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-      }
-      shiftKeyUpdateView();
+        shiftLock = !shiftLock;
+        if (shiftLock) {
+            shift = true;
+            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
+        } else {
+            shift = false;
+            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+        }
+        shiftKeyUpdateView();
     }
 
     if (keyCode == 17) {
-      ctrlLock = !ctrlLock;
-      if (ctrlLock) {
-        ctrl = true;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-      } else {
-        ctrl = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-      }
-      controlKeyUpdateView();
+        ctrlLock = !ctrlLock;
+        if (ctrlLock) {
+            ctrl = true;
+            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
+        } else {
+            ctrl = false;
+            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+        }
+        controlKeyUpdateView();
     }
-
-    if (keyCode == 32) {
-
-      longPressedSpaceButton = true;
-
-      InputMethodManager imm = (InputMethodManager)
-      getSystemService(Context.INPUT_METHOD_SERVICE);
-      if (imm != null)
-      imm.showInputMethodPicker();
-    }
-
-    if (vibratorOn) {
-      Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-      if (vibrator != null)
-      vibrator.vibrate(vibrateLength);
-    }
-  }
+}
 
   public void onText(CharSequence text) {
     InputConnection ic = getCurrentInputConnection();
