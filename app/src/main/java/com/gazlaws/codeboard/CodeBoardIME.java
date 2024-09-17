@@ -77,10 +77,8 @@ implements KeyboardView.OnKeyboardActionListener {
   private KeyboardLayoutView mCurrentKeyboardLayoutView = null;
   private boolean longPressedSpaceButton = false;
 
+  private int currentLayoutIndex = 0; // Default to QWERTY (index 0)
 
-private static final int LAYOUT_QWERTY = 0;
-private static final int LAYOUT_URDU = 4; // Assuming Urdu layout index is 4
-private int currentLayout = LAYOUT_QWERTY; // Default layout
 
   @Override
   public void onKey(int primaryCode, int[] KeyCodes) {
@@ -418,15 +416,18 @@ private int currentLayout = LAYOUT_QWERTY; // Default layout
     clearLongPressTimer();
   }
 
+
+// Handle long-press events for keys
+@Override
 public void onKeyLongPress(int keyCode) {
     InputConnection ic = getCurrentInputConnection();
 
     if (keyCode == 32) { // Space button long press
-        // Toggle between QWERTY and Urdu layouts
-        if (currentLayout == LAYOUT_QWERTY) {
-            currentLayout = LAYOUT_URDU;
+        // Toggle between QWERTY (0) and Urdu (4) layouts
+        if (currentLayoutIndex == 0) {
+            currentLayoutIndex = 4; // Switch to Urdu
         } else {
-            currentLayout = LAYOUT_QWERTY;
+            currentLayoutIndex = 0; // Switch to QWERTY
         }
 
         // Recreate the input view with the new layout
@@ -434,8 +435,9 @@ public void onKeyLongPress(int keyCode) {
 
         if (vibratorOn) {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            if (vibrator != null)
+            if (vibrator != null) {
                 vibrator.vibrate(vibrateLength);
+            }
         }
     }
 
@@ -465,6 +467,7 @@ public void onKeyLongPress(int keyCode) {
     }
 }
 
+
   public void onText(CharSequence text) {
     InputConnection ic = getCurrentInputConnection();
     ic.commitText(text, 1);
@@ -491,21 +494,22 @@ public void onKeyLongPress(int keyCode) {
 
   }
 
-  @Override
-  public View onCreateInputView() {
-
+@Override
+public View onCreateInputView() {
     if (mKeyboardUiFactory == null) {
-      mKeyboardUiFactory = new KeyboardUiFactory(this, new KeyboardPreferences(this));
+        mKeyboardUiFactory = new KeyboardUiFactory(this, new KeyboardPreferences(this));
     }
     KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
     setNotification(sharedPreferences.getNotification());
+
     if (sharedPreferences.getCustomTheme()) {
-      mKeyboardUiFactory.theme = getDefaultThemeInfo();
-      mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
-      mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
+        mKeyboardUiFactory.theme = getDefaultThemeInfo();
+        mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
+        mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
     } else {
-      mKeyboardUiFactory.theme = setThemeByIndex(sharedPreferences, sharedPreferences.getThemeIndex());
+        mKeyboardUiFactory.theme = setThemeByIndex(sharedPreferences, sharedPreferences.getThemeIndex());
     }
+
     // Keyboard Features
     vibrateLength = sharedPreferences.getVibrateLength();
     soundVolume = sharedPreferences.getSoundVolume();
@@ -519,16 +523,18 @@ public void onKeyLongPress(int keyCode) {
     int spaceBarSize = sharedPreferences.getSpaceBarSize();
     mKeyboardUiFactory.theme.size = mSize / 100.0f;
     mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
+
     if (sharedPreferences.getNavBarDark()) {
-      Objects.requireNonNull(getWindow().getWindow()).
-        setNavigationBarColor(
-          ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
-            Color.BLACK, 0.2f));
+        Objects.requireNonNull(getWindow().getWindow()).
+            setNavigationBarColor(
+                ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
+                Color.BLACK, 0.2f));
     } else if (sharedPreferences.getNavBar()) {
-      Objects.requireNonNull(getWindow().getWindow()).
-        setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
+        Objects.requireNonNull(getWindow().getWindow()).
+            setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
     }
-    //Key Layout
+
+    // Key Layout
     boolean mToprow = sharedPreferences.getTopRowActions();
     String mCustomSymbolsMain = sharedPreferences.getCustomSymbolsMain();
     String mCustomSymbolsMain2 = sharedPreferences.getCustomSymbolsMain2();
@@ -537,99 +543,98 @@ public void onKeyLongPress(int keyCode) {
     String mCustomSymbolsSym3 = sharedPreferences.getCustomSymbolsSym3();
     String mCustomSymbolsSym4 = sharedPreferences.getCustomSymbolsSym4();
     String mCustomSymbolsMainBottom = sharedPreferences.getCustomSymbolsMainBottom();
-    int mLayout = sharedPreferences.getLayoutIndex();
+    int layoutIndex = currentLayoutIndex; // Use the current layout index
 
-    //Need this to get resources for drawables
+    // Need this to get resources for drawables
     Definitions definitions = new Definitions(this);
     try {
-      KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
-      builder.setBox(Box.create(0, 0, 1, 1));
+        KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
+        builder.setBox(Box.create(0, 0, 1, 1));
 
-      if (mToprow) {
-        definitions.addCopyPasteRow(builder);
-      } else {
-        definitions.addArrowsRow(builder);
-      }
-
-      if (mKeyboardState == R.integer.keyboard_sym) {
-        if (!mCustomSymbolsSym.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsSym);
-        }
-        if (!mCustomSymbolsSym2.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsSym2);
-        }
-        if (!mCustomSymbolsSym3.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsSym3);
-        }
-        if (!mCustomSymbolsSym4.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsSym4);
-        }
-        if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
-          definitions.addSymbolRows(builder);
+        if (mToprow) {
+            definitions.addCopyPasteRow(builder);
         } else {
-          definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
+            definitions.addArrowsRow(builder);
         }
-      } else if (mKeyboardState == R.integer.keyboard_normal) {
-        if (!mCustomSymbolsMain.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsMain);
-        }
-        if (!mCustomSymbolsMain2.isEmpty()) {
-          Definitions.addCustomRow(builder, mCustomSymbolsMain2);
-        }
-        switch (mLayout) {
-          default:
-          case 0:
-          Definitions.addQwertyRows(builder);
-          break;
-          case 1:
-          Definitions.addAzertyRows(builder);
-          break;
-          case 2:
-          Definitions.addDvorakRows(builder);
-          break;
-          case 3:
-          Definitions.addQwertzRows(builder);
-          break;
-          case 4:
-          Definitions.addUrduRows(builder);
-          break;
-        }
-        definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
-      } else if (mKeyboardState == R.integer.keyboard_clipboard) {
-        definitions.addClipboardActions(builder);
 
-        ClipboardManager clipboard = (ClipboardManager)
-        getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboard.hasPrimaryClip()
-        && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-          ClipData pr = clipboard.getPrimaryClip();
-          //Android only allows one item in Clipboard
-          String s = pr.getItemAt(0).getText().toString();
-          builder.newRow().addKey(s);
-        } else {
-          builder.newRow().addKey("Nothing copied").withOutputText("");
-        }
-        builder.addKey(sharedPreferences.getPin1());
-        builder.newRow()
-          .addKey(sharedPreferences.getPin2())
-          .addKey(sharedPreferences.getPin3());
-        builder.newRow()
-          .addKey(sharedPreferences.getPin4())
-          .addKey(sharedPreferences.getPin5());
-        builder.newRow()
-          .addKey(sharedPreferences.getPin6())
-          .addKey(sharedPreferences.getPin7());
-      }
+        if (mKeyboardState == R.integer.keyboard_sym) {
+            if (!mCustomSymbolsSym.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsSym);
+            }
+            if (!mCustomSymbolsSym2.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsSym2);
+            }
+            if (!mCustomSymbolsSym3.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsSym3);
+            }
+            if (!mCustomSymbolsSym4.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsSym4);
+            }
+            if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
+                definitions.addSymbolRows(builder);
+            } else {
+                definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
+            }
+        } else if (mKeyboardState == R.integer.keyboard_normal) {
+            if (!mCustomSymbolsMain.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsMain);
+            }
+            if (!mCustomSymbolsMain2.isEmpty()) {
+                Definitions.addCustomRow(builder, mCustomSymbolsMain2);
+            }
+            switch (layoutIndex) {
+                default:
+                case 0:
+                    Definitions.addQwertyRows(builder);
+                    break;
+                case 1:
+                    Definitions.addAzertyRows(builder);
+                    break;
+                case 2:
+                    Definitions.addDvorakRows(builder);
+                    break;
+                case 3:
+                    Definitions.addQwertzRows(builder);
+                    break;
+                case 4:
+                    Definitions.addUrduRows(builder);
+                    break;
+            }
+            definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
+        } else if (mKeyboardState == R.integer.keyboard_clipboard) {
+            definitions.addClipboardActions(builder);
 
-      Collection<Key> keyboardLayout = builder.build();
-      mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
-      return mCurrentKeyboardLayoutView;
+            ClipboardManager clipboard = (ClipboardManager)
+                getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard.hasPrimaryClip()
+            && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
+                ClipData pr = clipboard.getPrimaryClip();
+                String s = pr.getItemAt(0).getText().toString();
+                builder.newRow().addKey(s);
+            } else {
+                builder.newRow().addKey("Nothing copied").withOutputText("");
+            }
+            builder.addKey(sharedPreferences.getPin1());
+            builder.newRow()
+                .addKey(sharedPreferences.getPin2())
+                .addKey(sharedPreferences.getPin3());
+            builder.newRow()
+                .addKey(sharedPreferences.getPin4())
+                .addKey(sharedPreferences.getPin5());
+            builder.newRow()
+                .addKey(sharedPreferences.getPin6())
+                .addKey(sharedPreferences.getPin7());
+        }
+
+        Collection<Key> keyboardLayout = builder.build();
+        mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
+        return mCurrentKeyboardLayoutView;
 
     } catch (KeyboardLayoutException e) {
-      e.printStackTrace();
+        e.printStackTrace();
     }
     return null;
-  }
+}
 
   @Override
   public void onUpdateExtractingVisibility(EditorInfo ei) {
