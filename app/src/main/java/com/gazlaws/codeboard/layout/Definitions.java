@@ -196,58 +196,49 @@ public class Definitions {
 
     public static void addUrduRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
-                .addKey('ط').onShiftUppercase()
+                .addKey('ض').onShiftUppercase()
                 .addKey('ص').onShiftUppercase()
-                .addKey('ث').onShiftUppercase()
-                .addKey('ق').onShiftUppercase()
-                .addKey('ف').onShiftUppercase()
                 .addKey('غ').onShiftUppercase()
-                .addKey('ع').onShiftUppercase()
-                .addKey('ه').onShiftUppercase()
-                .addKey('خ').onShiftUppercase()
+                .addKey('ڑ').onShiftUppercase()
+                .addKey('ٹ').onShiftUppercase()
+                .addKey('ث').onShiftUppercase()
                 .addKey('ح').onShiftUppercase()
-                .addKey('ج').onShiftUppercase()
-                .addKey('چ').onShiftUppercase()
+                .addKey('ئ').onShiftUppercase()
+                .addKey('ظ').onShiftUppercase()
+                .addKey('ط').onShiftUppercase()
+                .newRow()
+                .addKey('ق').onShiftUppercase()
+                .addKey('و').onShiftUppercase()
+                .addKey('ع').onShiftUppercase()
+                .addKey('ر').onShiftUppercase()
+                .addKey('ت').onShiftUppercase()
+                .addKey('ے').onShiftUppercase()
+                .addKey('ء').onShiftUppercase()
+                .addKey('ی').onShiftUppercase()
+                .addKey('ہ').onShiftUppercase()
                 .addKey('پ').onShiftUppercase()
                 .newRow()
                 .addKey('ا').onShiftUppercase()
                 .addKey('س').onShiftUppercase()
-                .addKey('د').onShiftUppercase()
                 .addKey('ڈ').onShiftUppercase()
-                .addKey('ر').onShiftUppercase()
-                .addKey('ز').onShiftUppercase()
-                .addKey('ژ').onShiftUppercase()
-                .addKey('ک').onShiftUppercase()
+                .addKey('د').onShiftUppercase()
+                .addKey('ف').onShiftUppercase()
                 .addKey('گ').onShiftUppercase()
+                .addKey('ھ').onShiftUppercase()
+                .addKey('ج').onShiftUppercase()
+                .addKey('ک').onShiftUppercase()
                 .addKey('ل').onShiftUppercase()
-                .addKey('م').onShiftUppercase()
-                .addKey('ن').onShiftUppercase()
-                .addKey('و').onShiftUppercase()
                 .newRow()
-                .addKey('ہ').onShiftUppercase()
-                .addKey('ء').onShiftUppercase()
-                .addKey('ی').onShiftUppercase()
-                .addKey('ے').onShiftUppercase()
-                .addKey('ں').onShiftUppercase()
+                .addKey('ذ').onShiftUppercase()
+                .addKey('ز').onShiftUppercase()
+                .addKey('ش').onShiftUppercase()
+                .addKey('خ').onShiftUppercase()
                 .addKey('چ').onShiftUppercase()
-                .addKey('ڑ').onShiftUppercase()
-                .addKey('آ').onShiftUppercase()
-                .addKey('ؤ').onShiftUppercase()
-                .addKey('إ').onShiftUppercase()
-                .addKey('ٱ').onShiftUppercase()
-                .addKey('ع').onShiftUppercase()
-                .newRow()
-                .addShiftKey()
-                .addKey('ض').onShiftUppercase()
-                .addKey('ظ').onShiftUppercase()
-                .addKey('ٹ').onShiftUppercase()
-                .addKey('پ').onShiftUppercase()
-                .addKey('د').onShiftUppercase()
-                .addKey('ڈ').onShiftUppercase()
-                .addKey('ڑ').onShiftUppercase()
+                .addKey('ب').onShiftUppercase()
                 .addKey('ں').onShiftUppercase()
-                .addBackspaceKey()
-        ;
+                .addKey('ن').onShiftUppercase()
+                .addKey('م').onShiftUppercase()
+                .addBackspaceKey();
     }
 
     public void addSymbolRows(KeyboardLayoutBuilder keyboard) {
@@ -297,16 +288,15 @@ public class Definitions {
         keyboard.newRow().addKey("Ctrl", 17).asModifier().onCtrlShow("CTRL");
 
         for (int i = 0; i < (chars.length + 1) / 2 && chars.length > 0; i++) {
-            keyboard.addKey(chars[i]).withSize(.7f);
+            keyboard.addKey(chars[i]).withSize(.7f).asRepeatable();
         }
-        //Lets divide int space bar size with 20 and get float values and apply to space bar
-        float size = (float) spaceBarSize / 20;  // spaceBarSize is the int value passed from the caller
+        float size = (float) spaceBarSize / 20;
 
         keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(size);
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addEnterKey();
+        keyboard.addEnterKey().asRepeatable();
 
     }
 
