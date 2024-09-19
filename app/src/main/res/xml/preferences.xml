@@ -188,6 +188,15 @@
             android:key="layout"
             android:title="Set Keyboard Layout"
             app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="@integer/spacebar_layout_index"
+            android:imeOptions="flagNoExtractUi"
+            android:key="spacebar_layout_index"
+            min="0"
+            max="4"
+            android:title="Spacebar Layout Index"
+            android:summary="0: Qwerty, 1: Azerty, 2: Dvorak, 3: Qwertz, 4: Urdu"
+            app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             android:defaultValue="@bool/top_row_actions"
             android:key="top_row_actions"

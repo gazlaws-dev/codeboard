@@ -27,7 +27,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.util.Log;
-import android.media.MediaPlayer; // for keypress sound
+import android.media.MediaPlayer;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -57,9 +58,8 @@ import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 /*Created by Ruby(aka gazlaws) on 13/02/2016.
  */
 
-
 public class CodeBoardIME extends InputMethodService
-implements KeyboardView.OnKeyboardActionListener {
+    implements KeyboardView.OnKeyboardActionListener {
   private static final String NOTIFICATION_CHANNEL_ID = "Codeboard";
   EditorInfo sEditorInfo;
   private boolean vibratorOn;
@@ -79,93 +79,92 @@ implements KeyboardView.OnKeyboardActionListener {
 
   private int currentLayoutIndex = 0; // Default to QWERTY (index 0)
 
-
   @Override
   public void onKey(int primaryCode, int[] KeyCodes) {
-    //NOTE: Long press goes second, this is onDown
+    // NOTE: Long press goes second, this is onDown
     InputConnection ic = getCurrentInputConnection();
     char code = (char) primaryCode;
     Log.i(getClass().getSimpleName(), "onKey: " + primaryCode);
 
     switch (primaryCode) {
-      //First handle cases that  don't use shift/ctrl meta modifiers
+      // First handle cases that don't use shift/ctrl meta modifiers
       case 53737:
-      ic.performContextMenuAction(android.R.id.selectAll);
-      break;
+        ic.performContextMenuAction(android.R.id.selectAll);
+        break;
       case 53738:
-      ic.performContextMenuAction(android.R.id.cut);
-      break;
+        ic.performContextMenuAction(android.R.id.cut);
+        break;
       case 53739:
-      ic.performContextMenuAction(android.R.id.copy);
-      break;
+        ic.performContextMenuAction(android.R.id.copy);
+        break;
       case 53740:
-      ic.performContextMenuAction(android.R.id.paste);
-      break;
+        ic.performContextMenuAction(android.R.id.paste);
+        break;
       case 53741:
-      ic.performContextMenuAction(android.R.id.undo);
-      break;
+        ic.performContextMenuAction(android.R.id.undo);
+        break;
       case 53742:
-      ic.performContextMenuAction(android.R.id.redo);
-      break;
+        ic.performContextMenuAction(android.R.id.redo);
+        break;
       case -1:
-      //SYM
-      if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
-        mKeyboardState = R.integer.keyboard_sym;
-      } else if (ctrl) {
-        mKeyboardState = R.integer.keyboard_clipboard;
-      } else {
-        mKeyboardState = R.integer.keyboard_normal;
-      }
-      // regenerate view
-      //Simple remove shift
-      if (shift) {
-        shift = false;
-        shiftLock = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-      }
-      if (ctrl) {
-        ctrl = false;
-        ctrlLock = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-      }
-      setInputView(onCreateInputView());
-      controlKeyUpdateView();
-      shiftKeyUpdateView();
-      break;
+        // SYM
+        if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
+          mKeyboardState = R.integer.keyboard_sym;
+        } else if (ctrl) {
+          mKeyboardState = R.integer.keyboard_clipboard;
+        } else {
+          mKeyboardState = R.integer.keyboard_normal;
+        }
+        // regenerate view
+        // Simple remove shift
+        if (shift) {
+          shift = false;
+          shiftLock = false;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+        }
+        if (ctrl) {
+          ctrl = false;
+          ctrlLock = false;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+        }
+        setInputView(onCreateInputView());
+        controlKeyUpdateView();
+        shiftKeyUpdateView();
+        break;
 
-      case 17: //KEYCODE_CTRL_LEFT:
-      // emulates a press down of the ctrl key
-      if (!ctrlLock && !ctrl) {
-        //Simple ctrl to true
-        ctrl = true;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-      } else if (!ctrlLock && ctrl) {
-        //Simple remove ctrl
-        ctrl = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-      }
-      //else if (ctrl && ctrlLock) {
-      //Stay ctrled if previously ctrled
-      //}
-      controlKeyUpdateView();
-      break;
+      case 17: // KEYCODE_CTRL_LEFT:
+        // emulates a press down of the ctrl key
+        if (!ctrlLock && !ctrl) {
+          // Simple ctrl to true
+          ctrl = true;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
+        } else if (!ctrlLock && ctrl) {
+          // Simple remove ctrl
+          ctrl = false;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+        }
+        // else if (ctrl && ctrlLock) {
+        // Stay ctrled if previously ctrled
+        // }
+        controlKeyUpdateView();
+        break;
 
-      case 16: //KEYCODE_SHIFT_LEFT
-      // emulates press of shift key - this helps for selection with arrow keys
-      if (!shiftLock && !shift) {
-        //Simple shift to true
-        shift = true;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
-      } else if (!shiftLock && shift) {
-        //Simple remove shift
-        shift = false;
-        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-      }
-      //else if (shift && shiftLock) {
-      //Stay shifted if previously shifted
-      //}
-      shiftKeyUpdateView();
-      break;
+      case 16: // KEYCODE_SHIFT_LEFT
+        // emulates press of shift key - this helps for selection with arrow keys
+        if (!shiftLock && !shift) {
+          // Simple shift to true
+          shift = true;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
+        } else if (!shiftLock && shift) {
+          // Simple remove shift
+          shift = false;
+          ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+        }
+        // else if (shift && shiftLock) {
+        // Stay shifted if previously shifted
+        // }
+        shiftKeyUpdateView();
+        break;
 
       default: {
         int meta = 0;
@@ -186,124 +185,127 @@ implements KeyboardView.OnKeyboardActionListener {
             controlKeyUpdateView();
           }
         }
-        //Now shift/ctrl metadata is set
-        //Convert primaryCode to KeyEvent:
-        //primaryCode is the char value, it doesn't correspond to the KeyEvent that we want to press
+        // Now shift/ctrl metadata is set
+        // Convert primaryCode to KeyEvent:
+        // primaryCode is the char value, it doesn't correspond to the KeyEvent that we
+        // want to press
         int ke = 0;
         switch (primaryCode) {
           case 9:
-          ke = KeyEvent.KEYCODE_TAB;
-          //ic.commitText("\u0009", 1);
-          break;
+            ke = KeyEvent.KEYCODE_TAB;
+            // ic.commitText("\u0009", 1);
+            break;
           case -2:
-          ke = KeyEvent.KEYCODE_ESCAPE;
-          break;
+            ke = KeyEvent.KEYCODE_ESCAPE;
+            break;
           case 32:
-          ke = KeyEvent.KEYCODE_SPACE;
-          break;
+            ke = KeyEvent.KEYCODE_SPACE;
+            break;
           case -5:
-          ke = KeyEvent.KEYCODE_DEL;
-          break;
+            ke = KeyEvent.KEYCODE_DEL;
+            break;
           case -4:
-          ke = KeyEvent.KEYCODE_ENTER;
-          break;
+            ke = KeyEvent.KEYCODE_ENTER;
+            break;
           case -6:
-          ke = KeyEvent.KEYCODE_F1;
-          break;
+            ke = KeyEvent.KEYCODE_F1;
+            break;
           case -7:
-          ke = KeyEvent.KEYCODE_F2;
-          break;
+            ke = KeyEvent.KEYCODE_F2;
+            break;
           case -8:
-          ke = KeyEvent.KEYCODE_F3;
-          break;
+            ke = KeyEvent.KEYCODE_F3;
+            break;
           case -9:
-          ke = KeyEvent.KEYCODE_F4;
-          break;
+            ke = KeyEvent.KEYCODE_F4;
+            break;
           case -10:
-          ke = KeyEvent.KEYCODE_F5;
-          break;
+            ke = KeyEvent.KEYCODE_F5;
+            break;
           case -11:
-          ke = KeyEvent.KEYCODE_F6;
-          break;
+            ke = KeyEvent.KEYCODE_F6;
+            break;
           case -12:
-          ke = KeyEvent.KEYCODE_F7;
-          break;
+            ke = KeyEvent.KEYCODE_F7;
+            break;
           case -13:
-          ke = KeyEvent.KEYCODE_F8;
-          break;
+            ke = KeyEvent.KEYCODE_F8;
+            break;
           case -14:
-          ke = KeyEvent.KEYCODE_F9;
-          break;
+            ke = KeyEvent.KEYCODE_F9;
+            break;
           case -15:
-          ke = KeyEvent.KEYCODE_F10;
-          break;
+            ke = KeyEvent.KEYCODE_F10;
+            break;
           case -16:
-          ke = KeyEvent.KEYCODE_F11;
-          break;
+            ke = KeyEvent.KEYCODE_F11;
+            break;
           case -17:
-          ke = KeyEvent.KEYCODE_F12;
-          break;
+            ke = KeyEvent.KEYCODE_F12;
+            break;
           case -18:
-          ke = KeyEvent.KEYCODE_MOVE_HOME;
-          break;
+            ke = KeyEvent.KEYCODE_MOVE_HOME;
+            break;
           case -19:
-          ke = KeyEvent.KEYCODE_MOVE_END;
-          break;
+            ke = KeyEvent.KEYCODE_MOVE_END;
+            break;
           case -20:
-          ke = KeyEvent.KEYCODE_INSERT;
-          break;
+            ke = KeyEvent.KEYCODE_INSERT;
+            break;
           case -21:
-          ke = KeyEvent.KEYCODE_FORWARD_DEL;
-          break;
+            ke = KeyEvent.KEYCODE_FORWARD_DEL;
+            break;
           case -22:
-          ke = KeyEvent.KEYCODE_PAGE_UP;
-          break;
+            ke = KeyEvent.KEYCODE_PAGE_UP;
+            break;
           case -23:
-          ke = KeyEvent.KEYCODE_PAGE_DOWN;
-          break;
+            ke = KeyEvent.KEYCODE_PAGE_DOWN;
+            break;
 
-          //These are like a directional joystick - can jump outside the inputConnection
+          // These are like a directional joystick - can jump outside the inputConnection
           case 5000:
-          ke = KeyEvent.KEYCODE_DPAD_LEFT;
-          break;
+            ke = KeyEvent.KEYCODE_DPAD_LEFT;
+            break;
           case 5001:
-          ke = KeyEvent.KEYCODE_DPAD_DOWN;
-          break;
+            ke = KeyEvent.KEYCODE_DPAD_DOWN;
+            break;
           case 5002:
-          ke = KeyEvent.KEYCODE_DPAD_UP;
-          break;
+            ke = KeyEvent.KEYCODE_DPAD_UP;
+            break;
           case 5003:
-          ke = KeyEvent.KEYCODE_DPAD_RIGHT;
-          break;
+            ke = KeyEvent.KEYCODE_DPAD_RIGHT;
+            break;
           default:
-          //(t key) code 116-> ke 48
-          if (Character.isLetter(code)) {
-            ke = KeyEvent.keyCodeFromString("KEYCODE_" + Character.toUpperCase(code));
-          }
-          //                        if (primaryCode >= 48 && primaryCode <= 57) {
-          //                            ke = KeyEvent.keyCodeFromString("KEYCODE_" + code);
-          //                        }
+            // (t key) code 116-> ke 48
+            if (Character.isLetter(code)) {
+              ke = KeyEvent.keyCodeFromString("KEYCODE_" + Character.toUpperCase(code));
+            }
+            // if (primaryCode >= 48 && primaryCode <= 57) {
+            // ke = KeyEvent.keyCodeFromString("KEYCODE_" + code);
+            // }
         }
         if (ke != 0) {
 
           Log.i(getClass().getSimpleName(), "onKey: keyEvent " + ke);
 
           /*
-                     *   The if statement was added in order to prevent the space button
-                     *   from having an action down event attached to it.
-                     *   Reason being that we first want to check
-                     *   whether the space button has been long pressed or not
-                     *   and afterwards produce the right output to the screen.
-                     *   TODO: Investigate whether KeyEvent.ACTION_UP is still required.
-                     */
-          if (primaryCode != 32) { ic.sendKeyEvent (new KeyEvent (0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta)); }
+           * The if statement was added in order to prevent the space button
+           * from having an action down event attached to it.
+           * Reason being that we first want to check
+           * whether the space button has been long pressed or not
+           * and afterwards produce the right output to the screen.
+           * TODO: Investigate whether KeyEvent.ACTION_UP is still required.
+           */
+          if (primaryCode != 32) {
+            ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_DOWN, ke, 0, meta));
+          }
 
           ic.sendKeyEvent(new KeyEvent(0, 0, KeyEvent.ACTION_UP, ke, 0, meta));
         } else {
-          //All non-letter characters are handled here
+          // All non-letter characters are handled here
           // This doesn't use modifiers.
           // For most users, this usage makes sense.
-          //eg. (0 key) code 48 -> ke 7
+          // eg. (0 key) code 48 -> ke 7
           // If we handled '0' with a keyEvent, shift+0 would result in ')'
           Log.i(getClass().getSimpleName(), "onKey: committext " + String.valueOf(code));
           ic.commitText(String.valueOf(code), 1);
@@ -325,7 +327,9 @@ implements KeyboardView.OnKeyboardActionListener {
         }
       });
 
-      float volume = (float) soundVolume / 100; // 0.0f to 1.0f If the value is outside this range, the system will clamp it if it will be high the system will clamp it to 1.0f if it will be low the system will clamp it to 0.0f
+      float volume = (float) soundVolume / 100; // 0.0f to 1.0f If the value is outside this range, the system will
+                                                // clamp it if it will be high the system will clamp it to 1.0f if it
+                                                // will be low the system will clamp it to 0.0f
       mp.setVolume(volume, volume);
       mp.start();
     }
@@ -357,7 +361,7 @@ implements KeyboardView.OnKeyboardActionListener {
     if (vibratorOn) {
       Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
       if (vibrator != null)
-      vibrator.vibrate(vibrateLength);
+        vibrator.vibrate(vibrateLength);
     }
 
     clearLongPressTimer();
@@ -400,15 +404,15 @@ implements KeyboardView.OnKeyboardActionListener {
   public void onRelease(int primaryCode) {
 
     /*
-         *   After the space button is released,
-         *   we check whether it was long pressed or not.
-         *   If it was, we don't do anything,
-         *   but If it wasn't, we print a "space" to the screen.
-         */
-    if ((primaryCode == 32) && (! longPressedSpaceButton)) {
+     * After the space button is released,
+     * we check whether it was long pressed or not.
+     * If it was, we don't do anything,
+     * but If it wasn't, we print a "space" to the screen.
+     */
+    if ((primaryCode == 32) && (!longPressedSpaceButton)) {
 
-      InputConnection ic = getCurrentInputConnection ();
-      ic.commitText (String.valueOf ((char) primaryCode), 1);
+      InputConnection ic = getCurrentInputConnection();
+      ic.commitText(String.valueOf((char) primaryCode), 1);
     }
 
     longPressedSpaceButton = false;
@@ -416,55 +420,55 @@ implements KeyboardView.OnKeyboardActionListener {
     clearLongPressTimer();
   }
 
-
-public void onKeyLongPress(int keyCode) {
+  public void onKeyLongPress(int keyCode) {
     InputConnection ic = getCurrentInputConnection();
 
     if (keyCode == 32) { // Space button long press
-        // Toggle between QWERTY (0) and Urdu (4) layouts
-        if (currentLayoutIndex == 0) {
-            currentLayoutIndex = 4; // Switch to Urdu
-        } else {
-            currentLayoutIndex = 0; // Switch to QWERTY
-        }
+      if (currentLayoutIndex == 0) {
+        KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
+        currentLayoutIndex = sharedPreferences.getSpacebarLayoutIndex();
+        Toast.makeText(getApplicationContext(), "Specified layout activated", Toast.LENGTH_SHORT).show();
+      } else {
+        currentLayoutIndex = 0; // Switch to QWERTY
+Toast.makeText(getApplicationContext(), "Qwerty layout activated", Toast.LENGTH_SHORT).show();
+      }
+      onCreateInputView();
 
-        // Recreate the input view with the new layout
-        onCreateInputView();
+      setInputView(onCreateInputView());
 
-        if (vibratorOn) {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            if (vibrator != null) {
-                vibrator.vibrate(vibrateLength);
-            }
+      if (vibratorOn) {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null) {
+          vibrator.vibrate(vibrateLength);
         }
+      }
     }
 
     // Existing functionality for shift and ctrl
     if (keyCode == 16) {
-        shiftLock = !shiftLock;
-        if (shiftLock) {
-            shift = true;
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
-        } else {
-            shift = false;
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
-        }
-        shiftKeyUpdateView();
+      shiftLock = !shiftLock;
+      if (shiftLock) {
+        shift = true;
+        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT));
+      } else {
+        shift = false;
+        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT));
+      }
+      shiftKeyUpdateView();
     }
 
     if (keyCode == 17) {
-        ctrlLock = !ctrlLock;
-        if (ctrlLock) {
-            ctrl = true;
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-        } else {
-            ctrl = false;
-            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-        }
-        controlKeyUpdateView();
+      ctrlLock = !ctrlLock;
+      if (ctrlLock) {
+        ctrl = true;
+        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
+      } else {
+        ctrl = false;
+        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
+      }
+      controlKeyUpdateView();
     }
-}
-
+  }
 
   public void onText(CharSequence text) {
     InputConnection ic = getCurrentInputConnection();
@@ -492,20 +496,20 @@ public void onKeyLongPress(int keyCode) {
 
   }
 
-@Override
-public View onCreateInputView() {
+  @Override
+  public View onCreateInputView() {
     if (mKeyboardUiFactory == null) {
-        mKeyboardUiFactory = new KeyboardUiFactory(this, new KeyboardPreferences(this));
+      mKeyboardUiFactory = new KeyboardUiFactory(this, new KeyboardPreferences(this));
     }
     KeyboardPreferences sharedPreferences = new KeyboardPreferences(this);
     setNotification(sharedPreferences.getNotification());
 
     if (sharedPreferences.getCustomTheme()) {
-        mKeyboardUiFactory.theme = getDefaultThemeInfo();
-        mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
-        mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
+      mKeyboardUiFactory.theme = getDefaultThemeInfo();
+      mKeyboardUiFactory.theme.foregroundColor = sharedPreferences.getFgColor();
+      mKeyboardUiFactory.theme.backgroundColor = sharedPreferences.getBgColor();
     } else {
-        mKeyboardUiFactory.theme = setThemeByIndex(sharedPreferences, sharedPreferences.getThemeIndex());
+      mKeyboardUiFactory.theme = setThemeByIndex(sharedPreferences, sharedPreferences.getThemeIndex());
     }
 
     // Keyboard Features
@@ -523,13 +527,11 @@ public View onCreateInputView() {
     mKeyboardUiFactory.theme.sizeLandscape = sizeLandscape / 100.0f;
 
     if (sharedPreferences.getNavBarDark()) {
-        Objects.requireNonNull(getWindow().getWindow()).
-            setNavigationBarColor(
-                ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
-                Color.BLACK, 0.2f));
+      Objects.requireNonNull(getWindow().getWindow()).setNavigationBarColor(
+          ColorUtils.blendARGB(mKeyboardUiFactory.theme.backgroundColor,
+              Color.BLACK, 0.2f));
     } else if (sharedPreferences.getNavBar()) {
-        Objects.requireNonNull(getWindow().getWindow()).
-            setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
+      Objects.requireNonNull(getWindow().getWindow()).setNavigationBarColor(mKeyboardUiFactory.theme.backgroundColor);
     }
 
     // Key Layout
@@ -546,93 +548,92 @@ public View onCreateInputView() {
     // Need this to get resources for drawables
     Definitions definitions = new Definitions(this);
     try {
-        KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
-        builder.setBox(Box.create(0, 0, 1, 1));
+      KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
+      builder.setBox(Box.create(0, 0, 1, 1));
 
-        if (mToprow) {
-            definitions.addCopyPasteRow(builder);
+      if (mToprow) {
+        definitions.addCopyPasteRow(builder);
+      } else {
+        definitions.addArrowsRow(builder);
+      }
+
+      if (mKeyboardState == R.integer.keyboard_sym) {
+        if (!mCustomSymbolsSym.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsSym);
+        }
+        if (!mCustomSymbolsSym2.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsSym2);
+        }
+        if (!mCustomSymbolsSym3.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsSym3);
+        }
+        if (!mCustomSymbolsSym4.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsSym4);
+        }
+        if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
+          definitions.addSymbolRows(builder);
         } else {
-            definitions.addArrowsRow(builder);
+          definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
         }
+      } else if (mKeyboardState == R.integer.keyboard_normal) {
+        if (!mCustomSymbolsMain.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsMain);
+        }
+        if (!mCustomSymbolsMain2.isEmpty()) {
+          Definitions.addCustomRow(builder, mCustomSymbolsMain2);
+        }
+        switch (layoutIndex) {
+          default:
+          case 0:
+            Definitions.addQwertyRows(builder);
+            break;
+          case 1:
+            Definitions.addAzertyRows(builder);
+            break;
+          case 2:
+            Definitions.addDvorakRows(builder);
+            break;
+          case 3:
+            Definitions.addQwertzRows(builder);
+            break;
+          case 4:
+            Definitions.addUrduRows(builder);
+            break;
+        }
+        definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
+      } else if (mKeyboardState == R.integer.keyboard_clipboard) {
+        definitions.addClipboardActions(builder);
 
-        if (mKeyboardState == R.integer.keyboard_sym) {
-            if (!mCustomSymbolsSym.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsSym);
-            }
-            if (!mCustomSymbolsSym2.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsSym2);
-            }
-            if (!mCustomSymbolsSym3.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsSym3);
-            }
-            if (!mCustomSymbolsSym4.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsSym4);
-            }
-            if (mCustomSymbolsSym3.isEmpty() && mCustomSymbolsSym4.isEmpty()) {
-                definitions.addSymbolRows(builder);
-            } else {
-                definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
-            }
-        } else if (mKeyboardState == R.integer.keyboard_normal) {
-            if (!mCustomSymbolsMain.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsMain);
-            }
-            if (!mCustomSymbolsMain2.isEmpty()) {
-                Definitions.addCustomRow(builder, mCustomSymbolsMain2);
-            }
-            switch (layoutIndex) {
-                default:
-                case 0:
-                    Definitions.addQwertyRows(builder);
-                    break;
-                case 1:
-                    Definitions.addAzertyRows(builder);
-                    break;
-                case 2:
-                    Definitions.addDvorakRows(builder);
-                    break;
-                case 3:
-                    Definitions.addQwertzRows(builder);
-                    break;
-                case 4:
-                    Definitions.addUrduRows(builder);
-                    break;
-            }
-            definitions.addCustomSpaceRow(builder, mCustomSymbolsMainBottom, spaceBarSize);
-        } else if (mKeyboardState == R.integer.keyboard_clipboard) {
-            definitions.addClipboardActions(builder);
-
-            ClipboardManager clipboard = (ClipboardManager)
-                getSystemService(Context.CLIPBOARD_SERVICE);
-            if (clipboard.hasPrimaryClip()
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard.hasPrimaryClip()
             && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-                ClipData pr = clipboard.getPrimaryClip();
-                String s = pr.getItemAt(0).getText().toString();
-                builder.newRow().addKey(s);
-            } else {
-                builder.newRow().addKey("Nothing copied").withOutputText("");
-            }
-            builder.addKey(sharedPreferences.getPin1());
-            builder.newRow()
-                .addKey(sharedPreferences.getPin2())
-                .addKey(sharedPreferences.getPin3());
-            builder.newRow()
-                .addKey(sharedPreferences.getPin4())
-                .addKey(sharedPreferences.getPin5());
-            builder.newRow()
-                .addKey(sharedPreferences.getPin6())
-                .addKey(sharedPreferences.getPin7());
+          ClipData pr = clipboard.getPrimaryClip();
+          String s = pr.getItemAt(0).getText().toString();
+          builder.newRow().addKey(s);
+        } else {
+          builder.newRow().addKey("Nothing copied").withOutputText("");
         }
+        builder.addKey(sharedPreferences.getPin1());
+        builder.newRow()
+            .addKey(sharedPreferences.getPin2())
+            .addKey(sharedPreferences.getPin3());
+        builder.newRow()
+            .addKey(sharedPreferences.getPin4())
+            .addKey(sharedPreferences.getPin5());
+        builder.newRow()
+            .addKey(sharedPreferences.getPin6())
+            .addKey(sharedPreferences.getPin7());
+      }
 
-        Collection<Key> keyboardLayout = builder.build();
-        mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
-        return mCurrentKeyboardLayoutView;
+      Collection<Key> keyboardLayout = builder.build();
+      mCurrentKeyboardLayoutView = mKeyboardUiFactory.createKeyboardView(this, keyboardLayout);
+      return mCurrentKeyboardLayoutView;
 
     } catch (KeyboardLayoutException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
     return null;
-}
+  }
 
   @Override
   public void onUpdateExtractingVisibility(EditorInfo ei) {
@@ -666,36 +667,36 @@ public View onCreateInputView() {
     ThemeInfo themeInfo = ThemeDefinitions.Default();
     switch (index) {
       case 0:
-      switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-        case Configuration.UI_MODE_NIGHT_YES:
+        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+          case Configuration.UI_MODE_NIGHT_YES:
+            themeInfo = ThemeDefinitions.MaterialDark();
+            break;
+          case Configuration.UI_MODE_NIGHT_NO:
+            themeInfo = ThemeDefinitions.MaterialWhite();
+            break;
+        }
+        break;
+      case 1:
         themeInfo = ThemeDefinitions.MaterialDark();
         break;
-        case Configuration.UI_MODE_NIGHT_NO:
+      case 2:
         themeInfo = ThemeDefinitions.MaterialWhite();
         break;
-      }
-      break;
-      case 1:
-      themeInfo = ThemeDefinitions.MaterialDark();
-      break;
-      case 2:
-      themeInfo = ThemeDefinitions.MaterialWhite();
-      break;
       case 3:
-      themeInfo = ThemeDefinitions.PureBlack();
-      break;
+        themeInfo = ThemeDefinitions.PureBlack();
+        break;
       case 4:
-      themeInfo = ThemeDefinitions.White();
-      break;
+        themeInfo = ThemeDefinitions.White();
+        break;
       case 5:
-      themeInfo = ThemeDefinitions.Blue();
-      break;
+        themeInfo = ThemeDefinitions.Blue();
+        break;
       case 6:
-      themeInfo = ThemeDefinitions.Purple();
-      break;
+        themeInfo = ThemeDefinitions.Purple();
+        break;
       default:
-      themeInfo = ThemeDefinitions.Default();
-      break;
+        themeInfo = ThemeDefinitions.Default();
+        break;
     }
     keyboardPreferences.setFgColor(themeInfo.foregroundColor);
     keyboardPreferences.setBgColor(themeInfo.backgroundColor);
@@ -726,10 +727,9 @@ public View onCreateInputView() {
 
   private static final int NOTIFICATION_ONGOING_ID = 1001;
 
-  //Code from Hacker keyboard's source
+  // Code from Hacker keyboard's source
   private void setNotification(boolean visible) {
-    NotificationManager mNotificationManager =
-  (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
     if (visible && mNotificationReceiver == null) {
       CharSequence text = "Keyboard notification enabled.";
@@ -742,31 +742,28 @@ public View onCreateInputView() {
       registerReceiver(mNotificationReceiver, pFilter);
 
       Intent notificationIntent = new Intent(NotificationReceiver.ACTION_SHOW);
-      PendingIntent contentIntent =
-      PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
+      PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
 
       Intent configIntent = new Intent(NotificationReceiver.ACTION_SETTINGS);
-      PendingIntent configPendingIntent =
-      PendingIntent.getBroadcast(getApplicationContext(), 2, configIntent, 0);
+      PendingIntent configPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 2, configIntent, 0);
 
       String title = "Show Codeboard Keyboard";
       String body = "Select this to open the keyboard. Disable in settings.";
 
-      NotificationCompat.Builder mBuilder =
-      new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-      .setSmallIcon(R.drawable.icon_large)
-      .setColor(0xff220044)
-      .setAutoCancel(false)
-      .setTicker(text)
-      .setContentTitle(title)
-      .setContentText(body)
-      .setContentIntent(contentIntent)
-      .setOngoing(true)
-      .addAction(R.drawable.icon_large, getString(R.string.notification_action_open_keyboard),
-        contentIntent)
-      .addAction(R.drawable.icon_large, getString(R.string.notification_action_settings),
-        configPendingIntent)
-      .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+      NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+          .setSmallIcon(R.drawable.icon_large)
+          .setColor(0xff220044)
+          .setAutoCancel(false)
+          .setTicker(text)
+          .setContentTitle(title)
+          .setContentText(body)
+          .setContentIntent(contentIntent)
+          .setOngoing(true)
+          .addAction(R.drawable.icon_large, getString(R.string.notification_action_open_keyboard),
+              contentIntent)
+          .addAction(R.drawable.icon_large, getString(R.string.notification_action_settings),
+              configPendingIntent)
+          .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
       NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
