@@ -52,35 +52,35 @@ public class Definitions {
 
     public static void addQwertyRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
-                .addKey('q').onShiftUppercase()
-                .addKey('w').onShiftUppercase()
-                .addKey('e').onShiftUppercase()
-                .addKey('r').onShiftUppercase()
-                .addKey('t').onShiftUppercase()
-                .addKey('y').onShiftUppercase()
-                .addKey('u').onShiftUppercase()
-                .addKey('i').onShiftUppercase()
-                .addKey('o').onShiftUppercase()
-                .addKey('p').onShiftUppercase()
+                .addKey('q').onShiftUppercase().asRepeatable()
+                .addKey('w').onShiftUppercase().asRepeatable()
+                .addKey('e').onShiftUppercase().asRepeatable()
+                .addKey('r').onShiftUppercase().asRepeatable()
+                .addKey('t').onShiftUppercase().asRepeatable()
+                .addKey('y').onShiftUppercase().asRepeatable()
+                .addKey('u').onShiftUppercase().asRepeatable()
+                .addKey('i').onShiftUppercase().asRepeatable()
+                .addKey('o').onShiftUppercase().asRepeatable()
+                .addKey('p').onShiftUppercase().asRepeatable()
                 .newRow()
-                .addKey('a').onShiftUppercase().withSize(1.5f)
-                .addKey('s').onShiftUppercase()
-                .addKey('d').onShiftUppercase()
-                .addKey('f').onShiftUppercase()
-                .addKey('g').onShiftUppercase()
-                .addKey('h').onShiftUppercase()
-                .addKey('j').onShiftUppercase()
-                .addKey('k').onShiftUppercase()
-                .addKey('l').onShiftUppercase().withSize(1.5f)
+                .addKey('a').onShiftUppercase().withSize(1.5f).asRepeatable()
+                .addKey('s').onShiftUppercase().asRepeatable()
+                .addKey('d').onShiftUppercase().asRepeatable()
+                .addKey('f').onShiftUppercase().asRepeatable()
+                .addKey('g').onShiftUppercase().asRepeatable()
+                .addKey('h').onShiftUppercase().asRepeatable()
+                .addKey('j').onShiftUppercase().asRepeatable()
+                .addKey('k').onShiftUppercase().asRepeatable()
+                .addKey('l').onShiftUppercase().withSize(1.5f).asRepeatable()
                 .newRow()
                 .addShiftKey()
-                .addKey('z').onShiftUppercase()
-                .addKey('x').onShiftUppercase()
-                .addKey('c').onShiftUppercase()
-                .addKey('v').onShiftUppercase()
-                .addKey('b').onShiftUppercase()
-                .addKey('n').onShiftUppercase()
-                .addKey('m').onShiftUppercase()
+                .addKey('z').onShiftUppercase().asRepeatable()
+                .addKey('x').onShiftUppercase().asRepeatable()
+                .addKey('c').onShiftUppercase().asRepeatable()
+                .addKey('v').onShiftUppercase().asRepeatable()
+                .addKey('b').onShiftUppercase().asRepeatable()
+                .addKey('n').onShiftUppercase().asRepeatable()
+                .addKey('m').onShiftUppercase().asRepeatable()
                 .addBackspaceKey()
         ;
     }
@@ -194,6 +194,53 @@ public class Definitions {
         ;
     }
 
+    public static void addUrduRows(KeyboardLayoutBuilder keyboard) {
+        keyboard.newRow()
+                .addKey('ض').onShiftUppercase()
+                .addKey('ص').onShiftUppercase()
+                .addKey('غ').onShiftUppercase()
+                .addKey('ڑ').onShiftUppercase()
+                .addKey('ٹ').onShiftUppercase()
+                .addKey('ث').onShiftUppercase()
+                .addKey('ح').onShiftUppercase()
+                .addKey('ئ').onShiftUppercase()
+                .addKey('ظ').onShiftUppercase()
+                .addKey('ط').onShiftUppercase()
+                .newRow()
+                .addKey('ق').onShiftUppercase()
+                .addKey('و').onShiftUppercase()
+                .addKey('ع').onShiftUppercase()
+                .addKey('ر').onShiftUppercase()
+                .addKey('ت').onShiftUppercase()
+                .addKey('ے').onShiftUppercase()
+                .addKey('ء').onShiftUppercase()
+                .addKey('ی').onShiftUppercase()
+                .addKey('ہ').onShiftUppercase()
+                .addKey('پ').onShiftUppercase()
+                .newRow()
+                .addKey('ا').onShiftUppercase()
+                .addKey('س').onShiftUppercase()
+                .addKey('ڈ').onShiftUppercase()
+                .addKey('د').onShiftUppercase()
+                .addKey('ف').onShiftUppercase()
+                .addKey('گ').onShiftUppercase()
+                .addKey('ھ').onShiftUppercase()
+                .addKey('ج').onShiftUppercase()
+                .addKey('ک').onShiftUppercase()
+                .addKey('ل').onShiftUppercase()
+                .newRow()
+                .addKey('ذ').onShiftUppercase()
+                .addKey('ز').onShiftUppercase()
+                .addKey('ش').onShiftUppercase()
+                .addKey('خ').onShiftUppercase()
+                .addKey('چ').onShiftUppercase()
+                .addKey('ب').onShiftUppercase()
+                .addKey('ں').onShiftUppercase()
+                .addKey('ن').onShiftUppercase()
+                .addKey('م').onShiftUppercase()
+                .addBackspaceKey();
+    }
+
     public void addSymbolRows(KeyboardLayoutBuilder keyboard) {
         keyboard.newRow()
                 .addKey("Home", -18)
@@ -216,7 +263,7 @@ public class Definitions {
                 .addKey("F8", -13)
                 .addKey("F9", -14)
                 .addKey("F10", -15)
-                .addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f)
+                .addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(1.5f)
                 .addKey("F11", -16)
                 .addKey("F12", -17)
                 .addEnterKey()
@@ -235,19 +282,21 @@ public class Definitions {
         ;
     }
 
-    public void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols) {
+    public void addCustomSpaceRow(KeyboardLayoutBuilder keyboard, String symbols, int spaceBarSize) {
         char[] chars = symbols.toCharArray();
 
         keyboard.newRow().addKey("Ctrl", 17).asModifier().onCtrlShow("CTRL");
 
         for (int i = 0; i < (chars.length + 1) / 2 && chars.length > 0; i++) {
-            keyboard.addKey(chars[i]).withSize(.7f);
+            keyboard.addKey(chars[i]).withSize(.7f).asRepeatable();
         }
-        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(2f);
+        float size = (float) spaceBarSize / 20;
+
+        keyboard.addKey(context.getDrawable(R.drawable.ic_space_bar_24dp), 32).withSize(size);
         for (int i = (chars.length + 1) / 2; i < chars.length; i++) {
             keyboard.addKey(chars[i]).withSize(.7f);
         }
-        keyboard.addEnterKey();
+        keyboard.addEnterKey().asRepeatable();
 
     }
 

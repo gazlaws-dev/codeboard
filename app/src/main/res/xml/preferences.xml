@@ -27,6 +27,28 @@
             android:title="Vibration Length (ms)"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            android:defaultValue="@integer/repeat_interval"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="repeat_interval"
+            android:title="Repeat Interval"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="@integer/initial_repeat_delay"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="initial_repeat_delay"
+            android:title="Initial Repeat Delay"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="@integer/sound_volume"
+            android:dependency="sound"
+            android:imeOptions="flagNoExtractUi"
+            android:key="sound_volume"
+            android:title="Sound Volume"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
             android:defaultValue="@integer/font_size"
             android:imeOptions="flagNoExtractUi"
             android:key="font_size"
@@ -54,8 +76,48 @@
             android:key="notification" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Colour">
 
+    <PreferenceCategory
+        android:title="Appearance">
+
+        <SeekBarPreference
+            android:key="button_transparency"
+            android:title="Button Transparency"
+            android:defaultValue="@integer/button_transparency"
+            android:min="0"
+            android:max="100"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="button_blur_effect"
+            android:title="Enable Button Blur"
+            android:defaultValue="false" />
+
+        <SeekBarPreference
+            android:key="bg_transparency"
+            android:title="Background Transparency"
+            android:defaultValue="@integer/bg_transparency"
+            android:min="0"
+            android:max="100"
+            app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+          android:key="spacebar_size"
+          android:title="Spacebar Size"
+          android:summary="Adjust the spacebar size"
+          android:defaultValue="@integer/spacebar_size"
+          android:min="0"
+          android:max="100"
+          app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="bg_blur_effect"
+            android:title="Enable Background Blur"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Colour">
         <ListPreference
             android:defaultValue="@integer/theme"
             android:entries="@array/Themes"
@@ -77,6 +139,34 @@
             android:key="fg_colour_picker"
             android:title="Foreground colour" />
         <SwitchPreferenceCompat
+            android:defaultValue="@bool/gradient"
+            android:key="gradient_enabled"
+            android:title="@string/gradient_enable" />
+        <SwitchPreferenceCompat
+            android:dependency="gradient_enabled"
+            android:defaultValue="false"
+            android:key="custom_gradient_enabled"
+            android:title="Custom Gradient" />
+        <Preference
+            android:defaultValue="@integer/gradient_start_color"
+            android:dependency="gradient_enabled"
+            android:key="gradient_start_color_picker"
+            android:title="Gradient Start Color" />
+        <Preference
+            android:defaultValue="@integer/gradient_end_color"
+            android:dependency="gradient_enabled"
+            android:key="gradient_end_color_picker"
+            android:title="Gradient End Color" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="custom_button_color_enabled"
+            android:title="Set Custom Button Color" />
+        <Preference
+            android:dependency="custom_button_color_enabled"
+            android:defaultValue="@integer/custom_button_color"
+            android:key="button_color_picker"
+            android:title="Button Color" />
+        <SwitchPreferenceCompat
             android:defaultValue="@bool/borders"
             android:key="borders"
             android:title="@string/key_borders" />
@@ -89,6 +179,7 @@
             android:key="navbar_dark"
             android:title="Navbar matches border color" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="Layout">
         <ListPreference
             android:defaultValue="0"
@@ -96,6 +187,15 @@
             android:entryValues="@array/Values"
             android:key="layout"
             android:title="Set Keyboard Layout"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="@integer/spacebar_layout_index"
+            android:imeOptions="flagNoExtractUi"
+            android:key="spacebar_layout_index"
+            min="0"
+            max="4"
+            android:title="Spacebar Layout Index"
+            android:summary="0: Qwerty, 1: Azerty, 2: Dvorak, 3: Qwertz, 4: Urdu"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             android:defaultValue="@bool/top_row_actions"
@@ -213,8 +313,7 @@
             android:title="Open on GitHub">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/gazlaws-dev/codeboard" />
+              android:data="https://github.com/abrarishere/codeboard" />
         </Preference>
-
     </PreferenceCategory>
 </PreferenceScreen>
