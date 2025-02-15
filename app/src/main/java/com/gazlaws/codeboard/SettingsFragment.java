@@ -25,8 +25,10 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
-import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
+//import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+//import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPicker;
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
