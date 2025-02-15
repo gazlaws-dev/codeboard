@@ -18,6 +18,7 @@ import android.widget.EditText;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
+import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -89,6 +90,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             scrollToPreference("notification");
         }
 
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        // Check if the preference is an EditTextPreference
+        if (preference instanceof EditTextPreference) {
+            // Create a new dialog fragment for the EditTextPreference
+            final EditTextPreferenceDialogFragmentCompat dialogFragment = EditTextPreferenceDialogFragmentCompat.newInstance(preference.getKey());
+            // Show the dialog fragment
+            dialogFragment.show(getParentFragmentManager(), null);
+        } else {
+            // If it's not an EditTextPreference, call the super method
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 
     public static CharSequence getCurrentImeLabel(Context context) {

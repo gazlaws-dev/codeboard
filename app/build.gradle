@@ -9,8 +9,8 @@ android {
         applicationId "com.gazlaws.codeboard"
         minSdkVersion 23
         targetSdk 34
-        versionCode 21
-        versionName "6.0.1"
+        versionCode 22
+        versionName "6.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
