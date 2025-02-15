@@ -92,19 +92,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
 
     }
 
-    @Override
-    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
-        // Check if the preference is an EditTextPreference
-        if (preference instanceof EditTextPreference) {
-            // Create a new dialog fragment for the EditTextPreference
-            final EditTextPreferenceDialogFragmentCompat dialogFragment = EditTextPreferenceDialogFragmentCompat.newInstance(preference.getKey());
-            // Show the dialog fragment
-            dialogFragment.show(getParentFragmentManager(), null);
-        } else {
-            // If it's not an EditTextPreference, call the super method
-            super.onDisplayPreferenceDialog(preference);
-        }
-    }
+
 
     public static CharSequence getCurrentImeLabel(Context context) {
         CharSequence readableName = null;
