@@ -36,14 +36,25 @@ public class KeyboardPreferences {
     }
 
     public boolean isVibrateEnabled() {
-        return read("vibrate",
-                res.getBoolean(R.bool.vibrate));
+        try {
+            return read("vibrate",
+                    res.getBoolean(R.bool.vibrate));
+        }
+        catch (Exception e){
+            return true;
+        }
+
     }
 
     //Note: EditTextPreference saves these as strings. Could be null
     public int getVibrateLength() {
+        try{
         return Integer.parseInt(safeRead("vibrate_ms",
                 String.valueOf(res.getInteger(R.integer.vibrate_length))));
+    }
+        catch (Exception e){
+            return 1;
+        }
     }
 
     public void setVibrateLength(int length) {
@@ -71,13 +82,21 @@ public class KeyboardPreferences {
     }
 
     public int getPortraitSize() {
+        try{
         return Integer.parseInt(safeRead("size_portrait",
                 String.valueOf(res.getInteger(R.integer.size_portrait))));
+        } catch (Exception e){
+            return 40;
+        }
     }
 
     public int getLandscapeSize() {
-        return Integer.parseInt(safeRead("size_landscape",
-                String.valueOf(res.getInteger(R.integer.size_landscape))));
+        try {
+            return Integer.parseInt(safeRead("size_landscape",
+                    String.valueOf(res.getInteger(R.integer.size_landscape))));
+        } catch (Exception e){
+            return 70;
+        }
     }
 
 
