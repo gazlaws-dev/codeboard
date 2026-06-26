@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CodeBoard Debug</string>
+    <string name="codeboard_ime">Debug CodeBoard IME</string>
+</resources>

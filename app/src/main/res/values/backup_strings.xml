@@ -1,0 +1,12 @@
+<resources>
+    <string name="export_settings_title">Export Settings</string>
+    <string name="import_settings_title">Import Settings</string>
+    <string name="export_success">Settings exported successfully</string>
+    <string name="export_failed">Export failed</string>
+    <string name="import_success">Settings imported. Restarting to apply changes...</string>
+    <string name="import_failed">Import failed</string>
+    <string name="backup_restore_category">Backup &amp; Restore</string>
+    <string name="default_export_filename">settings.codeboard</string>
+    <string name="import_error_format">Import failed: %1$s</string>
+    <string name="export_error_format">Export failed: %1$s</string>
+</resources>

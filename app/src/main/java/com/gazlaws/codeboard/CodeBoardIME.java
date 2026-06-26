@@ -1,6 +1,7 @@
 package com.gazlaws.codeboard;
 
 import android.Manifest;
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -707,11 +708,7 @@ public class CodeBoardIME extends InputMethodService
             mNotificationReceiver = new NotificationReceiver(this);
             final IntentFilter pFilter = new IntentFilter(NotificationReceiver.ACTION_SHOW);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                registerReceiver(mNotificationReceiver, pFilter, Context.RECEIVER_NOT_EXPORTED);
-            } else {
-                registerReceiver(mNotificationReceiver, pFilter);
-            }
+            ContextCompat.registerReceiver(this, mNotificationReceiver, pFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
 
 
             Intent imeIntent = new Intent(NotificationReceiver.ACTION_SHOW);

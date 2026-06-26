@@ -7,18 +7,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
-import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -26,23 +31,41 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.gazlaws.codeboard.theme.IOnFocusListenable;
 import com.gazlaws.codeboard.theme.ThemeDefinitions;
 import com.gazlaws.codeboard.theme.ThemeInfo;
-//import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
-//import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPicker;
 import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import static android.provider.Settings.Secure.DEFAULT_INPUT_METHOD;
 
-
 public class SettingsFragment extends PreferenceFragmentCompat implements IOnFocusListenable {
+
     KeyboardPreferences keyboardPreferences;
+
+    private final ActivityResultLauncher<String> exportLauncher = registerForActivityResult(
+            new ActivityResultContracts.CreateDocument("application/x-codeboard"),
+            uri -> {
+                if (uri != null) {
+                    performExport(uri);
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<String[]> importLauncher = registerForActivityResult(
+            new ActivityResultContracts.OpenDocument(),
+            uri -> {
+                if (uri != null) {
+                    validateAndPerformImport(uri);
+                }
+            }
+    );
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-        keyboardPreferences = new KeyboardPreferences(requireActivity());
+        keyboardPreferences = new KeyboardPreferences(getActivity());
 
-        //  Declare a new thread to do a preference check
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -55,44 +78,101 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         });
         t.start();
 
-        //Only allow numbers
+        //Only allow positive numbers
         String[] numberOnlyPrefereces = {"vibrate_ms", "font_size", "size_portrait", "size_landscape"};
         for (String key : numberOnlyPrefereces) {
             EditTextPreference editTextPreference = getPreferenceManager().findPreference(key);
-            editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+            if (editTextPreference != null) {
+                editTextPreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                    @Override
+                    public void onBindEditText(@NonNull EditText editText) {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    }
+                });
+            }
+        }
+
+        ListPreference themePreference = (ListPreference) getPreferenceManager().findPreference("theme");
+        if (themePreference != null) {
+            themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (!keyboardPreferences.getCustomTheme()) {
+                        int index = Integer.parseInt(newValue.toString());
+                        preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
+                        setThemeByIndex(index);
+                        return true;
+                    }
+                    preference.setSummary("Custom Theme is set");
+                    return false;
                 }
             });
         }
 
-        ListPreference themePreference = (ListPreference) getPreferenceManager().findPreference("theme");
-        assert themePreference != null;
-        themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!keyboardPreferences.getCustomTheme()) {
-                    int index = Integer.parseInt(newValue.toString());
-                    preference.setSummary(getResources().getStringArray(R.array.Themes)[index]);
-                    setThemeByIndex(index);
-                    return true;
-                }
-                preference.setSummary("Custom Theme is set");
-                return false;
-            }
-        });
-
         Bundle bundle = this.getArguments();
-//        Log.d(this.getClass().getSimpleName(), "onCreatePreferences: "+bundle );
-        if (bundle != null &&
-                (bundle.getInt("notification") == 1)) {
+        if (bundle != null && (bundle.getInt("notification") == 1)) {
             scrollToPreference("notification");
         }
-
     }
 
+    private void performExport(Uri uri) {
+        try {
+            OutputStream os = requireContext().getContentResolver().openOutputStream(uri);
+            if (os != null) {
+                String error = SettingsManager.exportSettings(requireContext(), os);
+                if (error == null) {
+                    Toast.makeText(getActivity(), R.string.export_success, Toast.LENGTH_SHORT).show();
+                } else {
+                    String msg = getString(R.string.export_error_format, error);
+                    Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.export_failed, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Export error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 
+    private void validateAndPerformImport(Uri uri) {
+        long fileSize = -1;
+        try (Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                if (sizeIndex != -1) fileSize = cursor.getLong(sizeIndex);
+            }
+        }
+
+        // Validate Size (512KB limit)
+        if (fileSize > 512 * 1024) {
+            Toast.makeText(getActivity(), "File too large (max 512KB)", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        performImport(uri);
+    }
+
+    private void performImport(Uri uri) {
+        try {
+            InputStream is = requireContext().getContentResolver().openInputStream(uri);
+            if (is != null) {
+                String error = SettingsManager.importSettings(requireContext(), is);
+                if (error == null) {
+                    Toast.makeText(getActivity(), R.string.import_success, Toast.LENGTH_LONG).show();
+                    requireActivity().recreate();
+                } else {
+                    String msg = getString(R.string.import_error_format, error);
+                    Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.import_failed, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Import error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 
     public static CharSequence getCurrentImeLabel(Context context) {
         CharSequence readableName = null;
@@ -113,9 +193,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-
         if (preference == null || preference.getKey() == null) {
-            //Run Intent
             return false;
         }
         switch (preference.getKey()) {
@@ -128,13 +206,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
             case "bg_colour_picker":
             case "fg_colour_picker":
                 openColourPicker(preference.getKey());
-                getPreferenceManager().findPreference("theme").setSummary("Custom Theme is set");
+                Preference themePref = getPreferenceManager().findPreference("theme");
+                if (themePref != null) themePref.setSummary("Custom Theme is set");
                 break;
             case "restore_default":
                 confirmReset();
                 break;
             case "restore_old":
                 classicSymbols();
+                break;
+            case "export_settings":
+                exportLauncher.launch(getString(R.string.default_export_filename));
+                break;
+            case "import_settings":
+                importLauncher.launch(new String[]{"application/octet-stream", "application/x-codeboard"});
                 break;
             default:
                 break;
@@ -154,11 +239,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                         addPreferencesFromResource(R.xml.preferences);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
+                .setNegativeButton("No", null)
                 .show();
     }
 
@@ -183,38 +264,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
                         addPreferencesFromResource(R.xml.preferences);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
+                .setNegativeButton("No", null)
                 .show();
     }
 
     private void setThemeByIndex(int index) {
         ThemeInfo themeInfo;
         switch (index) {
-            case 1:
-                themeInfo = ThemeDefinitions.MaterialDark();
-                break;
-            case 2:
-                themeInfo = ThemeDefinitions.MaterialWhite();
-                break;
-            case 3:
-                themeInfo = ThemeDefinitions.PureBlack();
-                break;
-            case 4:
-                themeInfo = ThemeDefinitions.White();
-                break;
-            case 5:
-                themeInfo = ThemeDefinitions.Blue();
-                break;
-            case 6:
-                themeInfo = ThemeDefinitions.Purple();
-                break;
-            default:
-                themeInfo = ThemeDefinitions.Default();
-                break;
+            case 1: themeInfo = ThemeDefinitions.MaterialDark(); break;
+            case 2: themeInfo = ThemeDefinitions.MaterialWhite(); break;
+            case 3: themeInfo = ThemeDefinitions.PureBlack(); break;
+            case 4: themeInfo = ThemeDefinitions.White(); break;
+            case 5: themeInfo = ThemeDefinitions.Blue(); break;
+            case 6: themeInfo = ThemeDefinitions.Purple(); break;
+            default: themeInfo = ThemeDefinitions.Default(); break;
         }
         keyboardPreferences.setBgColor(String.valueOf(themeInfo.backgroundColor));
         keyboardPreferences.setFgColor(String.valueOf(themeInfo.foregroundColor));
@@ -245,12 +308,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements IOnFoc
         });
     }
 
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            Preference imePreference = (Preference) getPreferenceManager().findPreference("change_keyboard");
-            imePreference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
+            Preference imePreference = getPreferenceManager().findPreference("change_keyboard");
+            if (imePreference != null) {
+                imePreference.setSummary(getCurrentImeLabel(getActivity().getApplicationContext()));
+            }
         }
     }
 }

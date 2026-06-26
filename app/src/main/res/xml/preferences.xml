@@ -188,6 +188,15 @@
             android:title="Pin 7:"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/backup_restore_category">
+        <Preference
+            android:key="export_settings"
+            android:title="@string/export_settings_title" />
+        <Preference
+            android:key="import_settings"
+            android:title="@string/import_settings_title" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Restore">
         <Preference
             android:key="restore_default"
