@@ -89,3 +89,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Archives - do not ignore
+!archives/logs/activity.log

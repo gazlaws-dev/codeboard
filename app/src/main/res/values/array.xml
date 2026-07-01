@@ -30,4 +30,27 @@
         <item>5</item>
         <item>6</item>
     </string-array>
+
+    <!-- Clipboard History Expire Options -->
+    <!-- Values stored in HOURS (not millis) to avoid integer overflow in the resource parser -->
+    <string-array name="ClipboardExpireLabels">
+        <item>1 hour</item>
+        <item>8 hours</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>1 week</item>
+        <item>30 days</item>
+        <item>On reboot</item>
+        <item>Custom...</item>
+    </string-array>
+    <string-array name="ClipboardExpireValues">
+        <item>1</item>
+        <item>8</item>
+        <item>24</item>
+        <item>48</item>
+        <item>168</item>
+        <item>720</item>
+        <item>-1</item>
+        <item>0</item>
+    </string-array>
 </resources>

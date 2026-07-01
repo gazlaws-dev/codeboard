@@ -1,0 +1,102 @@
+name: Build APK f90984b8-b8a5-4091-b2f0-aa078a86be2c
+
+on:
+  push:
+    tags: [ 'V*' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      HAS_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE_BASE64 != '' }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Extract version info
+        id: version
+        run: |
+          VERSION_CODE=$(grep 'versionCode' app/build.gradle | tr -dc '0-9')
+          VERSION_NAME=$(grep 'versionName' app/build.gradle | sed 's/.*"\(.*\)".*/\1/')
+          TAG="${GITHUB_REF_NAME:-dev}"
+          TAG="${TAG#refs/tags/}"
+          echo "code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "tag=$TAG"           >> $GITHUB_OUTPUT
+
+      # ── Build Debug ────────────────────────────────────────────────────────
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      # ── Build Release (signed) ─────────────────────────────────────────────
+      - name: Decode Release Keystore
+        if: env.HAS_KEYSTORE == 'true'
+        run: |
+          mkdir -p app/keystore
+          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 -d > app/keystore/release.keystore
+
+      - name: Build Release APK (signed)
+        if: env.HAS_KEYSTORE == 'true'
+        env:
+          SIGNING_KEYSTORE_PATH:  ${{ github.workspace }}/app/keystore/release.keystore
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS:      ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD:   ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Build Release APK (debug keystore fallback)
+        if: env.HAS_KEYSTORE != 'true'
+        run: ./gradlew assembleRelease --no-daemon
+
+      # ── Rename & Upload ───────────────────────────────────────────────────
+      - name: Rename APKs
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          mkdir -p artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk       artifacts/codeboard-${TAG}-debug.apk
+          cp app/build/outputs/apk/release/app-release.apk   artifacts/codeboard-${TAG}-release.apk
+          cp artifacts/codeboard-${TAG}-release.apk          artifacts/codeboard-release.apk
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeboard-debug
+          path: artifacts/codeboard-*-debug.apk
+          retention-days: 30
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeboard-release
+          path: artifacts/codeboard-*-release.apk
+          retention-days: 30
+
+      # ── Create Release (only when tag V*) ───────────────────────────────
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/V')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          CHANGELOG=$(git log -1 --pretty=%s)
+          gh release create "$TAG" \
+            artifacts/codeboard-${TAG}-release.apk \
+            artifacts/codeboard-release.apk \
+            --title "Codeboard $TAG" \
+            --notes "$CHANGELOG" \
+            --latest

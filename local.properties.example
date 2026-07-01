@@ -1,0 +1,12 @@
+# local.properties.example
+# Copy this file to local.properties and fill in your keystore path
+# DO NOT commit local.properties to git!
+
+# SDK path (required)
+sdk.dir=/path/to/Android/Sdk
+
+# Signing config for Android Studio
+signing.keystore.path=/path/to/release.keystore
+signing.store.password=
+signing.key.alias=
+signing.key.password=

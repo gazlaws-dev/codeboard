@@ -7,11 +7,27 @@ import com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder;
 
 public class Definitions {
     private Context context;
-    private static final int CODE_ESCAPE = -2;
+    private static final int CODE_ESCAPE  = -2;
     private static final int CODE_SYMBOLS = -1;
+    // Special code for the HIST key — same value as CODE_SYMBOLS (-1) because
+    // onKey case -1 handles mode toggling based on the ctrl+shift state.
+    // Kept as a separate constant for clarity and easier future changes.
+    private static final int CODE_HISTORY = -1;
 
     public Definitions(Context current) {
         this.context = current;
+    }
+
+    public void addHistoryTopRow(KeyboardLayoutBuilder keyboard) {
+        keyboard.newRow()
+                .addKey("Esc", CODE_ESCAPE)
+                .addTabKey()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_left_24dp), 5000).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_down_24dp), 5001).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_up_24dp), 5002).asRepeatable()
+                .addKey(context.getDrawable(R.drawable.ic_keyboard_arrow_right_24dp), 5003).asRepeatable()
+                .addKey("HIST", CODE_HISTORY)
+        ;
     }
 
     public void addArrowsRow(KeyboardLayoutBuilder keyboard) {

@@ -188,6 +188,47 @@
             android:title="Pin 7:"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/clipboard_history_category">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="clipboard_history_enabled"
+            android:title="@string/clipboard_history_enabled_title"
+            android:summary="@string/clipboard_history_enabled_summary" />
+        <ListPreference
+            android:dependency="clipboard_history_enabled"
+            android:defaultValue="24"
+            android:entries="@array/ClipboardExpireLabels"
+            android:entryValues="@array/ClipboardExpireValues"
+            android:key="clipboard_history_expire_preset"
+            android:title="@string/clipboard_history_expire_title"
+            android:summary="@string/clipboard_history_expire_summary_default"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:dependency="clipboard_history_enabled"
+            android:key="clipboard_history_expire_custom_hours"
+            android:title="@string/clipboard_history_custom_title"
+            android:dialogMessage="@string/clipboard_history_custom_hint"
+            android:imeOptions="flagNoExtractUi"
+            app:useSimpleSummaryProvider="true" />
+        <Preference
+            android:dependency="clipboard_history_enabled"
+            android:key="clipboard_history_path"
+            android:title="@string/clipboard_history_path_title"
+            android:summary="@string/clipboard_history_path_summary"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/backup_category">
+        <Preference
+            android:key="backup_export"
+            android:title="@string/backup_export_title"
+            android:summary="@string/backup_export_summary" />
+        <Preference
+            android:key="backup_import"
+            android:title="@string/backup_import_title"
+            android:summary="@string/backup_import_summary" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Restore">
         <Preference
             android:key="restore_default"

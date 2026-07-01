@@ -20,4 +20,25 @@
     <string name="notification_action_open_keyboard_workaround">Fix popup</string>
     <string name="notification_action_settings">Settings</string>
     <string name="github_summary">This app is free, open-source and does not read your data! You can view, modify and compile the code yourself on GitHub.</string>
+
+    <!-- Backup & Restore -->
+    <string name="backup_category">Backup &amp; Restore</string>
+    <string name="backup_export_title">Export settings</string>
+    <string name="backup_export_summary">Save all settings, symbols, and pins to a .json file</string>
+    <string name="backup_import_title">Import settings</string>
+    <string name="backup_import_summary">Restore settings from a .json backup file</string>
+    <string name="backup_export_success">Backup saved successfully</string>
+    <string name="backup_import_success">Backup restored successfully. Restart the app to apply changes.</string>
+    <string name="backup_error_prefix">Failed: </string>
+
+    <!-- Clipboard History -->
+    <string name="clipboard_history_category">Clipboard History</string>
+    <string name="clipboard_history_enabled_title">Save clipboard history</string>
+    <string name="clipboard_history_enabled_summary">Every copied text will be saved to local storage</string>
+    <string name="clipboard_history_expire_title">Auto-delete after</string>
+    <string name="clipboard_history_expire_summary_default">1 day</string>
+    <string name="clipboard_history_custom_title">Custom duration (hours)</string>
+    <string name="clipboard_history_custom_hint">Minimum 1 hour, maximum 2160 hours (90 days)</string>
+    <string name="clipboard_history_path_title">Storage location</string>
+    <string name="clipboard_history_path_summary">Android/media/com.gazlaws.codeboard/.localcache/copy/</string>
 </resources>

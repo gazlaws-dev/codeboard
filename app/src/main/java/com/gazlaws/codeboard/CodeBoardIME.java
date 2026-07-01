@@ -36,6 +36,10 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 import androidx.core.graphics.ColorUtils;
 
+import com.gazlaws.codeboard.clipboard.ClipboardEntry;
+import com.gazlaws.codeboard.clipboard.ClipboardMonitor;
+import com.gazlaws.codeboard.clipboard.ClipboardPrefs;
+import com.gazlaws.codeboard.clipboard.ClipboardStorage;
 import com.gazlaws.codeboard.layout.Box;
 import com.gazlaws.codeboard.layout.Definitions;
 import com.gazlaws.codeboard.layout.Key;
@@ -63,6 +67,10 @@ public class CodeBoardIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
     private static final String NOTIFICATION_CHANNEL_ID = "Codeboard";
     EditorInfo sEditorInfo;
+
+    // Clipboard history
+    private ClipboardMonitor clipboardMonitor;
+
     private boolean vibratorOn;
     private int vibrateLength;
     private boolean soundOn;
@@ -105,7 +113,14 @@ public class CodeBoardIME extends InputMethodService
                 break;
             case -1:
                 //SYM
-                if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
+                if (ctrl && shift) {
+                    // Ctrl + Shift + SYM → toggle HIST mode
+                    if (mKeyboardState == R.integer.keyboard_history) {
+                        mKeyboardState = R.integer.keyboard_normal;
+                    } else {
+                        mKeyboardState = R.integer.keyboard_history;
+                    }
+                } else if (mKeyboardState == R.integer.keyboard_normal && !ctrl) {
                     mKeyboardState = R.integer.keyboard_sym;
                 } else if (ctrl) {
                     mKeyboardState = R.integer.keyboard_clipboard;
@@ -518,10 +533,12 @@ public class CodeBoardIME extends InputMethodService
             KeyboardLayoutBuilder builder = new KeyboardLayoutBuilder(this);
             builder.setBox(Box.create(0, 0, 1, 1));
 
-            if (mToprow) {
-                definitions.addCopyPasteRow(builder);
-            } else {
-                definitions.addArrowsRow(builder);
+            if (mKeyboardState != R.integer.keyboard_history) {
+                if (mToprow) {
+                    definitions.addCopyPasteRow(builder);
+                } else {
+                    definitions.addArrowsRow(builder);
+                }
             }
 
             if (mKeyboardState == R.integer.keyboard_sym) {
@@ -589,6 +606,11 @@ public class CodeBoardIME extends InputMethodService
                 builder.newRow()
                         .addKey(sharedPreferences.getPin6())
                         .addKey(sharedPreferences.getPin7());
+            } else if (mKeyboardState == R.integer.keyboard_history) {
+                // HIST mode: doesn't use KeyboardLayoutView because its coordinates are relative
+                // (every entry would shrink if divided evenly).
+                // Uses ScrollView + LinearLayout with a fixed entry height.
+                return buildHistoryView(mKeyboardUiFactory.theme);
             }
 
             Collection<Key> keyboardLayout = builder.build();
@@ -607,11 +629,188 @@ public class CodeBoardIME extends InputMethodService
         super.onUpdateExtractingVisibility(ei);
     }
 
+    /**
+     * Build the view for HIST mode using ScrollView + LinearLayout.
+     * Each entry has a fixed height so it can scroll correctly.
+     */
+    private android.view.View buildHistoryView(com.gazlaws.codeboard.theme.ThemeInfo theme) {
+        android.util.DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int screenH = metrics.heightPixels;
+        int screenW = metrics.widthPixels;
+
+        int rowHeightPx = (int)(48 * metrics.density);
+
+        // Get the keyboard height from UiTheme — exactly the same as KeyboardLayoutView.onMeasure
+        // so the HIST height matches the normal keyboard height
+        com.gazlaws.codeboard.theme.UiTheme uiTheme =
+                com.gazlaws.codeboard.theme.UiTheme.buildFromInfo(mKeyboardUiFactory.theme);
+        float kbSize = screenH > screenW ? uiTheme.portraitSize : uiTheme.landscapeSize;
+        int kbHeight = (int)(screenH * kbSize);
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setBackgroundColor(theme.backgroundColor);
+        root.setLayoutParams(new android.view.ViewGroup.LayoutParams(screenW, kbHeight));
+        root.setClipChildren(true);
+        root.setClipToPadding(true);
+
+        // BUG1&2 Fix: use createKeyboardView (same approach as normal mode)
+        // then override onMeasure so its height is only 1 row, not the full keyboard height.
+        // key.box uses relative coordinates 0.0-1.0 — KeyboardLayoutView.layout()
+        // converts them to pixels. Don't populate manually.
+        final int rowH = rowHeightPx;
+        try {
+            com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder topBuilder =
+                    new com.gazlaws.codeboard.layout.builder.KeyboardLayoutBuilder(this);
+            topBuilder.setBox(com.gazlaws.codeboard.layout.Box.create(0, 0, 1, 1));
+            new com.gazlaws.codeboard.layout.Definitions(this).addHistoryTopRow(topBuilder);
+            java.util.Collection<com.gazlaws.codeboard.layout.Key> topKeys = topBuilder.build();
+
+            // createKeyboardView produces a KeyboardLayoutView already populated with KeyboardButtonView
+            // at the correct positions and sizes (relative → pixel conversion is done internally)
+            final com.gazlaws.codeboard.layout.ui.KeyboardLayoutView topRowBase =
+                    mKeyboardUiFactory.createKeyboardView(this, topKeys);
+
+            // Wrap in a FrameLayout that overrides onMeasure to report a 1-row height
+            // so the parent LinearLayout respects the rowHeightPx height
+            android.widget.FrameLayout topRowWrapper = new android.widget.FrameLayout(this) {
+                @Override
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    int w = android.view.View.MeasureSpec.getSize(widthMeasureSpec);
+                    setMeasuredDimension(w, rowH);
+                    int wSpec = android.view.View.MeasureSpec.makeMeasureSpec(w,
+                            android.view.View.MeasureSpec.EXACTLY);
+                    int hSpec = android.view.View.MeasureSpec.makeMeasureSpec(rowH,
+                            android.view.View.MeasureSpec.EXACTLY);
+                    topRowBase.measure(wSpec, hSpec);
+                }
+                @Override
+                protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                    topRowBase.layout(l, t, r, b);
+                }
+            };
+            topRowWrapper.addView(topRowBase);
+            topRowWrapper.setLayoutParams(
+                    new android.widget.LinearLayout.LayoutParams(screenW, rowHeightPx));
+            root.addView(topRowWrapper);
+        } catch (Exception e) {
+            android.util.Log.e("CodeBoardIME", "Failed to build HIST top row: " + e.getMessage(), e);
+        }
+
+        // Divider below the top row
+        android.view.View topDivider = new android.view.View(this);
+        topDivider.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        topDivider.setBackgroundColor(theme.foregroundColor & 0x33FFFFFF);
+        root.addView(topDivider);
+
+        // ScrollView — explicit height: remainder after top row + divider (1px)
+        int scrollHeight = kbHeight - rowHeightPx - 1;
+        android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
+        scrollView.setLayoutParams(new android.widget.LinearLayout.LayoutParams(screenW, scrollHeight));
+        scrollView.setBackgroundColor(theme.backgroundColor);
+        scrollView.setFillViewport(false);
+
+        final android.widget.LinearLayout entryList = new android.widget.LinearLayout(this);
+        entryList.setOrientation(android.widget.LinearLayout.VERTICAL);
+
+        // Show temporary loading state
+        android.widget.TextView loading = new android.widget.TextView(this);
+        loading.setText("Loading...");
+        loading.setTextColor(theme.foregroundColor);
+        loading.setGravity(android.view.Gravity.CENTER);
+        loading.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT, rowHeightPx));
+        entryList.addView(loading);
+
+        // BUG8 Fix: disk I/O on a background thread to avoid ANR
+        final com.gazlaws.codeboard.theme.ThemeInfo themeFinal = theme;
+        final int rowHeightFinal = rowHeightPx;
+        final float densityFinal = metrics.density;
+        final android.os.Handler mainHandler =
+                new android.os.Handler(android.os.Looper.getMainLooper());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClipboardStorage histStorage = new ClipboardStorage(CodeBoardIME.this);
+                final java.util.List<ClipboardEntry> entries = histStorage.readRecentEntries(200);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        entryList.removeAllViews();
+                        if (entries.isEmpty()) {
+                            android.widget.TextView empty = new android.widget.TextView(CodeBoardIME.this);
+                            empty.setText("No history");
+                            empty.setTextColor(themeFinal.foregroundColor);
+                            empty.setGravity(android.view.Gravity.CENTER);
+                            empty.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                                    android.view.ViewGroup.LayoutParams.MATCH_PARENT, rowHeightFinal));
+                            entryList.addView(empty);
+                        } else {
+                            for (final ClipboardEntry entry : entries) {
+                                android.widget.TextView tv = new android.widget.TextView(CodeBoardIME.this);
+                                tv.setText(entry.text);
+                                tv.setTextColor(themeFinal.foregroundColor);
+                                tv.setMaxLines(1);
+                                tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                                tv.setPadding((int)(12 * densityFinal), 0, (int)(12 * densityFinal), 0);
+                                tv.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                                tv.setBackgroundColor(themeFinal.backgroundColor);
+                                tv.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                                        android.view.ViewGroup.LayoutParams.MATCH_PARENT, rowHeightFinal));
+                                tv.setOnClickListener(new android.view.View.OnClickListener() {
+                                    private long lastClick = 0;
+                                    @Override
+                                    public void onClick(android.view.View v) {
+                                        long now = System.currentTimeMillis();
+                                        if (now - lastClick < 400) {
+                                            android.view.inputmethod.InputConnection ic = getCurrentInputConnection();
+                                            if (ic != null) ic.commitText(entry.text, 1);
+                                            lastClick = 0;
+                                        } else {
+                                            lastClick = now;
+                                        }
+                                    }
+                                });
+                                entryList.addView(tv);
+                                android.view.View divider = new android.view.View(CodeBoardIME.this);
+                                divider.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                                        android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1));
+                                divider.setBackgroundColor(themeFinal.foregroundColor & 0x33FFFFFF);
+                                entryList.addView(divider);
+                            }
+                        }
+                    }
+                });
+            }
+        }).start();
+
+        scrollView.addView(entryList);
+        root.addView(scrollView);
+        return root;
+    }
+
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
         setInputView(onCreateInputView());
         sEditorInfo = attribute;
+
+        // Start the clipboard monitor when the keyboard is active
+        if (clipboardMonitor == null) {
+            ClipboardPrefs clipboardPrefs = new ClipboardPrefs(this);
+            clipboardMonitor = new ClipboardMonitor(this, clipboardPrefs);
+        }
+        clipboardMonitor.start();
+    }
+
+    @Override
+    public void onFinishInputView(boolean finishingInput) {
+        super.onFinishInputView(finishingInput);
+        if (clipboardMonitor != null) {
+            clipboardMonitor.stop();
+            clipboardMonitor = null; // Let GC collect it, executor is already shut down
+        }
     }
 
     public void controlKeyUpdateView() {
