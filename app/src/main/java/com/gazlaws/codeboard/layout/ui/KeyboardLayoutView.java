@@ -7,12 +7,16 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 
 import com.gazlaws.codeboard.theme.UiTheme;
 
 public class KeyboardLayoutView extends ViewGroup {
 
     private final UiTheme uiTheme;
+    // Height of the system IME bar (arrow-to-hide + language globe) at the
+    // bottom of the screen. Reserving it keeps the bottom row of keys visible.
+    private int bottomInset = 0;
 
     public KeyboardLayoutView(Context context, UiTheme uiTheme) {
         super(context);
@@ -36,11 +40,35 @@ public class KeyboardLayoutView extends ViewGroup {
     }
 
     @Override
+    public WindowInsets onApplyWindowInsets(WindowInsets insets) {
+        updateBottomInset(insets.getSystemWindowInsetBottom());
+        return insets;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (getRootWindowInsets() != null) {
+            updateBottomInset(getRootWindowInsets().getSystemWindowInsetBottom());
+        }
+    }
+
+    private void updateBottomInset(int inset) {
+        if (inset != bottomInset) {
+            bottomInset = inset;
+            requestLayout();
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // Reserve the system IME bar height at the bottom so the bottom row of
+        // keys is not hidden underneath the arrow-to-hide / language globe bar.
+        int contentBottom = b - bottomInset;
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            child.layout(l,t,r,b);
+            child.layout(l, t, r, contentBottom);
         }
     }
 
